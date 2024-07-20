@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}?">
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}?">
+{% endblock css %}
+
+{% block content %}
+
+    <div class="checkout-main main">
+        <div class="container">
+            <h5 style="font-size: 24px; margin-bottom: 32px; margin-top: 56px;">Checkout</h5>
+            <div class="row">
+                <div class="col-md-7">
+					<form action="" method="post">
+					{% csrf_token %}
+
+					<div>
+						<div class="card-header">
+							<h5 class="mb-0">
+								Shipping address
+							</h5>
+						</div>
+						<div class="card-body">
+							<div style="border-radius: 8px; background-color: transparent;">
+								<div class="d-flex">
+									<div style="margin-bottom: 24px; margin-right: 32px;">
+										<p>Address<span style="color: red;">*</span></p>
+										{{ form.address }}
+										{{ form.errors.address }}
+									</div>
+									<div style="margin-bottom: 24px;">
+										<p>House/Apartment number</p>
+										{{ form.house }}
+										{{ form.errors.house }}
+									</div>
+								</div>
+				
+						<div class="d-flex">
+							<div style="margin-bottom: 24px; margin-right: 32px;">
+								<p>Additional instructions</p>
+								{{ form.instructions }}
+								{{ form.errors.instructions }}
+							</div>
+						</div>
+								
+							</div>
+						</div>
+					</div>
+
+					<div style="margin-bottom: 120px;">
+						<div class="card-header">
+							<h5 class="mb-0">
+								Payment method
+							</h5>
+						</div>
+						<div>
+						<div class="card-body">
+							<div class="d-flex justify-content-center">
+								<button type="button" id="card" disabled class="payment-method" style="margin-right: 32px;">
+									<img src="{% static 'img/card-gray.svg' %}" alt="">
+									Pay now with card 
+								</button>
+								<button type="button" id="cash" onclick="selectPaymentMethod(this)" class="payment-method active">
+									<img src="{% static 'img/cash.svg' %}" alt="">
+									Pay at door with cash
+								</button>
+							</div>
+							<div class="text-center" style="margin-top: 30px;">
+								<select style="display: none;" name="payment-method">
+									<option value="cash">Cash</option>
+									<option value="card">Card</option>
+								</select>
+								<input type="submit" value="Submit">
+							</div>
+						</div>
+						</div>
+					</div>
+                </div>
+			</form>
+
+                <div class="col-md-5" style="margin-top: -50px;">
+                    <div class="card payment-card">
+						<h5>Summary</h5>
+                        <div style="border-bottom: 1px solid #828282;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                                <span>Amount</span>
+                                <span>{{ user.cart.total_price }} $</span>
+                            </div>
+							<div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                                <span>Shipping</span>
+                                <span>{{ shipping_price }} $</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 16px;">
+                            <span>Total price</span>
+							<span class="price">{{ total_price }} $</span>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+	function selectPaymentMethod(element){
+		element.classList.add('active')
+	}
+</script>
+{% endblock js %}

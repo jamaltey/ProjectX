@@ -1,0 +1,76 @@
+{% extends 'profile-base.html' %}
+{% load static %}
+
+{% block title %}Profile Info - {% endblock title %}
+
+{% block profile-content %}
+
+    <div class="profile-names-cont">
+        <h4 class="profile-name-mobile" style="margin-bottom: 16px; color: #4F4F4F;">My Account</h4>
+        <h5 style="font-size: 20px; padding-bottom: 16px; color: #4F4F4F; margin-top: 9px;">Personal information</h5>
+    </div>
+
+    <div class="profile-inputs">
+        <div style="background-color: white; width: 720px; border-radius: 8px;">
+            <form action="" method="post" style="padding-left: 32px; padding-top: 32px; padding-bottom: 32px;">
+                {% csrf_token %}
+                <div style="display: flex;" class="profile-inputs-cont">
+                    <div style="margin-bottom: 24px; margin-right: 32px;">
+                        <p>Full Name</p>
+                        {{ form.full_name }}
+                        {{form.errors.full_name}}
+                    </div>
+                    <!-- <div style="margin-bottom: 24px;">
+                        <p>Surname</p>
+                        <input type="text" placeholder="Your surname">
+                    </div> -->
+                </div>
+                
+        
+        <div style="display: flex;" class="profile-inputs-cont">
+            <div style="margin-bottom: 24px; margin-right: 32px;">
+                <p>E-mail</p>
+                {{ form.email }}
+                {{form.errors.email}}
+            </div>
+            <div style="margin-bottom: 24px;">
+                <p>Phone</p>
+                {{ form.phone }}
+                {{form.errors.phone}}
+            </div>
+        </div>
+
+        <!-- </div> -->
+
+        <div style="text-align: center;">
+            <input type="submit" value="Submit">
+        </div>
+                
+        </form>
+        </div>
+    </div>
+
+    <!-- <h5 style="font-size: 20px; padding-bottom: 16px; color: #4F4F4F; margin-top: 48px;">Change password</h5>
+    <div class="profile-inputs">
+        <div style="background-color: white; width: 720px; border-radius: 8px;">
+            <form action="" style="padding-left: 32px; padding-top: 32px; padding-bottom: 32px;">
+                <div style="display: flex;" class="profile-inputs-cont">
+                <div style="margin-bottom: 24px; margin-right: 32px;">
+                    <p>Old password</p>
+                    <input type="password" placeholder="Your old password">
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <p>New password</p>
+                    <input type="password" placeholder="Your new password">
+                </div>
+            </div>
+        
+                <div style="text-align: center;">
+                    <input type="submit" value="Submit" style="background-color: #2DD06E; border: none; border-radius: 8px; padding: 16px 80px; color: white;">
+                </div>
+                
+            </form>
+        </div>
+    </div> -->
+
+{% endblock profile-content %}

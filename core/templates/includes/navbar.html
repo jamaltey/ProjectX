@@ -1,0 +1,76 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light pr-5 pt-4 pb-4" style="padding-left: 75px;">
+    <a class="navbar-brand" href="{% url 'core:home' %}"><h2>Div Telecom</h2></a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse show" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mt-2 mt-lg-0" style="margin: 0 auto;">
+          <form class="form-inline my-2 my-lg-0 nav-form" method="get" action="{% url 'core:list' %}">
+              <input class="form-control nav-inp search" value="{% if search %}{{ search }}{% endif %}" type="search" name="search" placeholder="Search..." aria-label="Search">
+              <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+          </form>
+
+          <div style="display: flex; margin-left: 113px;" class="nav-icons">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:profile-info' request.user.id %}"><img src="{% static 'img/person.svg' %}" alt=""></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'accounts:wishlist' %}"><img src="{% static 'img/heart.svg' %}" alt=""></a>
+            </li>
+            <li class="nav-item">
+            	<a class="nav-link" href="{% url 'accounts:cart' %}"><img src="{% static 'img/cart.svg' %}" alt="">
+				{% if user.cart.count %}
+					<span class="cart-objects-count">{{ user.cart.count }}</span>
+				{% endif %}
+            	</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a style="color: #4F4F4F !important; font-weight: 500;" class="nav-link" href="{% url 'accounts:login' %}">
+                <img src="{% static 'img/person.svg' %}" alt="">
+                Log in
+              </a>
+            </li>
+            {% endif %}
+            <li class="nav-item" onclick="toggleTheme()">
+              <a class="nav-link">
+                <img src="https://cdn-icons-png.flaticon.com/128/8338/8338708.png" alt="">
+              </a>
+            </li>
+        </div>
+
+        </ul>
+        
+      </div>
+  </nav>
+  <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:home' %}">New</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:list' %}">All products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:list' %}?type=Phone">Phones</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:list' %}?type=Tablet">Tablets</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:list' %}?type=Watch">Watches</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:list' %}?type=Headphones">Headphones</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:list' %}?category=Accessories">Accessories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'core:sales' %}">Sales</a>
+      </li>
+</ul>
+

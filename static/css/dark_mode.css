@@ -1,0 +1,48 @@
+body.dark{
+    background-color: #1d2a35 !important;
+    color: white !important;
+}
+
+body.dark h1,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6,
+body.dark a.nav-link{
+    color: white !important;
+}
+
+body.dark ul.details span{
+    color: white;
+}
+
+body.dark a.view-details{
+    color: white;
+}
+
+body.dark .nav-link.active{
+    background: #243341 !important;
+}
+
+body.dark .card{
+    background-color: #243341 !important;
+}
+
+body.dark .dropdown-menu{
+    background-color: #1d2124 !important;
+}
+
+body.dark .dropdown-item:hover{
+    background-color: #243341 !important;
+}
+
+body.dark .profile-main{
+    background-color: #243341 !important;
+}
+
+body.dark .profile-inputs div,
+body.dark .profile-sections,
+body.dark .blocks-cont{
+    background-color: #3a5169 !important;
+}

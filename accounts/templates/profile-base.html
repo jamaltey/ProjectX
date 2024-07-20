@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="profile-main" style="background-color: #FAF9F9; padding-bottom: 158px;">
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'includes/profile-tabs.html' %}
+            <div class="col-md-9 profile-cards-cont" style="margin-top: 40px; padding-left: 34px;">
+            {% block profile-content %}
+            
+            {% endblock profile-content %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+let icon = $(`.profile-main li a[href="${activeTab}"] img`)
+
+icon.attr('src', icon.attr('src').replace(/.svg$/, '-green.svg'))
+$(`.profile-main li a[href="${activeTab}"] span`).addClass('active')
+
+</script>
+{% block profile-js %}
+{% endblock profile-js %}
+
+{% endblock js %}

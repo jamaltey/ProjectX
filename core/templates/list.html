@@ -1,0 +1,260 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Products - {% endblock title %}
+
+{% block content %}
+
+
+<div class="main container-fluid" style="margin-top: 10px; margin-bottom: 50px;">
+  <div class="row">
+      <div class="mobile-tabs justify-content-center" style="display: none; width: 100%;">
+          <div class="dropdown" style="width: 100%;">
+              <button class="btn" type="button" id="dropdownMenuButton"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                 <img src="{% static 'img/swap.svg' %}" style="width: 24px;" alt="">
+                 {{ sort }}
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                {% if request.GET.sort %}
+                  <a class="dropdown-item" href="?{{args}}">
+                    Sort: Newest
+                  </a>
+                {% endif %}
+                {% if not request.GET.sort == 'price-asc' %}
+                  <a class="dropdown-item" href="?sort=price-asc&{{args}}">
+                    Sort: Cheapest
+                  </a>
+                {% endif %}
+                {% if not request.GET.sort == 'price-desc' %}
+                  <a class="dropdown-item" href="?sort=price-desc&{{args}}">
+                    Sort: Most Expensive
+                  </a>
+                {% endif %}
+              </div>
+          </div>
+          <div class="w-100">
+              <button onclick="$('.first-list-part').toggle()" id="filter-show-button" class="btn" type="button">
+                 <img src="{% static 'img/filter.svg' %}" style="width: 20px;" alt=""> Filters
+              </button>
+          </div>
+      </div>
+      <div class="col-md-3 first-list-part col-12" style="padding-left: 79px;">
+
+          <!-- <p class="list-path">
+            Home <img src="{% static 'img/arrow.svg' %}">
+            Products <img src="{% static 'img/arrow.svg' %}">
+            <span></span>
+          </p> -->
+
+          <!-- Filters -->
+          <div style="width: 305px;">
+
+              <div class="filter">
+                  <div class="card-header" id="headingOne">
+                      <h5 class="mb-0">
+                          Brand ({{brands.count}})
+                      </h5>
+                  </div>
+                  <div >
+                      <div class="card-body">
+                          <ul>
+                            {% for i in brands %}
+                              <li style="list-style: none;">
+                                  <span>
+                                    <label class="container">{{i.title}}
+                                          <input type="checkbox" onchange="applyFilter(this, 'brand', '{{i.title}}')" {% if request.GET.brand.lower == i.title.lower %} checked {% endif %}>
+                                          <span class="checkmark"></span>
+                                    </label>
+                                  </span>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="filter">
+                  <div class="card-header" id="headingTwo">
+                      <h5 class="mb-0">
+                          Type ({{types.count}})
+                      </h5>
+                  </div>
+                  <div>
+                      <div class="card-body">
+                          <ul>
+                            {% for i in types %}
+                              <li style="list-style: none;">
+                                <span>
+                                    <label class="container">{{i.title}}
+                                        <input type="checkbox" onchange="applyFilter(this, 'type', '{{i.title}}')" {% if request.GET.type.lower == i.title.lower %} checked {% endif %}>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </span>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="filter">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        Category ({{categories.count}})
+                    </h5>
+                </div>
+                <div>
+                    <div class="card-body">
+                        <ul>
+                          {% for i in categories %}
+                            <li style="list-style: none;">
+                              <span>
+                                  <label class="container">{{i}}
+                                      <input type="checkbox" onchange="applyFilter(this, 'category', '{{i}}')" {% if request.GET.category.lower == i.lower %} checked {% endif %}>
+                                      <span class="checkmark"></span>
+                                  </label>
+                              </span>
+                            </li>
+                          {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+              <div class="text-center">
+                  <button onclick="location.search=''" class="btn-dark">
+                    Reset all filters
+                  </button>
+              </div>
+          </div>
+      </div>
+      
+      <div class="col-md-9 col-12 second-list-part pt-5">
+        {% if success is True%}
+          <div
+              style="padding-left: 65px; padding-right: 65px; display: flex; justify-content: space-between;">
+              <span>{{ page.paginator.count }} products found</span>
+              <div class="dropdown web-drop">
+                  <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                      style="border: 1px solid #BDBDBD;">
+                      Sort: {{ sort }}
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    {% if request.GET.sort %}
+                      <a class="dropdown-item" href="?{{args}}">
+                        Sort: Newest
+                      </a>
+                    {% endif %}
+                    {% if not request.GET.sort == 'price-asc' %}
+                      <a class="dropdown-item" href="?sort=price-asc&{{args}}">
+                        Sort: Cheapest
+                      </a>
+                    {% endif %}
+                    {% if not request.GET.sort == 'price-desc' %}
+                      <a class="dropdown-item" href="?sort=price-desc&{{args}}">
+                        Sort: Most Expensive
+                      </a>
+                    {% endif %}
+                  </div>
+              </div>
+          </div>
+          <div class="row product-list" style="padding: 65px; padding-top: 42px; margin-bottom: 72px;">
+            {% for product in page %}
+              <div id="{{product.id}}" class="col-md-4 product" style="margin-bottom: 62px;">
+                      <div class="card" style="width: 18rem;">
+                        <div class="heart-cont">
+                            <a onclick="updateFavorites({{product.id}})">
+                                <div>
+                                  {% if not product in favorites %}
+                                    <img src="{% static 'img/heart2.svg' %}" alt="" style="margin-top: 7px; margin-left: 7px;">
+                                  {% else %}
+                                    <img src="{% static 'img/heart-red.svg' %}" alt="" style="margin-top: 7px; margin-left: 7px;">
+                                  {% endif %}
+                                </div>
+                            </a>
+                        </div>
+                        <a href="{% url 'core:detail' product.id %}" style="color: black; text-decoration: none;">
+                          <div style="text-align: center;">
+                              <img class="card-img-top" style="width: 215px;"
+                                  src="{{product.image.url}}"
+                                  alt="Card image cap">
+                          </div>
+                          <div class="card-body">
+                              <h5 class="card-title" style="font-size: 16px;">{{product.title}}</h5>
+
+                              <p class="price card-text" id="price">
+                                {% if product.old_price %}
+                                    <span id="old-price" class="old-price card-text">{{ product.old_price}} $</span>{{ product.price }} $
+                                {% else %}
+                                    {{ product.price }} $
+                                {% endif %}
+                              </p>
+                            </div>
+                        </a>
+                      </div>
+              </div>
+            {% endfor %}
+          </div>
+          <div style="display: flex; justify-content: center;">
+              <nav aria-label="Pagination">
+                  <ul class="pagination">
+                    {% if page.has_previous %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page=1&{{args}}" aria-label="Previous">
+                            <img src="{% static 'img/pag1.svg' %}" alt="" style="margin-top: -6px;">
+                        </a>
+                        </li>
+                    {% endif %}
+
+                    {% for i in page.paginator.page_range %}
+                        <li class="page-item"><a class="page-link num" href="?page={{i}}&{{args}}" style="font-size: 20px; color: #4F4F4F;">{{i}}</a></li>
+                    {% endfor %}
+
+                    {% if page.has_next %}
+                        <li class="page-item">
+                        <a class="page-link" href="?page={{ paginator.num_pages }}&{{args}}" aria-label="Next">
+                            <img src="{% static 'img/pag2.svg' %}" alt="" style="margin-top: -6px;">
+                        </a>
+                        </li>
+                    {% endif %}
+                  </ul>
+              </nav>
+          </div>
+        {% else %}
+        <div class="no-products">
+          <h1>No products found</h1>
+          <img src="{% static 'img/no-products.svg' %}" alt="">
+        </div>
+        {% endif %}
+      </div>
+  </div>
+</div>
+</div>
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'js/update-favorites.js' %}"></script>
+<script>
+
+function applyFilter(checkbox, key, value) {
+    if (checkbox.checked) {
+        let regex = new RegExp(`(${key}=[^&]*)`)
+        if (regex.test(location.search)) {
+            location.search = location.search.replace(regex, `${key}=${value}`)
+        } else if (!location.search.startsWith('?')) {
+            location.search = `?${key}=${value}`
+        } else {
+            location.search += `&${key}=${value}`
+        }
+    }
+    else {
+        value = value.replace(' ', '%20')
+        let regex = new RegExp(`(&|\\?)${key}=${value}`)
+        location.search = location.search.replace(regex, '').replace(/^&/, '?')
+    } 
+}
+
+</script>
+{% endblock %}

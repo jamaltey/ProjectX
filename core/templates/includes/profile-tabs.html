@@ -1,0 +1,41 @@
+{% load static %}
+
+<div class="col-md-3 sections-cont" style="margin-top: 40px; padding-left: 73px;">
+    <div class="profile-sections" style="width: 280px; background-color: white; border-radius: 8px; padding-top: 32px; padding-left: 26px; padding-bottom: 32px;">
+        <h5 style="font-size: 20px; padding-bottom: 32px; color: #4F4F4F;">My Account</h5>
+        <div>
+            <ul style="padding-left: 0;">
+                <li style="list-style: none; margin-bottom: 32px;">
+                    <a href="{% url 'accounts:orders' %}">
+                        <img src="{% static 'img/cart.svg' %}" alt="">
+                        <span>My orders</span>
+                    </a>
+                </li>
+                <li style="list-style: none; margin-bottom: 32px;">
+                    <a href="{% url 'accounts:wishlist' %}">
+                        <img src="{% static 'img/heart.svg' %}" alt="">
+                        <span>Wishlist</span>
+                    </a>
+                </li>
+                <li style="list-style: none; margin-bottom: 32px;">
+                    <a href="{% url 'accounts:profile-info' request.user.id %}">
+                        <img src="{% static 'img/person.svg' %}" alt="">
+                        <span>Personal information</span>
+                    </a>
+                </li>
+                <li style="list-style: none; margin-bottom: 32px;">
+                    <a href="{% url 'accounts:address' %}">
+                        <img src="{% static 'img/pin.svg' %}" alt="">
+                        <span>Shipping address</span>
+                    </a>
+                </li>
+                <li style="list-style: none;">
+                    <a href="{% url 'accounts:logout' %}">
+                        <img src="{% static 'img/log-out.svg' %}" alt="">
+                        <span>Log out</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

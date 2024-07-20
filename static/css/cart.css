@@ -1,0 +1,29 @@
+footer{
+    margin-top: 200px;
+}
+.total-price p{
+    font-size: 20px;
+}
+.total-price .old-price{
+    text-decoration: none;
+}
+.total-price{
+    margin-top: 10px;
+}
+.cart-object .info{
+    margin: 0;
+}
+.payment-card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 344px;
+    padding: 15px;
+    padding-bottom: 20px;
+}
+.quantity{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100px;
+}

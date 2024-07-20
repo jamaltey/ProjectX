@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}?">
+<style>
+    .card-header {
+        background-color: transparent;
+    }
+
+    .accordion-click-me{
+        padding-left: 0;
+        color: #1D2123 !important;
+        font-size: 20px;
+    }
+    .accordion-click-me:focus{
+        box-shadow: none;
+    }
+
+    button.payment-method{
+        width: 248px;
+        height: 48px;
+        border-radius: 8px;
+        border: 1px solid #E0E0E0;
+        background-color: white;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+
+    <div class="payment-main">
+        <div class="container">
+            <h5 style="font-size: 24px; margin-bottom: 32px; margin-top: 56px;">Payment</h5>
+            <div class="row">
+                <div class="col-md-7">
+                    <div id="accordion">
+                        <div class="">
+                          <div class="card-header" style="padding-left: 0 !important; border-top: 1px solid #828282; border-bottom: none; border-radius: 0 !important;" id="headingOne">
+                            <h5 class="mb-0">
+                              <button class="accordion-click-me btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                1. Personal information
+                              </button>
+                            </h5>
+                          </div>
+                      
+                          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body">
+                              <div style="display: flex;" class="inner-payment">
+                                  <div style="margin-right: 32px;">
+                                      <p>Name</p>
+                                      <input type="text" placeholder="Your name">
+                                  </div>
+                                  <div>
+                                    <p>Surname</p>
+                                    <input type="text" placeholder="Your surname">
+                                </div>
+                              </div>
+                              <div style="display: flex; margin-top: 24px;" class="inner-payment">
+                                <div style="margin-right: 32px;">
+                                    <p>Phone number</p>
+                                    <input type="text" placeholder="000 - 00 - 00">
+                                </div>
+                                <div>
+                                  <p>E-mail</p>
+                                  <input type="text" placeholder="Your e-mail">
+                              </div>
+                            </div>
+                            <div style="display: flex; margin-top: 48px;" class="inner-payment">
+                                <div style="margin-right: 32px;">
+                                    <input type="submit" value="Submit">
+                                </div>
+                            </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="">
+                          <div class="card-header" style="padding-left: 0 !important; border-bottom: 1px solid #828282; border-radius: 0 !important;" id="headingTwo">
+                            <h5 class="mb-0">
+                              <button class="accordion-click-me btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                2. Shipping
+                              </button>
+                            </h5>
+                          </div>
+                          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            hi
+                          </div>
+                        </div>
+                        <div class="" style="margin-bottom: 120px;">
+                          <div class="card-header" style="padding-left: 0 !important; border-bottom: none; border-radius: 0 !important;" id="headingThree">
+                            <h5 class="mb-0">
+                              <button class="accordion-click-me btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" id="third-here" aria-expanded="false" aria-controls="collapseThree">
+                                3. Payment method
+                              </button>
+                            </h5>
+                          </div>
+                          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                            <div class="card-body">
+                              <div class="d-flex justify-content-center">
+                                    <button class="payment-method" style="margin-right: 32px;">
+                                        <img src="{% static 'img/card.svg' %}" alt="">
+                                        Pay now with card 
+                                    </button>
+                                    <button class="payment-method">
+                                        <img src="{% static 'img/cash.svg' %}" alt="">
+                                        Pay at door with cash
+                                    </button>
+                              </div>
+                              <div class="text-center" style="margin-top: 48px;">
+                                  <input type="submit" value="Submit">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-md-5" style="margin-top: -50px;">
+                    <div class="card payment-card" style="height: 309px; width: 344px; padding: 32px; margin: 0 auto;">
+                        <div style="border-bottom: 1px solid #828282;">
+                            <h6 style="font-size: 20px; margin-bottom: 16px;">Price</h6>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                                <span style="font-size: 16px;">Amount</span>
+                                <span style="font-size: 16px;">66.50 $</span>
+                            </div>
+                            ...
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 16px;">
+                            <span style="font-size: 16px;">Total</span>
+                            <span style="font-size: 16px;">66.50 $</span>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

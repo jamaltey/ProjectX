@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="main-product">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-6 col-12 product-first-part" style="padding-left: 79px; padding-top: 26px;">
+                  <div class="product-path-cont">
+                      <p class="list-path" style="margin-bottom: 42px;"> 
+                        <!-- <img src="{% static 'img/arrow.svg' %}" alt=""> -->
+                      <!-- <img src="{% static 'img/arrow.svg' %}" alt=""> -->
+                            <span style="color: #828282;">
+                            </span>
+                        </p>
+                  </div>
+                <div id="carouselExampleControls" class="carousel slide" data-interval="false">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="d-block" src="{{product.image.url}}" alt="First slide">
+                        </div>
+                    </div>
+                </div> 
+              </div>
+              <div class="col-md-6 col-12 product-second-part" style="padding-top: 106px;">
+                  <div class="configure-product">
+
+                      <div class="product-title">
+                          <h6 class="product-title-h6" style="font-size: 20px; width: 488px; line-height: 28px;">{{ product.product.title }}</h6>
+                      </div>
+                      <div class="product-rating">
+                        {% if product.product.rating.rating %}
+                          <div class="stars">
+                            {% for i in product.product.rating.get_stars %}
+                              <img src="{% static i %}" alt="">
+                            {% endfor %}
+                          </div>
+                        {% else %}
+                            <p class="rating-text">No reviews</p>
+                        {% endif %}
+                      </div>
+                      <div class="prices">
+                          <p class="card-text" id="price">
+                                {{ product.final_price }} $
+                          </p>
+                      </div>
+                      {% if product.color %}
+                      <div class="colors" style="padding-top: 24px;">
+                          <div style="display: flex;"> <p style="font-size: 14px; padding-top: 5px; margin-right: 10px;">Color: {{product.color.color_name}}</p>
+                              <div colorname="{{product.color.color_name}}" class="color" style="background-color: {{ product.color.color }};"></div>
+                          </div>
+                      </div>
+                      {% endif %}
+
+                      {% if product.storage %}
+                      <div class="storages" style="padding-top: 24px; border-bottom: 1px solid #F2F2F2; padding-bottom: 24px;">
+                          <div style="display: flex;"> <p style="font-size: 14px; padding-top: 5px; margin-right: 22px;">Storage: </p>
+                              <div class="storage active" storage="{{ i.storage }}">{{ product.storage.size_format }}</div>
+                          </div>
+                      </div>
+                      {% endif %}
+
+                      <div style="padding-top: 24px;" class="purchase-buttons d-flex">
+                          <a href="{% url 'accounts:cart-remove' product.pk %}"><button class="basket-add"><img src="{% static 'img/white-cart.svg' %}" style="margin-right: 16px; width: 20px; margin-top: -2px;" alt=""> Remove from cart</button></a>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="second-product-part container-fluid" style="padding-left: 79px;  padding-right: 79px;  margin-top: 96px;">
+          <div class="product-tabs" style="border-bottom: 1px solid #C4C4C4; padding-bottom: 16px;">
+              <button id="info-button" style="font-size: 20px; border: none; background-color: transparent; margin-right: 181px; outline: none;">Specifications</button>
+          </div>
+          <div class="container-fluid" id="info-part" style="padding-left: 100px; margin-bottom: 100px; padding-top: 32px;">
+              <div class="row">
+                  <div class="col-md-6">
+                    <div class="specifications">
+
+                        <h2 class="info-headings">Specifications</h2>
+                        <div>
+                            <span>Brand</span>
+                            <span>{{product.product.brand}}</span>
+                        </div>
+
+                      {% for k,v in product.product.specifications %}
+                        <div>
+                            <span>{{ k }}</span>
+                            <span>{{ v }}</span>
+                        </div>
+                      {% endfor %}
+
+                    </div>
+                  </div>
+
+                {% if product.product.description %}
+                <div class="col-md-6">
+                    <div class="specifications">
+                        <h2 class="info-headings">About this product</h2>
+                        <div>
+                            <p>{{product.product.description}}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

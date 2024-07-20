@@ -1,0 +1,46 @@
+{% extends 'profile-base.html' %}
+{% load static %}
+
+{% block title %}Shipping Address - {% endblock title %}
+
+{% block profile-content %}
+
+    <div class="profile-names-cont">
+        <h4 class="profile-name-mobile" style="margin-bottom: 16px; color: #4F4F4F;">My Account</h4>
+        <h5 style="font-size: 20px; padding-bottom: 16px; color: #4F4F4F; margin-top: 9px;">Shipping address</h5>
+    </div>
+    
+    <div class="profile-inputs">
+        <div style="background-color: white; width: 720px; border-radius: 8px;">
+            <form action="" method="post" style="padding-left: 32px; padding-top: 32px; padding-bottom: 32px;">
+                {% csrf_token %}
+                <div style="display: flex;" class="profile-inputs-cont">
+                    <div style="margin-bottom: 24px; margin-right: 32px;">
+                        <p>Address<span style="color: red;">*</span></p>
+                        {{ form.address }}
+                        {{ form.errors.address }}
+                    </div>
+                    <div style="margin-bottom: 24px;">
+                        <p>House/Apartment number</p>
+                        {{ form.house }}
+                        {{ form.errors.house }}
+                    </div>
+                </div>
+
+        <div style="display: flex;" class="profile-inputs-cont">
+            <div style="margin-bottom: 24px; margin-right: 32px;">
+                <p>Additional instructions</p>
+                {{ form.instructions }}
+                {{ form.errors.instructions }}
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <input type="submit" value="Submit">
+        </div>
+                
+        </form>
+        </div>
+    </div>
+
+{% endblock profile-content %}

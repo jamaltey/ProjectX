@@ -1,0 +1,95 @@
+{% extends 'profile-base.html' %}
+{% load static %}
+
+{% block title %}Orders - {% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}?">
+<style>
+    .order {
+        margin-bottom: 62px;
+    }
+    .order-img-container{
+        /* width: 245px !important; */
+        border-right: 1px solid #F2F2F2;
+        background-color: rgb(245,	245, 247);
+    }
+</style>
+{% endblock css %}
+
+{% block profile-content %}
+
+    <div class="profile-names-cont">
+        <h4 class="profile-name-mobile mobile" style="margin-bottom: 16px; color: #4F4F4F;">My Account</h4>
+        <h5 style="font-size: 20px; padding-bottom: 16px; color: #4F4F4F; margin-top: 9px;">My Orders</h5>
+    </div>
+
+    <div class="row">
+        {% for order in orders %}
+        <div class="col-md-6 order">
+            <div class="card" style="display: flex;">
+                <div class="d-flex">
+
+                    <!-- <img class="card-img-top" src="{{order.products.first.image.url}}" alt="Card image cap"> -->
+                    <div class="order-img-container" style="/* background: url({{order.products.first.image.url}}) */">
+                    {% if order.products.count <= 3 %}
+                        {% for product in order.products.all %}
+                        <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
+                        {% endfor %}
+                    {% else %}
+                        <div class="row">
+                        {% for product in order.products.all %}
+                            <div class="col-md-6">
+                                <img style="width: 100%;" src="{{product.image.url}}" alt="Card image cap">
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                    </div>
+
+                    <div class="card-body">
+                        <div>
+                            <span>Date: </span>
+                            <p>{{ order.created_at | date:"d.m.Y" }}</p>
+                        </div>
+                        <div>
+                            <span>Status: </span>
+                            <p>{{ order.status }}</p>
+                        </div>
+                        <div>
+                            <span>Total: </span>
+                            <p class="price">{{ order.total_price }} $</p>
+                        </div>
+
+                        <a href="{% url 'accounts:order-detail' order.id %}" class="order-details-btn btn">
+                            Order Details
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock profile-content %}
+
+{% block profile-js %}
+<script>
+    $('.order-img-container').each(function(index, element) {
+        if (element.children.length == 1){
+            element.children[0].style.height = "100%";
+        } else if (element.children.length == 2){
+            element.children[0].style.height = "50%";
+            element.children[1].style.height = "50%";
+        } else if (element.children.length == 3){
+            element.children[0].style.height = "33.33%";
+            element.children[1].style.height = "33.33%";
+            element.children[2].style.height = "33.33%";
+        }
+    })
+</script>
+{% endblock profile-js %}

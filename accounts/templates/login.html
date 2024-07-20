@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="main" style="margin-top: 100px; margin-bottom: 110px;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 first-part" style="padding-left: 55px;">
+                <div class="user-form">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <h3>Log In</h3>
+
+                        <!-- <div class="social-div">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-6 text-center social">
+                                        <div class="d-flex soc-item" style="justify-content: end; padding-right: 28px;">
+                                            <div style="background-color: #4267B2;">
+                                                <img src="{% static 'img/facebook2.svg' %}?123" alt="">
+                                            </div>
+                                            <span class="social-span">Facebook</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 social">
+                                        <div class="d-flex soc-item"
+                                            style="justify-content: start; padding-left: 28px;">
+                                            <div style="background-color: #DB4437;">
+                                                <img src="{% static 'img/google.svg' %}?123" alt="">
+                                            </div>
+                                            <span class="social-span">Google</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p>or</p> -->
+
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            {{ form.username }}
+                            {{ form.username.errors }}
+                        </div>
+
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label for="password">Password</label>
+                            {{ form.password }}
+                            {{ form.password.errors }}
+                        </div>
+
+                        <div class="terms">
+                            <span><a href="">Forgot Password?</a></span>
+                        </div>
+
+                        {% if form.non_field_errors %}
+                        <ul class='form-errors'>
+                            {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
+
+                        <input type="submit" class="submit-btn" value="Log In">
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-6 second-part" style="padding-left: 100px;">
+                <div class="illustration-cont">
+                    <img src="{% static 'img/login.svg' %}" alt="" class="login-img">
+                    <img src="{% static 'img/Dot Grid.svg' %}" class="dot-grid" alt=""
+                        style="margin-top: -87px; margin-left: -137px;">
+                </div>
+
+                <div style="width: 388px; text-align: center; margin-top: 15px;">
+                    <p>Don't have an account?<a href="{% url 'accounts:signup' %}?next={{ request.GET.next }}"> Sign Up</a></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

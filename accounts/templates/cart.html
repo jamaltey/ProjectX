@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cart - {% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}?">
+{% endblock css %}
+
+{% block content %}
+
+<div class="main container-fluid" style="padding: 75px; padding-top: 26px;">
+
+	<div class="d-flex mb-5">
+		<h3 class="mr-auto">My cart ({{ cart.products.count }})</h3>
+		{% if cart.products.all %}
+		<a class="btn btn-dark" href="{% url 'accounts:cart-clear' %}">
+			Clear cart
+		</a>
+		{% endif %}
+	</div>
+
+{% if cart.products.all %}
+	<div class="row">
+		{% for i in cart.products.all %}
+		<div id="{{ i.id }}" class="col-md-12 cart-object">
+			<img style="width: 150px !important;" src="{{ i.image.url }}" alt="{{ i.title }}">
+			<div class="container-fluid">
+				<h2 style="margin: 0;">
+					{{ i }}
+				</h2>
+				<div class="info">
+					<span class="price">
+						{{ i.final_price }} $
+					</span>
+
+					{% if i.color %}
+					<span>
+						Color: {{ i.color.color_name }},
+					</span>
+					{% endif %}
+
+					{% if i.storage %}
+					<span>
+						Storage: {{ i.storage.size_format }}
+					</span>
+					{% endif %}
+
+				</div>
+			</div>
+
+			<div class="quantity">
+				<div style="gap: 10px;" class="counter-elements d-flex">
+					<div onclick="changeQuantity({{ i.id }}, -1)" class="counter-button">
+						<img src="/static/img/minus.svg" alt="">
+					</div>
+					<span class="counter" style="margin-top: 4px;">{{ i.quantity }}</span>
+					<div onclick="changeQuantity({{ i.id }}, 1)" class="counter-button">
+						<img src="/static/img/plus.svg" alt="">
+					</div>
+				</div>
+			</div>
+
+			<a class="btn view-details" href="{% url 'accounts:cart-detail' i.id %}">View details »</a>
+			<a class="btn" href="{% url 'accounts:cart-remove' i.id %}"><img style="height: 30px;" src="{% static 'img/remove.svg' %}?" alt=""></a>
+			
+		</div>
+		{% endfor %} 
+	</div>
+
+	<div class="card payment-card">
+
+		<div class="total-price">
+			{% if cart.discount %}
+			<p>Discount: <span class="old-price">–{{ cart.discount }} $</span></p>
+			<hr>
+			{% endif %}
+			<p>Total price: <span class="price">{{ cart.total_price }} $</span></p>
+		</div>
+
+		<a href="{% url 'accounts:checkout' %}"><button style="margin: 0 auto;" class="basket-add">
+			Checkout
+		</button></a>
+
+	</div>
+
+
+{% else %}
+	<div class="no-products">
+		<img src="{% static 'img/no-products.svg' %}" alt="">
+		<p style="color: #BDBDBD; margin-top: 40px;">Your cart is empty</p>
+	</div>
+{% endif %}
+
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script src="{% static 'js/change-quantity.js' %}?1"></script>
+{% endblock js %}

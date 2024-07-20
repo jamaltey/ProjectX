@@ -1,0 +1,122 @@
+{% extends 'profile-base.html' %}
+{% load static %}
+
+{% block title %}Order {{ order.id }} Details - {% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/order-detail.css' %}?">  
+{% endblock css %}
+
+{% block profile-content %}
+
+<div class="profile-names-cont">
+    <h4 class="profile-name-mobile mobile">My Account</h4>
+    <a href="{% url 'accounts:orders' %}" style="text-decoration: none;">
+        <h5 style="font-size: 20px; color: #4F4F4F;">
+            <img src="{% static 'img/arrow-left.svg' %}" alt="" style="margin-top: -4px;">
+            <span>My orders</span>
+        </h5>
+    </a>
+</div>
+
+<div class="blocks-cont">
+
+    {% for product in order.products.all %}
+    <div class="order-item">
+        <div class="block-1-img-cont">
+            <img class="card-img-top" src="{{product.image.url}}" alt="">
+        </div>
+
+        <div class="product-info">
+            <h5>{{ product }}</h5>
+            <div class="info mb-0">
+                {% if product.color %}
+                <div>
+                    <span>Color: </span>
+                    <p>{{ product.color.color_name }}</p>
+                </div>
+                {% endif %}
+
+                {% if product.storage %}
+                <div>
+                    <span>Storage: </span>
+                    <p>{{ product.storage.size_format }}</p>
+                </div>
+                {% endif %}
+                
+                <a href="{% url 'core:detail' product.product.id %}" class="btn btn-dark btn-view-product">
+                    View product
+                </a>
+            </div>
+        </div>
+    </div>
+    {% if forloop.last %}
+        <hr class="mb-0">
+    {% endif %}
+
+    {% endfor %}
+
+    <div class="order-block">
+
+        <div class="info">
+            <div>
+                <span>Date: </span>
+                <p>{{ order.created_at | date:"d.m.Y" }}</p>
+            </div>
+            <div>
+                <span>Status: </span>
+                <p>{{ order.status }}</p>
+            </div>
+        </div>
+
+        <div style="display: flex;">
+            <div class="personal-info" style="margin-right: 201px;">
+                <h5 style="font-size: 20px; padding-bottom: 24px; color: #4F4F4F;">Personal information</h5>
+                <ul class="details" style="padding-left: 16px;">
+                    <li><span>{{ user.full_name }}</span></li>
+                    <li><span>{{ user.phone }}</span></li>
+                    <li><span>{{ user.email }}</span></li>
+                </ul>
+            </div>
+            <div>
+                <h5 style="font-size: 20px; padding-bottom: 24px; color: #4F4F4F;">Shipping address
+                </h5>
+                <ul class="details" style="padding-left: 16px;">
+					{% for i in user.address %}
+                    <li><span>{{ i }}</span></li>
+					{% endfor %}
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="order-block">
+
+        <div style="display: flex; justify-content: space-between;">
+            <div>
+                <h5 style="font-size: 20px; padding-bottom: 24px; color: #4F4F4F;">Payment details</h5>
+                <ul class="payment-details details">
+                    <li><span>Payment method</span></li>
+                    <li><span>Amount</span></li>
+                    <li><span>Shipping</span></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="details" style="margin-top: 55px; text-align: end;">
+                    <li><span>{{ order.payment_method }}</span></li>
+                    <li><span>{{ order.price }} $</span></li>
+                    <li><span>{{ order.shipping_price }} $</span></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="total-price">
+		<h5 style="font-size: 20px; padding-bottom: 24px; color: #4F4F4F;">Total</h5>
+		<span class="price">{{ order.total_price }} $</span>
+    </div>
+</div>
+
+{% endblock profile-content %}
