@@ -83,6 +83,7 @@ def address(request: HttpRequest):
 def cart(request: HttpRequest):
     favorites = [i.product for i in Favorite.objects.filter(user=request.user)]
     cart = Cart.objects.get_or_create(user=request.user)[0]
+
     context = {
         'favorites': favorites,
         'cart': cart
@@ -161,7 +162,6 @@ def checkout(request: HttpRequest):
         return redirect('accounts:cart')
 
     if request.method == 'POST':
-        print(request.POST)
         form = AddressForm(request.POST)
         if form.is_valid():
             if user_has_address:

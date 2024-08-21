@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock css %}
+
 {% block content %}
 
 <div class="main" style="margin-top: 100px; margin-bottom: 110px;">
@@ -12,47 +16,22 @@
                         {% csrf_token %}
                         <h3>Sign Up</h3>
 
-                        <!-- <div class="social-div">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <div class="col-md-6 text-center social">
-                                        <div class="d-flex soc-item" style="justify-content: end; padding-right: 28px;">
-                                            <div style="background-color: #4267B2;">
-                                                <img src="{% static 'img/facebook2.svg' %}?123" alt="">
-                                            </div>
-                                            <span class="social-span">Facebook</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 social">
-                                        <div class="d-flex soc-item" style="justify-content: start; padding-left: 28px;">
-                                            <div style="background-color: #DB4437;">
-                                                <img src="{% static 'img/google.svg' %}?123" alt="">
-                                            </div>
-                                            <span class="social-span">Google</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-
-                        <p>or</p> -->
-
                         <div class="form-group">
                             <label for="full_name">Full Name</label>
                             {{ form.full_name }}
-                            {{ form.full_name.errors }}
+                            {{ form.errors.full_name }}
                         </div>
 
                         <div class="form-group">
                             <label for="email">E-mail</label>
                             {{ form.email }}
-                            {{ form.email.errors }}
+                            {{ form.errors.email }}
                         </div>
 
                         <div class="form-group">
                             <label for="number">Phone number</label>
                             {{ form.phone }}
-                            {{ form.phone.errors }}
+                            {{ form.errors.phone }}
                         </div>
 
                         <div class="form-group" style="margin-top: 20px;">
@@ -70,6 +49,9 @@
                         <div class="terms">
                             <input type="checkbox">
                             <span>I agree with <a href="">Terms and Conditions</a></span>
+                        </div>
+                        <div class="mobile mt-1">
+                            <span>Already have an account?<a href="{% url 'accounts:login' %}"> Log In</a></span> 
                         </div>
 
                         <input type="submit" class="submit-btn" disabled value="Sign Up">
@@ -98,13 +80,13 @@
 
 {% block js %}
 <script>
-    let checkbox = document.querySelector("div.terms input[type=checkbox]");
-    let submit_btn = document.querySelector("form input[type=submit]");
-    checkbox.addEventListener("change", function(){
-        if (checkbox.checked) {
-            submit_btn.disabled = false;
+    let checkbox = $("div.terms input[type=checkbox]");
+    let submit_btn = $("form input[type=submit]");
+    checkbox.on("change", function(){
+        if (checkbox.prop("checked")) {
+            submit_btn.prop("disabled", false);
         } else {
-            submit_btn.disabled = true;
+            submit_btn.prop("disabled", true);
         }
     })
 </script>

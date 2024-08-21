@@ -10,8 +10,21 @@ footer{
 .total-price{
     margin-top: 10px;
 }
+.cart-object{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    padding: 0;
+    padding-right: 10px;
+}
 .cart-object .info{
     margin: 0;
+}
+.cart-object img{
+    max-width: 150px !important;
 }
 .payment-card{
     display: flex;
@@ -21,9 +34,28 @@ footer{
     padding: 15px;
     padding-bottom: 20px;
 }
-.quantity{
+.btn-container{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100px;
+}
+ 
+@media (min-width: 361px) and (max-width: 767px) {
+    .main{
+        padding: 0 !important;
+    }
+    .cart-object > *{
+        padding: 0 !important;
+    }
+    .cart-object{
+        padding: 0 !important;
+        justify-content: center !important;
+    }
+    .btn-container{
+        flex-direction: column;
+        padding-top: 10px !important;
+    }
+    .row{
+        margin: 0 !important;
+    }
 }

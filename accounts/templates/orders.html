@@ -13,6 +13,13 @@
         /* width: 245px !important; */
         border-right: 1px solid #F2F2F2;
         background-color: rgb(245,	245, 247);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .order-img-container img{
+        height: auto !important;
     }
 </style>
 {% endblock css %}
@@ -31,7 +38,7 @@
                 <div class="d-flex">
 
                     <!-- <img class="card-img-top" src="{{order.products.first.image.url}}" alt="Card image cap"> -->
-                    <div class="order-img-container" style="/* background: url({{order.products.first.image.url}}) */">
+                    <div class="order-img-container">
                     {% if order.products.count <= 3 %}
                         {% for product in order.products.all %}
                         <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">

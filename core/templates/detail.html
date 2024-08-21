@@ -8,7 +8,7 @@
     <div class="main-product">
       <div class="container-fluid">
           <div class="row">
-              <div class="col-md-6 col-12 product-first-part" style="padding-left: 79px; padding-top: 26px;">
+              <div class="col-md-6 col-12 product-first-part" style=" padding-top: 26px;">
                   <div class="product-path-cont">
                       <p class="list-path" style="margin-bottom: 42px;"> 
                         <!-- <img src="{% static 'img/arrow.svg' %}" alt=""> -->
@@ -63,14 +63,10 @@
                       <div class="prices d-flex">
 
                         {% if product.old_price %}
-                          <span id="old-price" class="old-price card-text">{{ product.old_price}} $</span>
+                          <span id="old-price" default="{{ product.old_price }}" class="old-price card-text">{{ product.old_price}} $</span>
                         {% endif %}
 
-                        <p id="price" class="price card-text"> {{ product.price }} $</p>
-                        
-                        <!-- {% if product.discount %}
-                            <p id="discount" class="price ml-2">(–{{ product.discount }}%)</p>
-                        {% endif %} -->
+                        <p id="price" default="{{ product.price }}" class="price card-text"> {{ product.price }} $</p>
 
                       </div>
                       {% if colors %}
@@ -169,7 +165,7 @@
 
         {% if user.is_authenticated %}
         <div class="write-comment" style="margin-top: 48px; text-align: center;">
-            <form class="comment-form" method="post" action="" style="width: 800px; margin: 0 auto;">
+            <form class="comment-form" method="post" action>
                 {% csrf_token %}
                 <h6 style="font-size: 20px;">Write a review</h6>
 
@@ -254,19 +250,8 @@
 
 {% endblock content %}
 {% block js %}
+<script src="{% static 'js/detail.js' %}"></script>
 <script>
-
-function setRating(rating){
-    $('select#comment-rating').val(rating)
-    let stars = $('.comment-form .stars img')
-    stars.each((index, star) => {
-        if (index < rating) {
-            star.attr('src', "{% static 'img/star.svg' %}")
-        } else {
-            star.attr('src', "{% static 'img/star-empty.svg' %}")
-        }
-    })
-}
 
 if (/#comment-part$/.test(location.href)){
     showCommentsPart()
@@ -291,109 +276,6 @@ if (!storage.length){
 }
 selectStorage(storage)
 // {% endif %}
-
-function selectColor(element){
-    element = $(element)
-    $('.color').removeClass("active")
-    element.addClass("active")
-
-    let colorname = element.attr('colorname')
-    $('input[name="color"]').val(colorname)
-    sessionStorage.setItem('color', colorname)
-
-    let img = $(`.carousel-item img[colorname="${colorname}"]`)
-    let carouselItems = $(".carousel-item")
-
-    if (img) {
-        carouselItems.removeClass("active")
-        img.parent().addClass("active")
-    }
-}
-
-function selectStorage(element){
-    element = $(element)
-    $('.storage').removeClass("active")
-    element.addClass("active")
-    
-    let storage = element.attr('storage')
-    $('input[name="storage"]').val(storage)
-    sessionStorage.setItem('storage', storage)
-    
-    let addPrice = parseInt(element.attr('addprice'))
-    let defaultPrice = parseInt('{{product.price}}')
-    let quantity = parseInt( $('.quantity span').text() )
-    let finalPrice = (defaultPrice + addPrice) * quantity
-    $('#price').text(`${ finalPrice } $`)
-
-    if ($('#old-price').length) {
-        let oldPrice = parseInt('{{product.old_price}}')
-        $('#old-price').text(`${ (oldPrice + addPrice) * quantity } $`)
-    }
-}
-
-function changeCount(count){
-    let counter = $('.quantity span')
-    prevCount = parseInt(counter.text())
-    quantity = prevCount + count
-    if (quantity < 1) {
-        return
-    }
-    counter.text(quantity)
-    $('input[name="quantity"]').val(quantity)
-
-    let price = parseInt($('#price').text().split(' ')[0])
-    let finalPrice = price/prevCount * quantity
-    $('#price').text(`${ finalPrice } $`)
-
-    if ($('#old-price').length) {
-        let oldPrice = parseInt($('#old-price').text().split(' ')[0])
-        $('#old-price').text(`${ oldPrice/prevCount * quantity } $`)
-    }
-}
-
-function sendComment(rating=0, text){
-    let url = location.href
-    $.post(
-      url,
-      {
-        'csrfmiddlewaretoken': csrftoken,
-        'comment-rating': rating,
-        'text': text
-      },
-      function( data ){
-        $('.product-rating').html( $(data).find('.product-rating > *') )
-        $('.comments-div').html( $(data).find('.comments-div > *') )
-      }
-    )
-}
-
-function deleteComment(comment_id){
-    let url = location.href
-    $.get(
-      `/delete-comment/${comment_id}`,
-      function( data ){
-        $('.product-rating').html( $(data).find('.product-rating > *') )
-        $('.comments-div').html( $(data).find('.comments-div > *') )
-        if ($('.comments-div .row').children().length == 0) {
-            $('.comments-div div').remove()
-        }
-      }
-    )
-}
-
-function showCommentsPart(){
-    $('comment-button').css('color', 'black')
-    $('info-button').css('color', '#BDBDBD')
-    $('#info-part').hide()
-    $('#comment-part').show()
-}
-
-function showInfoPart(){
-    $('comment-button').css('color', '#BDBDBD')
-    $('info-button').css('color', 'black')
-    $('#info-part').show()
-    $('#comment-part').hide()
-}
 
 </script>
 {% endblock %}

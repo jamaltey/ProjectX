@@ -3,7 +3,8 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}?">
-<link rel="stylesheet" href="{% static 'css/checkout.css' %}?">
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
 {% endblock css %}
 
 {% block content %}
@@ -22,31 +23,31 @@
 								Shipping address
 							</h5>
 						</div>
-						<div class="card-body">
-							<div style="border-radius: 8px; background-color: transparent;">
-								<div class="d-flex">
-									<div style="margin-bottom: 24px; margin-right: 32px;">
-										<p>Address<span style="color: red;">*</span></p>
-										{{ form.address }}
-										{{ form.errors.address }}
-									</div>
-									<div style="margin-bottom: 24px;">
-										<p>House/Apartment number</p>
-										{{ form.house }}
-										{{ form.errors.house }}
-									</div>
+
+						<div class="address-form">
+							<div class="d-flex">
+								<div>
+									<p>Address<span style="color: red;">*</span></p>
+									{{ form.address }}
+									{{ form.errors.address }}
 								</div>
-				
-						<div class="d-flex">
-							<div style="margin-bottom: 24px; margin-right: 32px;">
-								<p>Additional instructions</p>
-								{{ form.instructions }}
-								{{ form.errors.instructions }}
+								<div>
+									<p>House/Apartment number</p>
+									{{ form.house }}
+									{{ form.errors.house }}
+								</div>
 							</div>
-						</div>
-								
+			
+							<div class="d-flex">
+								<div>
+									<p>Additional instructions</p>
+									{{ form.instructions }}
+									{{ form.errors.instructions }}
+								</div>
 							</div>
+							
 						</div>
+
 					</div>
 
 					<div style="margin-bottom: 120px;">
@@ -55,18 +56,22 @@
 								Payment method
 							</h5>
 						</div>
-						<div>
-						<div class="card-body">
-							<div class="d-flex justify-content-center">
-								<button type="button" id="card" disabled class="payment-method" style="margin-right: 32px;">
+
+						<div class="payment-methods-container card-body">
+							<div class="btn-container">
+
+								<button type="button" id="card" disabled class="payment-method">
 									<img src="{% static 'img/card-gray.svg' %}" alt="">
 									Pay now with card 
 								</button>
+
 								<button type="button" id="cash" onclick="selectPaymentMethod(this)" class="payment-method active">
 									<img src="{% static 'img/cash.svg' %}" alt="">
 									Pay at door with cash
 								</button>
+
 							</div>
+
 							<div class="text-center" style="margin-top: 30px;">
 								<select style="display: none;" name="payment-method">
 									<option value="cash">Cash</option>
@@ -74,8 +79,9 @@
 								</select>
 								<input type="submit" value="Submit">
 							</div>
+
 						</div>
-						</div>
+
 					</div>
                 </div>
 			</form>

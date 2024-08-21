@@ -64,7 +64,7 @@
                                   <span>
                                     <label class="container">{{i.title}}
                                           <input type="checkbox" onchange="applyFilter(this, 'brand', '{{i.title}}')" {% if request.GET.brand.lower == i.title.lower %} checked {% endif %}>
-                                          <span class="checkmark"></span>
+                                          
                                     </label>
                                   </span>
                               </li>
@@ -88,7 +88,7 @@
                                 <span>
                                     <label class="container">{{i.title}}
                                         <input type="checkbox" onchange="applyFilter(this, 'type', '{{i.title}}')" {% if request.GET.type.lower == i.title.lower %} checked {% endif %}>
-                                        <span class="checkmark"></span>
+                                        
                                     </label>
                                 </span>
                               </li>
@@ -104,22 +104,20 @@
                         Category ({{categories.count}})
                     </h5>
                 </div>
-                <div>
-                    <div class="card-body">
-                        <ul>
-                          {% for i in categories %}
-                            <li style="list-style: none;">
-                              <span>
-                                  <label class="container">{{i}}
-                                      <input type="checkbox" onchange="applyFilter(this, 'category', '{{i}}')" {% if request.GET.category.lower == i.lower %} checked {% endif %}>
-                                      <span class="checkmark"></span>
-                                  </label>
-                              </span>
-                            </li>
-                          {% endfor %}
-                        </ul>
-                    </div>
-                </div>
+
+				<div class="card-body">
+					<ul>
+					{% for i in categories %}
+						<li style="list-style: none;">
+						<span>
+							<label class="container">{{i}}
+								<input type="checkbox" onchange="applyFilter(this, 'category', '{{i}}')" {% if request.GET.category.lower == i.lower %} checked {% endif %}>
+							</label>
+						</span>
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
             </div>
 
               <div class="text-center">
@@ -237,6 +235,10 @@
 {% block js %}
 <script src="{% static 'js/update-favorites.js' %}"></script>
 <script>
+
+if ( ! $(`.nav-item .nav-link.active`).length ){
+	$(`.nav-item .nav-link[href="/list/"]`).addClass('active')
+}
 
 function applyFilter(checkbox, key, value) {
     if (checkbox.checked) {

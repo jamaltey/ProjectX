@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row">
             {% include 'includes/profile-tabs.html' %}
-            <div class="col-md-9 profile-cards-cont" style="margin-top: 40px; padding-left: 34px;">
+            <div class="col-md-9 profile-cards-cont" style="margin-top: 40px;">
             {% block profile-content %}
             
             {% endblock profile-content %}
@@ -23,14 +23,24 @@
 {% endblock content %}
 
 {% block js %}
-<script>
-let icon = $(`.profile-main li a[href="${activeTab}"] img`)
 
-icon.attr('src', icon.attr('src').replace(/.svg$/, '-green.svg'))
-$(`.profile-main li a[href="${activeTab}"] span`).addClass('active')
+<script>
+
+let activeProfileTab = location.pathname
+
+if ( ! $(`.nav-item .nav-link.active`).length ){
+	$(`.nav-item .nav-link#profile-link`).addClass('active')
+}
 
 </script>
 {% block profile-js %}
 {% endblock profile-js %}
+<script>
+let icon = $(`.profile-main li a[href="${activeProfileTab}"] img`)[0]
+
+icon.src = icon.src.replace(/.svg$/, '-green.svg')
+$(`.profile-main li a[href="${activeProfileTab}"] span`).addClass('active')
+
+</script>
 
 {% endblock js %}

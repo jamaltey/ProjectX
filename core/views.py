@@ -70,6 +70,8 @@ def detail(request: HttpRequest, pk: int):
             cart = Cart.objects.get_or_create(user=request.user)[0]
             product_version, created = cart.products.get_or_create( product=product )
 
+            ProductVersion.delete_empty()
+
             if color:
                 product_version.color = color
             if storage:

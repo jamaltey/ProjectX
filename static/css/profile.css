@@ -17,16 +17,14 @@ textarea{
     resize: none;
 }
 
-input[type=submit]{
-    background-color: #2DD06E !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 1px !important;
-    color: white !important;
-}
-
 .profile-sections img{
     margin-right: 16px;
+}
+
+.profile-inputs{
+    background-color: white !important;
+    padding: 32px;
+    max-width: 720px;
 }
 
 .profile-names-cont{

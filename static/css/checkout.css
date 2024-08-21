@@ -16,6 +16,11 @@
     color: #4F4F4F;
 }
 
+.btn-container{
+    display: flex;
+    justify-content: space-between;
+}
+
 button.payment-method{
     width: 248px;
     height: 48px;
@@ -26,4 +31,14 @@ button.payment-method{
 .payment-method.active{
     border: 2px solid cyan;
     background: #ffffff;
+}
+
+@media (min-width: 361px) and (max-width: 767px) {
+    .payment-methods-container{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    button.payment-method{
+        width: auto;
+    }
 }

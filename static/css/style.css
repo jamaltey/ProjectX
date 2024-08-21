@@ -67,17 +67,6 @@ span.cart-objects-count{
     margin-right: 28px;
 }
 
-.cart-object{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    border-radius: 8px;
-    margin-bottom: 30px;
-    padding: 0;
-    padding-right: 10px;
-}
-
 .nav-link{
     border: none !important;
     border-top-left-radius: .25rem;
@@ -134,7 +123,8 @@ div.no-products{
 }
 
 .carousel-item img{
-    height: 386px;
+    /* max-height: 386px; */
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -270,6 +260,11 @@ div.no-products{
 .stars{
     user-select: none;
     -webkit-user-select: none;
+}
+
+.comment-form{
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .comment-form .stars img{

@@ -1,7 +1,6 @@
 from django.db import models
 from colorfield.fields import ColorField
 from accounts.models import User
-from django.core.exceptions import ObjectDoesNotExist
 import re, math
 
 class Rating(models.Model):
@@ -233,7 +232,16 @@ class ProductVersion(models.Model):
         if self.storage:
             final_price += self.storage.price
         return final_price * self.quantity
-    
+
+    @classmethod
+    def delete_empty(cls):
+        n = 0
+        for i in cls.objects.all():
+            if not i.carts.count() and not i.orders.count():
+                i.delete()
+                n += 1
+        return n
+
     def __str__(self):
         result = str(self.product)
         if self.color:

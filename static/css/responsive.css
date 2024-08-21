@@ -15,7 +15,7 @@
         display: inherit !important;
     }
     .navbar {
-        padding-left: 20px !important;
+        padding: 20px !important;
     }
     .nav-form {
         margin-left: 0 !important;
@@ -28,6 +28,9 @@
     }
     .col-md-3 {
         margin-bottom: 70px;
+    }
+    .col-md-4{
+        padding: 0 !important;
     }
     .banners-inner {
         padding: 25px !important;
@@ -49,7 +52,7 @@
         width: auto !important;
     }
     .submit-btn {
-        width: 100px;
+        width: 100%;
     }
     .first-part {
         padding-left: 0 !important;
@@ -74,9 +77,6 @@
     }
     .password-t-label {
         width: 92px;
-    }
-    .submit-btn {
-        width: 303px !important;
     }
     label {
         margin-right: 0 !important;
@@ -109,6 +109,13 @@
     }
     .payment-card {
         width: auto !important;
+    }
+    #info-part{
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    #info-part .col-md-6{
+        padding: 0 !important;
     }
     
 }

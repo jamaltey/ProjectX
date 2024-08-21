@@ -4,7 +4,7 @@
 {% block title %}Cart - {% endblock title %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/cart.css' %}?">
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
 {% endblock css %}
 
 {% block content %}
@@ -24,10 +24,10 @@
 	<div class="row">
 		{% for i in cart.products.all %}
 		<div id="{{ i.id }}" class="col-md-12 cart-object">
-			<img style="width: 150px !important;" src="{{ i.image.url }}" alt="{{ i.title }}">
+			<img src="{{ i.image.url }}" alt="{{ i.title }}">
 			<div class="container-fluid">
 				<h2 style="margin: 0;">
-					{{ i }}
+					{{ i.product }}
 				</h2>
 				<div class="info">
 					<span class="price">
@@ -49,7 +49,7 @@
 				</div>
 			</div>
 
-			<div class="quantity">
+			<div class="btn-container">
 				<div style="gap: 10px;" class="counter-elements d-flex">
 					<div onclick="changeQuantity({{ i.id }}, -1)" class="counter-button">
 						<img src="/static/img/minus.svg" alt="">
@@ -59,10 +59,10 @@
 						<img src="/static/img/plus.svg" alt="">
 					</div>
 				</div>
+	
+				<a class="btn view-details" href="{% url 'accounts:cart-detail' i.id %}">View details »</a>
+				<a class="btn" href="{% url 'accounts:cart-remove' i.id %}"><img style="height: 30px;" src="{% static 'img/remove.svg' %}?" alt=""></a>
 			</div>
-
-			<a class="btn view-details" href="{% url 'accounts:cart-detail' i.id %}">View details »</a>
-			<a class="btn" href="{% url 'accounts:cart-remove' i.id %}"><img style="height: 30px;" src="{% static 'img/remove.svg' %}?" alt=""></a>
 			
 		</div>
 		{% endfor %} 
