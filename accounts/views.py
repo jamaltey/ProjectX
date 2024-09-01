@@ -1,15 +1,18 @@
-from django.shortcuts import render, redirect, resolve_url
+from django.db.models.base import Model as Model
+from django.db.models.query import QuerySet
+from django.shortcuts import render, redirect
 from django.http import HttpRequest, Http404, HttpResponse, JsonResponse
-from django.contrib.auth.views import LoginView, RedirectURLMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout, login, authenticate
 from django.urls import reverse_lazy
 from django.views.generic import *
-from accounts.models import User
-from accounts.forms import SignUpForm, LoginForm, EditProfileForm, AddressForm
+from .models import User
+from .forms import SignUpForm, LoginForm, EditProfileForm, AddressForm
 from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
-from django.contrib.auth import logout, login, authenticate
 from core.models import Product, Favorite, ProductVersion, Cart, Address, Order
-from core.views import isEmpty
+from core.utils import isEmpty
 import re
 
 def register(request):
@@ -41,66 +44,27 @@ def orders(request: HttpRequest):
     }
     return render(request, 'orders.html', context)
 
-@login_required
-def order_detail(request: HttpRequest, pk: int):
-    order = Order.objects.get(id=pk, user=request.user)
-    context = {
-        'order': order
-    }
-    return render(request, 'order-detail.html', context)
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'order-detail.html'
 
-@login_required
-def address(request: HttpRequest):
-    user = request.user
-    user_has_address = Address.objects.filter(user=user).exists()
+    def get_object(self, queryset=None):
+        return self.model.objects.get(id=self.kwargs['pk'], user=self.request.user)
 
-    if request.method == 'POST':
-        form = AddressForm(request.POST)
-        if form.is_valid():
-            if user_has_address:
-                address: Address = user.address
-                address.address = form.cleaned_data['address']
-                address.house = form.cleaned_data['house']
-                address.instructions = form.cleaned_data['instructions']
-                address.save()
-            else:
-                address = form.save(commit=False)
-                address.user = user
-                address.save()
-            return redirect('accounts:address')
-    form = AddressForm()
-    if user_has_address:
-        form['address'].initial = user.address.address
-        form['house'].initial = user.address.house
-        form['instructions'].initial = user.address.instructions
+class CartView(LoginRequiredMixin, DetailView):
+    model = Cart
+    template_name = 'cart.html'
 
-    context = {
-        'form': form
-    }
-    return render(request, 'address.html', context)
+    def get_object(self, queryset=None):
+        return self.model.objects.get_or_create(user=self.request.user)[0]
 
-@login_required
-def cart(request: HttpRequest):
-    favorites = [i.product for i in Favorite.objects.filter(user=request.user)]
-    cart = Cart.objects.get_or_create(user=request.user)[0]
+class CartDetailView(LoginRequiredMixin, DetailView):
+    model = ProductVersion
+    template_name = 'cart-detail.html'
+    context_object_name = 'product'
 
-    context = {
-        'favorites': favorites,
-        'cart': cart
-    }
-    return render(request, 'cart.html', context)
-
-@login_required
-def cart_detail(request: HttpRequest, pk: int):
-    try:
-        product = request.user.cart.products.get(id=pk)
-    except ObjectDoesNotExist:
-        raise Http404('Product not found')
-    
-    context = {
-        'product': product
-    }
-    return render(request, 'cart-detail.html', context)
+    def get_queryset(self):
+        return self.request.user.cart.products.all()
 
 @login_required
 def remove_from_cart(request: HttpRequest, pk: int):
@@ -147,75 +111,59 @@ def wishlist(request: HttpRequest, pk: int = None):
         if redirect_to:
             redirect_to = redirect_to.group(1)
             return redirect(redirect_to)
-
+        
+        return JsonResponse({'is_favorite': favorite.exists()})
+ 
     context = {
         'favorites': Favorite.objects.filter(user=request.user)
     }
     return render(request, 'wishlist.html', context)
 
-@login_required
-def checkout(request: HttpRequest):
-    user = request.user
-    cart: Cart = user.cart
-    user_has_address = Address.objects.filter(user=user).exists()
-    if not cart:
-        return redirect('accounts:cart')
-
-    if request.method == 'POST':
-        form = AddressForm(request.POST)
-        if form.is_valid():
-            if user_has_address:
-                address: Address = user.address
-                address.address = form.cleaned_data['address']
-                address.house = form.cleaned_data['house']
-                address.instructions = form.cleaned_data['instructions']
-                address.save()
-            else:
-                address = form.save(commit=False)
-                address.user = user
-                address.save()
-
-            order = Order.objects.create(user=user, address=address)
-            order.products.set(cart.products.all())
-            order.save()
-            cart.clear_cart()
-            return redirect('accounts:orders')
-    
-    form = AddressForm()
-    if user_has_address:
-        form['address'].initial = user.address.address
-        form['house'].initial = user.address.house
-        form['instructions'].initial = user.address.instructions
-
-    SHIPPING_PRICE = 9.99
-    context = {
-        'shipping_price': SHIPPING_PRICE,
-        'total_price': cart.total_price + SHIPPING_PRICE,
-        'user_has_address': user_has_address,
-        'form': form
-    }
-    return render(request, 'checkout.html', context)
-
-class UpdateAddress(UpdateView):
+class AddressView(LoginRequiredMixin, CreateView, UpdateView):
     model = Address
     form_class = AddressForm
     template_name = 'address.html'
+    success_url = reverse_lazy('accounts:address')
 
-    def get_success_url(self):
-        return reverse_lazy(f'accounts:address')
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect(f'/accounts/login/?next={request.get_full_path()}')
-        if self.request.user.id != self.get_object().user.id:
-            raise PermissionDenied
-        return super(UpdateAddress, self).dispatch(request, *args, **kwargs)
+    def get_object(self, queryset=None):
+        user: User = self.request.user
+        user_has_address = Address.objects.filter(user=user).exists()
+
+        return user.address if user_has_address else None
     
     def form_valid(self, form):
         address = form.save(commit=False)
         address.user = self.request.user
         address.save()
-        return redirect('accounts:address')
+        return redirect(self.success_url)
+
+class CheckoutView(AddressView):
+    template_name = 'checkout.html'
+    success_url = reverse_lazy('accounts:orders')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user: User = self.request.user
+        cart: Cart = user.cart
+
+        address = self.get_object()
+        order = Order.objects.create(user=user, address=address)
+        order.products.set(cart.products.all())
+        order.save()
+
+        cart.clear_cart()
+
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user: User = self.request.user
+        cart: Cart = user.cart
+        context.update({
+            'shipping_price': Order.SHIPPING_PRICE,
+            'total_price': cart.total_price + Order.SHIPPING_PRICE,
+        })
+        return context
 
 class CustomLoginView(LoginView):
     template_name = 'login.html'
@@ -227,17 +175,11 @@ class CustomLoginView(LoginView):
             return redirect('core:home')
         return super(CustomLoginView, self).dispatch(request, *args, **kwargs)
 
-class EditProfile(UpdateView):
+class EditProfile(LoginRequiredMixin, UpdateView):
     model = User
     form_class = EditProfileForm
     template_name = 'profile-info.html'
+    success_url = reverse_lazy('accounts:profile-info')
 
-    def get_success_url(self):
-        return reverse_lazy(f'core:home')
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect(f'/accounts/login/?next={request.get_full_path()}')
-        if self.request.user.id != self.get_object().id:
-            raise PermissionDenied
-        return super(EditProfile, self).dispatch(request, *args, **kwargs)
+    def get_object(self, queryset=None):
+        return self.request.user

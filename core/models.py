@@ -1,25 +1,8 @@
 from django.db import models
 from colorfield.fields import ColorField
 from accounts.models import User
+from .utils import Rating
 import re, math
-
-class Rating(models.Model):
-    rating = models.PositiveIntegerField()
-
-    @classmethod
-    def get_default_pk(cls):
-        return cls.objects.get_or_create(rating=0)[0].pk
-
-    def render_stars_html(self):
-        result = ''
-        for i in range(self.rating):
-            result += '<img src="/static/img/star.svg" alt="">\n'
-        for i in range(5 - self.rating):
-            result += '<img src="/static/img/star-empty.svg" alt="">\n'
-        return result
-
-    def __str__(self):
-        return str(self.rating) if self.rating > 0 else 'No rating'
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
@@ -29,9 +12,8 @@ class Product(models.Model):
     specifications = models.ForeignKey("Specifications", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
     storages = models.ManyToManyField("Storage", related_name="products", blank=True)
     type = models.ForeignKey("ProductType", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
-    rating = models.ForeignKey("Rating", on_delete=models.CASCADE, related_name="products", default=Rating.get_default_pk, null=True, blank=True)
-    price = models.PositiveIntegerField() # TODO: different configurations have different prices
-    old_price = models.PositiveIntegerField(blank=True, null=True)
+    price = models.PositiveSmallIntegerField()
+    old_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -49,14 +31,19 @@ class Product(models.Model):
             return None
 
     @property
-    def reviews(self) -> models.QuerySet:
-        return self.comments.filter(rating__rating__gt=0)
+    def reviews(self):
+        reviews: models.QuerySet[Comment] = self.comments.filter(rating_value__gt=0)
+        return reviews
+
+    @property
+    def rating(self):
+        return Rating(self.calculate_rating())
 
     def calculate_rating(self):
         reviews = self.reviews
-        if reviews.count() > 0:
-            summ = sum(i.rating.rating for i in reviews.all())
-            count = reviews.count()
+        count = reviews.count()
+        if count > 0:
+            summ = sum(i.rating_value for i in reviews)
             avg = math.ceil(summ / count)
             return avg
         else:
@@ -84,22 +71,23 @@ class Specifications(models.Model):
     ram = models.CharField(max_length=100, null=True, blank=True)
     battery = models.CharField(max_length=100, null=True, blank=True)
     water_and_dust_rating = models.CharField(max_length=100, null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Specifications"
-        verbose_name_plural = "Specifications"
+    additional_specifications = models.JSONField(null=True, blank=True)
 
     @property
     def dict(self):
-        result = {}; FIELDS = self.FIELDS
+        FIELDS = self.FIELDS
+        result = self.additional_specifications or {}
         for i in FIELDS:
-            value = eval(f'self.{i}')
+            value = getattr(self, i)
             if value:
                 result[FIELDS[i]] = value
         return result
     
     def __iter__(self):
         return iter(self.dict.items())
+
+    class Meta:
+        verbose_name_plural = verbose_name = "Specifications"
 
     def __str__(self):
         if self.name:
@@ -120,6 +108,9 @@ class ProductImage(models.Model):
         if self.color:
             return f"{self.product} ({self.color.color_name}) —— {filename}"
         return f"{self.product} —— {filename}"
+    
+    class Meta:
+        ordering = ['color__color_name']
 
 class Color(models.Model):
     color_name = models.CharField(max_length=100)
@@ -128,11 +119,13 @@ class Color(models.Model):
 
     def __str__(self):
         return f"{self.color_name} ({self.color}) —— {self.product}"
+    
+    class Meta:
+        ordering = ['color_name']
 
 class Storage(models.Model):
-    storage = models.PositiveIntegerField() # in GB
-    price = models.PositiveIntegerField(default=0)
-    # product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="storages", null=True, blank=True, db_constraint=False)
+    storage = models.PositiveSmallIntegerField() # in GB
+    price = models.PositiveSmallIntegerField(default=0)
 
     @property
     def size_format(self):
@@ -140,6 +133,9 @@ class Storage(models.Model):
 
     def __str__(self):
         return f"{self.size_format}, +{self.price}$"
+    
+    class Meta:
+        ordering = ['storage']
 
 class Brand(models.Model):
     title = models.CharField(max_length=100)
@@ -155,14 +151,30 @@ class ProductType(models.Model):
         return self.title
 
 class Comment(models.Model):
+    RATING_CHOICES =(
+        (0, 'No rating'),
+        (1, '1 star'),
+        (2, '2 stars'),
+        (3, '3 stars'),
+        (4, '4 stars'),
+        (5, '5 stars')
+    )
+
     text = models.TextField()
-    rating = models.ForeignKey(Rating, on_delete=models.CASCADE, related_name="comments", default=Rating.get_default_pk)
+    rating_value = models.PositiveSmallIntegerField(default=0, choices=RATING_CHOICES)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    @property
+    def rating(self):
+        return Rating(self.rating_value)
+
     def __str__(self):
         return f'{self.author.full_name}: {self.text}'
+    
+    class Meta:
+        ordering = ['-rating_value']
 
 class Favorite(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorites")
@@ -203,7 +215,7 @@ class Cart(models.Model):
 
 class ProductVersion(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="versions")
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveSmallIntegerField(default=1)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -221,10 +233,8 @@ class ProductVersion(models.Model):
         if not old_price:
             return 0
         if self.storage:
-            old_price =  old_price + self.storage.price
-        if self.quantity > 1:
-            old_price = old_price * self.quantity
-        return old_price
+            old_price = old_price + self.storage.price
+        return old_price * self.quantity
 
     @property
     def final_price(self):
@@ -248,9 +258,7 @@ class ProductVersion(models.Model):
             result += f" {self.color.color_name}"
         if self.storage:
             result += f" {self.storage.size_format}"
-        # if self.quantity > 1:
-        #     result += f" x{self.quantity}"
-        return result
+        return result + f" x{self.quantity}"
 
 class Address(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="address", null=True, blank=True)
@@ -284,6 +292,7 @@ class Order(models.Model):
         ('Cash', 'Cash'),
         ('Card', 'Card'),
     )
+    SHIPPING_PRICE = 9.99
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     products = models.ManyToManyField(ProductVersion, related_name="orders")
@@ -294,8 +303,7 @@ class Order(models.Model):
 
     @property
     def shipping_price(self):
-        SHIPPING_PRICE = 9.99
-        return SHIPPING_PRICE
+        return self.SHIPPING_PRICE
     
     @property
     def price(self):

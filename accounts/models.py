@@ -1,5 +1,4 @@
 from django.db import models
-from core.models import *
 from django.contrib.auth.models import AbstractUser, UnicodeUsernameValidator
 from accounts.managers import UserManager
 
@@ -23,6 +22,10 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
     objects = UserManager()
+
+    @property
+    def favorite_products(self):
+        return [i.product for i in self.favorites.all()]
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"

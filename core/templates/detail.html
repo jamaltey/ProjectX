@@ -22,7 +22,7 @@
                         <div class="carousel-item active">
                           <img class="d-block" src="{{product.image.url}}" alt="First slide">
                         </div>
-                    {% for image in images %}
+                    {% for image in product.images.all %}
                         <div class="carousel-item">
                           <img class="d-block" {% if image.color %} colorname="{{image.color.color_name}}" {% endif %} src="{{image.url}}" alt="Second slide">
                         </div>
@@ -46,9 +46,8 @@
 
                       <input type="hidden" name="product_id" value="{{ product.id }}">
 
-                      <div class="product-title">
-                          <h6 class="product-title-h6" style="font-size: 20px; width: 488px; line-height: 28px;">{{ product.title }}</h6>
-                      </div>
+                      <h6 class="product-title" style="font-size: 20px; width: 488px; line-height: 28px;">{{ product.title }}</h6>
+
                       <div class="product-rating">
                         {% if product.rating.rating %}
                           <div class="stars">
@@ -105,17 +104,17 @@
                       </div>
 
                       <div class="purchase-buttons d-flex">
-                          <a href=""><button type="submit" class="basket-add"><img src="{% static 'img/white-cart.svg' %}" style="margin-right: 16px; width: 20px; margin-top: -2px;" alt=""> Add to cart</button></a>
-                          <a href="{% url 'accounts:wishlist-update' product.id %}?redirect_to={{ request.get_full_path }}">
+                          <button type="submit" class="basket-add"><img src="{% static 'img/white-cart.svg' %}" style="margin-right: 16px; width: 20px; margin-top: -2px;" alt=""> Add to cart</button>
+                          <!-- <a href="{% url 'accounts:wishlist-update' product.id %}?redirect_to={{ request.get_full_path }}"> -->
                             <button type="button" class="wishlist-add">
                                 <img src="{% static 'img/green-heart.svg' %}" style="margin-right: 3px; width: 20px; margin-top: -2px;" alt="">
-                            {% if not favorite %}
-                                Add to wishlist
+                            {% if not product in user.favorite_products %}
+                                <span>Add to wishlist</span>
                             {% else %}
-                                Remove from wishlist
+                                <span>Remove from wishlist</span>
                             {% endif %}
                             </button>
-                          </a>
+                          <!-- </a> -->
                       </div>
                     </form>
                   </div>
@@ -164,86 +163,81 @@
       <div class="container-fluid" id="comment-part">
 
         {% if user.is_authenticated %}
-        <div class="write-comment" style="margin-top: 48px; text-align: center;">
-            <form class="comment-form" method="post" action>
-                {% csrf_token %}
-                <h6 style="font-size: 20px;">Write a review</h6>
+		<form class="comment-form" method="post" action>
+			{% csrf_token %}
+			<h6 style="font-size: 20px;">Write a review</h6>
 
-                <div style="display: flex; text-align: start; margin-top: 32px;">
-                   <p><label for="name">Rating</label></p>
-                   <select style="display: none;" name="comment-rating" id="comment-rating">
-                       <option value="0">0</option>
-                       <option value="1">1</option>
-                       <option value="2">2</option>
-                       <option value="3">3</option>
-                       <option value="4">4</option>
-                       <option value="5">5</option>
-                   </select>
+			<div style="display: flex; text-align: start; margin-top: 32px;">
+				<p><label for="name">Rating</label></p>
+				<select style="display: none;" name="comment-rating" id="comment-rating">
+					<option value="0">0</option>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+				</select>
 
-                   <div class="stars" style="margin-left: 16px;">
-                       <img onclick="setRating(1)" src="{% static 'img/star-empty.svg' %}" alt="1">
-                       <img onclick="setRating(2)" src="{% static 'img/star-empty.svg' %}" alt="2">
-                       <img onclick="setRating(3)" src="{% static 'img/star-empty.svg' %}" alt="3">
-                       <img onclick="setRating(4)" src="{% static 'img/star-empty.svg' %}" alt="4">
-                       <img onclick="setRating(5)" src="{% static 'img/star-empty.svg' %}" alt="5">
-                   </div>
+				<div class="stars" style="margin-left: 16px;">
+					<img onclick="setRating(1)" src="{% static 'img/star-empty.svg' %}" alt="1">
+					<img onclick="setRating(2)" src="{% static 'img/star-empty.svg' %}" alt="2">
+					<img onclick="setRating(3)" src="{% static 'img/star-empty.svg' %}" alt="3">
+					<img onclick="setRating(4)" src="{% static 'img/star-empty.svg' %}" alt="4">
+					<img onclick="setRating(5)" src="{% static 'img/star-empty.svg' %}" alt="5">
+				</div>
 
-               </div>
+			</div>
 
-                 <div style="text-align: start; margin-top: 32px;">
-                     <p><label for="text">Text</label></p>
-                     <textarea required id="comment-text" name="text" type="text" style="background-color: #F2F2F2; padding-left: 16px; border: none; border-radius: 8px; width: 100%; padding-top: 14px; resize: none; height: 114px;" placeholder="Your comment..."></textarea>
-                 </div>
-                 <div style="text-align: end; margin-top: 32px;">
-                     <input onclick="sendComment($('#comment-rating').val(), $('#comment-text').val())" type="button" value="Send" style="background-color: #2DD06E; color: white; border-radius: 8px; border: none;width: 174px; height: 44px;">
-                 </div>
-            </form>
-        </div>
+				<div style="text-align: start; margin-top: 32px;">
+					<p><label for="text">Text</label></p>
+					<textarea required id="comment-text" name="text" type="text" style="background-color: #F2F2F2; padding-left: 16px; border: none; border-radius: 8px; width: 100%; padding-top: 14px; resize: none; height: 114px;" placeholder="Your comment..."></textarea>
+				</div>
+				<div style="text-align: end; margin-top: 32px;">
+					<input onclick="sendComment($('#comment-rating').val(), $('#comment-text').val())" type="button" value="Send" style="background-color: #2DD06E; color: white; border-radius: 8px; border: none;width: 174px; height: 44px;">
+				</div>
+		</form>
         {% endif %}
 
-         <div class="comments-div">
-            {% if comments %}
-          <div class="container-fluid" style="padding-bottom: 38px; border-bottom: 1px solid #C4C4C4; border-top: 1px solid #C4C4C4; margin-top: 20px; padding-top: 32px;">
-              <div class="row">
-                {% for i in comments %}
-                    <div id="comment{{i.id}}" class="col-md-3" style="text-align: center; border-right: 1px solid #C4C4C4;">
-                        <h1>{{i.rating}}</h1>
-                        <div class="stars">
-                            {{ i.rating.render_stars_html | safe }}
-                        </div>
-                    </div>
-                    <div id="comment{{i.id}}" class="col-md-9" style="padding-left: 31px;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <div>
-                                <h6 style="font-size: 20px;">{{i.author.full_name}}</h6>
-                            </div>
-                            <div>
-                                <p style="font-size: 12px;">{{i.created_at |date:"M d, Y"}}</p>
-                            </div>
-                        </div>
-                        <div>
-                            <p style="color: #4F4F4F;">{{i.text}}</p>
-                        </div>
-                        {% if i.author == request.user %}
-                          <button onclick="deleteComment({{i.id}})" class="btn-dark">
-                              Delete comment
-                          </button>
-                        {% endif %}
-                    </div>
+        {% if comments %}
+			<div class="comments" style="padding: 32px 15px; border-bottom: 1px solid #C4C4C4; border-top: 1px solid #C4C4C4;">
+				{% for i in comments %}
+					<div class="comment row" id="{{ i.id }}">
+					
+					<div class="col-md-3">
+						<h1>{{i.rating}}</h1>
+						<div class="stars">
+							{{ i.rating.render_stars_html | safe }}
+						</div>
+					</div>
+					<div class="col-md-9">
+						<div class="comment-info">
+							<h6>{{i.author.full_name}}</h6>
 
-                    {% if not forloop.last %}
-                    <hr id="comment{{i.id}}" style="color: #C4C4C4; width: 100%; margin: 25px;">
-                    {% endif %}
-                {% endfor %}
-              </div>
-          </div>
-            {% else %}
-            <div class="no-products">
-                <h1>No comments yet...</h1>
-                <img src="{% static 'img/no-products.svg' %}" alt="">
-              </div>
-            {% endif %}
-         </div>
+							<p>{{i.created_at | date:"M d, Y"}}</p>
+						</div>
+
+						<p>{{i.text}}</p>
+
+						{% if i.author == request.user %}
+							<button onclick="deleteComment('{{i.id}}')" class="btn-dark">
+								Delete comment
+							</button>
+						{% endif %}
+					</div>
+
+					{% if not forloop.last %}
+					<hr style="color: #C4C4C4; width: 100%; margin: 25px;">
+					{% endif %}
+
+					</div>
+				{% endfor %}
+			</div>
+        {% else %}
+			<div class="no-products">
+				<h1>No comments yet...</h1>
+				<img src="{% static 'img/no-products.svg' %}" alt="">
+			</div>
+        {% endif %}
 
   </div>
   </div>
@@ -252,6 +246,8 @@
 {% block js %}
 <script src="{% static 'js/detail.js' %}"></script>
 <script>
+
+const productId = parseInt('{{ product.id }}')
 
 if (/#comment-part$/.test(location.href)){
     showCommentsPart()

@@ -46,7 +46,7 @@
           <h6 class="mb-4 font-weight-bold">Help</h6>
           {% if user.is_authenticated %}
           <p>
-            <a href="{% url 'accounts:profile-info' user.id %}" class="footer-link">Your Account</a>
+            <a href="{% url 'accounts:profile-info' %}" class="footer-link">Your Account</a>
           </p>
           {% endif %}
           <p>

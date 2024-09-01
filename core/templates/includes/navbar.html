@@ -16,7 +16,7 @@
           <div style="display: flex; margin-left: 113px;" class="nav-icons">
             {% if request.user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'accounts:profile-info' request.user.id %}" id="profile-link"><img src="{% static 'img/person.svg' %}" alt=""></a>
+              <a class="nav-link" href="{% url 'accounts:profile-info' %}" id="profile-link"><img src="{% static 'img/person.svg' %}" alt=""></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'accounts:wishlist' %}"><img src="{% static 'img/heart.svg' %}" alt=""></a>
@@ -36,11 +36,11 @@
               </a>
             </li>
             {% endif %}
-            <!-- <li class="nav-item" onclick="toggleTheme()">
+            <li class="nav-item" onclick="toggleTheme()">
               <a class="nav-link">
                 <img src="https://cdn-icons-png.flaticon.com/128/8338/8338708.png" alt="">
               </a>
-            </li> -->
+            </li>
         </div>
 
         </ul>

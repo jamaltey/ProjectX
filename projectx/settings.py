@@ -14,7 +14,7 @@ from pathlib import Path
 from django.urls import reverse_lazy
 from django.core.management.commands.runserver import Command as runserver
 
-runserver.default_port = "5000"
+runserver.default_addr = "0.0.0.0"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,8 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r$z+xu$0^9mu=r!3gvh9h-a3txn5rjx&c4+%_7vkqw_ct6x#+q'
+from os import getenv
+from dotenv import load_dotenv
+
+load_dotenv()
+SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'core',
     'accounts',
     'colorfield'

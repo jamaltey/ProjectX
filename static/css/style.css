@@ -258,13 +258,38 @@ div.no-products{
 }
 
 .stars{
+    cursor: default;
     user-select: none;
     -webkit-user-select: none;
 }
 
+.comment .col-md-3{
+    text-align: center;
+    border-right: 1px solid #C4C4C4;
+}
+
+.comment .col-md-9{
+    padding-left: 32px;
+}
+
+.comment-info{
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-info p{
+    color: #828282;
+    font-size: 16px;
+}
+
+.comment-info h6{
+    font-size: 20px;
+}
+
 .comment-form{
+    text-align: center;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 48px auto;
 }
 
 .comment-form .stars img{
