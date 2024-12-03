@@ -1,8 +1,14 @@
-input{
+
+main {
+    background-color: #FAF9F9;
+    padding-bottom: 100px;
+}
+
+input {
     width: 279px;
     height: 48px;
 }
-input, textarea{
+input, textarea {
     background: #F2F2F2;
     border-radius: 8px;
     position: inherit;
@@ -10,55 +16,57 @@ input, textarea{
     padding-left: 16px;
     opacity: 1;
 }
-textarea{
+textarea {
     width: 592px;
     height: 80px;
     padding-top: 14px;
     resize: none;
 }
 
-.profile-sections img{
+#profile-tabs {
+    max-width: fit-content;
+    border-radius: 5px;
+    margin: 2.5rem auto 1.5rem auto;
+    /* padding: 2rem; */
+}
+
+#profile-tabs h5 {
+    color: #4f4f4f;
+}
+
+#profile-tabs img {
     margin-right: 16px;
 }
 
-.profile-inputs{
+.profile-inputs {
     background-color: white !important;
     padding: 32px;
     max-width: 720px;
 }
 
-.profile-names-cont{
-    margin-bottom: 10px;
-}
-
-.profile-name-mobile{
-    margin-bottom: 16px;
-    color: #4F4F4F;
-}
-
-a{
+a {
     color: inherit;
 }
 
-a span.active{
+a span.active {
     color: #2DD06E !important;
 }
 
-.order-details-btn{
+.order-details-btn {
     width: 160px;
     height: 40px;
     background-color: #F2F2F2;
     border: none;
     border-radius: 4px;
 }
-.order .card-body div{
+.order .card-body div {
     margin-bottom: 24px;
 }
-.order .card-body div span{
+.order .card-body div span {
     color: #828282;
     font-size: 12px;
 }
-.order .card-body div p{
+.order .card-body div p {
     font-size: 16px;
 }
 

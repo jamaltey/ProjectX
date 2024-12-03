@@ -1,6 +1,6 @@
 from django.db import models
 from colorfield.fields import ColorField
-from accounts.models import User
+from accounts.models import *
 from .utils import Rating
 import re, math
 
@@ -13,7 +13,7 @@ class Product(models.Model):
     storages = models.ManyToManyField("Storage", related_name="products", blank=True)
     type = models.ForeignKey("ProductType", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
     price = models.PositiveSmallIntegerField()
-    old_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    old_price = models.PositiveIntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -53,15 +53,15 @@ class Product(models.Model):
         return f"{self.brand} {self.title}"
 
 class Specifications(models.Model):
-    FIELDS = {'operating_system':'Operating system'
-              ,'cellular_technology':'Cellular technology'
-              ,'display_type':'Display type'
-              ,'camera':'Camera'
-              ,'cpu':'CPU'
-              ,'ram':'RAM'
-              ,'battery':'Battery'
-              ,'water_and_dust_rating':'Water and dust rating'}
-    
+    FIELDS = {'operating_system':'Operating system',
+            'cellular_technology':'Cellular technology',
+            'display_type':'Display type',
+            'camera':'Camera',
+            'cpu':'CPU',
+            'ram':'RAM',
+            'battery':'Battery',
+            'water_and_dust_rating':'Water and dust rating'}
+
     name = models.CharField(max_length=100, null=True, blank=True)
     operating_system = models.CharField(max_length=100, null=True, blank=True)
     cellular_technology = models.CharField(max_length=100, null=True, blank=True)
@@ -176,43 +176,6 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-rating_value']
 
-class Favorite(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="favorites")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="favorites")
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.user.full_name}: {self.product}'
-
-class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="cart")
-    products = models.ManyToManyField("ProductVersion", related_name="carts", blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    @property
-    def count(self):
-        return self.products.count()
-    
-    @property
-    def discount(self):
-        return sum(i.old_price-i.final_price for i in self.products.all() if i.old_price)
-    
-    @property
-    def total_price(self):
-        return sum(i.final_price for i in self.products.all())
-    
-    @property
-    def image(self):
-        if self.products.first():
-            return self.products.first().image
-
-    def clear_cart(self):
-        for product in self.products.all():
-            self.products.remove(product)
-
-    def __str__(self):
-        return f"{self.user.full_name}'s cart"
-
 class ProductVersion(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="versions")
     quantity = models.PositiveSmallIntegerField(default=1)
@@ -259,59 +222,3 @@ class ProductVersion(models.Model):
         if self.storage:
             result += f" {self.storage.size_format}"
         return result + f" x{self.quantity}"
-
-class Address(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="address", null=True, blank=True)
-    address = models.CharField(max_length=100)
-    house = models.CharField(max_length=100, null=True, blank=True)
-    instructions = models.TextField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.address}"
-    
-    def __iter__(self):
-        yield f'Address: {self.address}'
-        if self.house:
-            yield f'House: {self.house}'
-        if self.instructions:
-            yield f'Additional Instructions: {self.instructions}'
-
-    class Meta:
-        verbose_name = "Address"
-        verbose_name_plural = "Addresses"
-
-class Order(models.Model):
-    STATUS_CHOICES = (
-        ('Pending', 'Pending'),
-        ('Shipped', 'Shipped'),
-        ('Delivered', 'Delivered'),
-        ('Cancelled', 'Cancelled'),
-    )
-    PAYMENT_CHOICES = (
-        ('Cash', 'Cash'),
-        ('Card', 'Card'),
-    )
-    SHIPPING_PRICE = 9.99
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    products = models.ManyToManyField(ProductVersion, related_name="orders")
-    address = models.ForeignKey("Address", on_delete=models.CASCADE, related_name="order")
-    payment_method = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default="Cash")
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Pending")
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    @property
-    def shipping_price(self):
-        return self.SHIPPING_PRICE
-    
-    @property
-    def price(self):
-        return sum(i.final_price for i in self.products.all())
-
-    @property
-    def total_price(self):
-        return self.price + self.shipping_price
-
-    def __str__(self):
-        return f"{self.user.full_name}'s order {self.id} ({self.status}) ${self.total_price}"

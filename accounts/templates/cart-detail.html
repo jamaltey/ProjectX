@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock css %}
+
 {% block content %}
 
     <div class="main-product">
@@ -62,7 +66,7 @@
                       {% endif %}
 
                       <div style="padding-top: 24px;" class="purchase-buttons d-flex">
-                          <a href="{% url 'accounts:cart-remove' product.pk %}"><button class="basket-add"><img src="{% static 'img/white-cart.svg' %}" style="margin-right: 16px; width: 20px; margin-top: -2px;" alt=""> Remove from cart</button></a>
+                          <a href="{% url 'accounts_api:cart-remove' product.pk %}"><button class="basket-add"><img src="{% static 'img/white-cart.svg' %}" style="margin-right: 16px; width: 20px; margin-top: -2px;" alt=""> Remove from cart</button></a>
                       </div>
 
                   </div>

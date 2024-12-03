@@ -1,0 +1,225 @@
+
+.carousel-item img {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.colors, .storages {
+    display: flex;
+    align-items: center;
+    padding-top: 24px;
+    gap: 22px;
+}
+
+.colors span, .storages span {
+    font-size: .9em;
+}
+
+.storages {
+    border-bottom: 1px solid #F2F2F2;
+    padding-bottom: 24px;
+}
+
+.color, .storage {
+    cursor: pointer;
+    transition: .3s;
+}
+
+.color {
+    border: 1px solid #E0E0E0;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 10px;
+}
+
+.color.active {
+    border-width: 2px;
+    outline: 2px solid blue;
+}
+
+.storage {
+    border: none;
+    border-radius: 8px;
+    color: #4F4F4F;
+    background-color: #F2F2F2;
+    text-align: center;
+    width: 76px;
+    height: 36px;
+    padding-top: 5px;
+}
+
+.storage:hover {
+    background-color: #E0E0E0;
+}
+
+.storage.active {
+    background-color: #4F4F4F !important;
+    color: white !important;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 24px 0 56px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.quantity div {
+    background-color: #F2F2F2;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    padding: 2px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.purchase-buttons {
+    display: flex;
+}
+
+.purchase-buttons img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.wishlist-add, .basket-add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #2DD06E;
+    border-radius: 8px;
+    height: 48px;
+}
+
+.wishlist-add {
+    color: #2DD06E;
+    background-color: white;
+    padding: 16px;
+}
+
+.basket-add {
+    color: white;
+    background-color: #2DD06E;
+    padding: 16px 32px;
+    margin-right: 28px;
+}
+
+.product-tabs {
+    border-bottom: 1px solid #C4C4C4;
+    padding-bottom: 16px;
+}
+
+.product-tabs button {
+    font-size: 20px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
+#info-button {
+    margin-right: 181px;
+}
+
+#comment-button {
+    color: #BDBDBD;
+}
+
+.specifications {
+    max-width: 95%;
+    margin-bottom: 32px;
+}
+
+.specifications h2 {
+    font-size: 20px;
+}
+
+.specifications div {
+    display: flex;
+    justify-content: space-between; 
+    padding-left: 16px;
+    padding-top: 24px;
+    padding-bottom: 16px;
+}
+
+.specifications span, .specifications p {
+    color: #828282;
+}
+
+#comment-part {
+    margin-bottom: 140px !important;
+    display: none;
+}
+
+.stars {
+    cursor: default;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    text-align: center;
+    max-width: 800px;
+    margin: 48px auto;
+}
+
+.comment-form .stars {
+    margin-left: 15px;
+}
+
+.comment-form .stars img {
+    cursor: pointer;
+}
+
+.comment-form textarea {
+    background-color: #F2F2F2;
+    resize: none;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 16px;
+    width: 100%;
+    height: 114px;
+}
+
+.comment-form input[type=button] {
+    color: white;
+    background-color: #2DD06E;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 0;
+    width: 174px;
+} 
+
+.comment .col-md-3 {
+    text-align: center;
+    border-right: 1px solid #C4C4C4;
+}
+
+.comment h2 {
+    font-size: 2em;
+}
+
+.comment-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-info p {
+    color: #828282;
+}
+
+.comment .col-md-9 {
+    padding-left: 32px;
+}
+
+p {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

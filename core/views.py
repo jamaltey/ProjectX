@@ -15,11 +15,12 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user: User = self.request.user
-        newproducts = Product.objects.order_by('-id')[:4]
-        bestsellers = sorted(newproducts, key=lambda x: x.calculate_rating(), reverse=True)
+        products = Product.objects.order_by('-id')
+        newproducts = products[:4]
+        bestsellers = sorted(products, key=lambda x: x.calculate_rating(), reverse=True)[:4]
 
         if user.is_authenticated:
-            favorites = user.favorite_products
+            favorites = user.favorites.all()
         else:
             favorites = []
 
@@ -121,7 +122,7 @@ def list(request: HttpRequest, sales=False):
 
     user: User = request.user
     if user.is_authenticated:
-        favorites = user.favorite_products
+        favorites = user.favorites.all()
     else:
         favorites = []
 
@@ -182,4 +183,4 @@ def list(request: HttpRequest, sales=False):
 #         })
 
 #         return context
-    
+

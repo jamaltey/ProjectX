@@ -1,79 +1,81 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg navbar-light pr-5 pt-4 pb-4" style="padding-left: 75px;">
-    <a class="navbar-brand" href="{% url 'core:home' %}"><h2>Div Telecom</h2></a>
+<nav class="navbar navbar-expand-lg navbar-light pb-2 pt-3 py-lg-4 px-5">
+	<a class="navbar-brand" href="{% url 'core:home' %}"><h1>Div Telecom</h1></a>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    
-      <div class="collapse navbar-collapse show" id="navbarTogglerDemo03">
-        <ul class="navbar-nav mt-2 mt-lg-0" style="margin: 0 auto;">
-          <form class="form-inline my-2 my-lg-0 nav-form" method="get" action="{% url 'core:list' %}">
-              <input class="form-control nav-inp search" value="{% if search %}{{ search }}{% endif %}" type="search" name="search" placeholder="Search..." aria-label="Search">
-              <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
-          </form>
+	<button class="navbar-toggler py-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+		<i class="fa-solid fa-bars fs-4"></i>
+	</button>
 
-          <div style="display: flex; margin-left: 113px;" class="nav-icons">
-            {% if request.user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'accounts:profile-info' %}" id="profile-link"><img src="{% static 'img/person.svg' %}" alt=""></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'accounts:wishlist' %}"><img src="{% static 'img/heart.svg' %}" alt=""></a>
-            </li>
-            <li class="nav-item">
-            	<a class="nav-link" href="{% url 'accounts:cart' %}"><img src="{% static 'img/cart.svg' %}" alt="">
-				{% if user.cart.count %}
-					<span class="cart-objects-count">{{ user.cart.count }}</span>
-				{% endif %}
-            	</a>
-            </li>
-            {% else %}
-            <li class="nav-item">
-              <a style="color: #4F4F4F !important; font-weight: 500;" class="nav-link" href="{% url 'accounts:login' %}">
-                <img src="{% static 'img/person.svg' %}" alt="">
-                Log in
-              </a>
-            </li>
-            {% endif %}
-            <li class="nav-item" onclick="toggleTheme()">
-              <a class="nav-link">
-                <img src="https://cdn-icons-png.flaticon.com/128/8338/8338708.png" alt="">
-              </a>
-            </li>
-        </div>
+	<div class="collapse navbar-collapse justify-content-between px-3" id="navbar">
+		<form class="nav-form form-inline my-2 my-lg-0 mx-auto" method="get" action="{% url 'core:list' %}">
+			<input class="form-control nav-inp search" id="search" value="{% if search %}{{ search }}{% endif %}" type="search" name="search" placeholder="Search..." aria-label="Search">
+			<!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+		</form>
 
-        </ul>
-        
-      </div>
-  </nav>
-  <li class="nav-item mobile" style="text-decoration: underline;">
-    <a class="nav-link" href="{% url 'core:list' %}">View all products</a>
-  </li>
-  <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:home' %}">New</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:list' %}">All products</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:list' %}?type=Phone">Phones</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:list' %}?type=Tablet">Tablets</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:list' %}?type=Watch">Watches</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:list' %}?type=Headphones">Headphones</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:list' %}?category=Accessories">Accessories</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'core:sales' %}">Sales</a>
-      </li>
+		<ul class="nav-icons d-flex justify-content-center gap-1">
+			{% if user.is_authenticated %}
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'accounts:profile-info' %}" id="profile-link">
+					<i class="fa-regular fa-user"></i>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'accounts:wishlist' %}">
+					<i class="fa-regular fa-heart"></i>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'accounts:cart' %}">
+					<i class="fa-regular fa-cart-shopping"></i>
+					{% if user.cart.products.exists %}
+					<span id="cart-items-count">{{ user.cart.count }}</span>
+					{% endif %}
+				</a>
+			</li>
+			{% else %}
+			<li class="nav-item">
+				<a class="nav-link" href="{% url 'accounts:login' %}">
+					<!-- <img src="{% static 'img/person.svg' %}" alt=""> -->
+					<i class="fa-regular fa-user"></i>
+					Log in
+				</a>
+			</li>
+			{% endif %}
+			<li class="nav-item theme-toggle">
+				<a class="nav-link">
+					<i class="fa-solid fa-circle-half-stroke"></i>
+				</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+<li class="nav-item d-none text-center text-decoration-underline">
+	<a class="nav-link" href="{% url 'core:list' %}">View all products</a>
+</li>
+<ul class="d-none d-lg-flex nav nav-tabs">
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:home' %}">New</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:list' %}">All products</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:list' %}?type=Phone">Phones</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:list' %}?type=Tablet">Tablets</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:list' %}?type=Watch">Watches</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:list' %}?type=Headphones">Headphones</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:list' %}?category=Accessories">Accessories</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" href="{% url 'core:sales' %}">Sales</a>
+	</li>
 </ul>
 

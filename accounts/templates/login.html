@@ -7,62 +7,58 @@
 
 {% block content %}
 
-<div class="main" style="margin-top: 100px; margin-bottom: 110px;">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 first-part" style="padding-left: 55px;">
-                <div class="user-form">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <h3>Log In</h3>
+<main style="padding: 7rem 0;">
+    <div class="row px-5 row-gap-5">
+        <div class="col-12 col-md-6">
+            <div class="user-form">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <h3>Log In</h3>
 
-                        <div class="form-group">
-                            <label for="email">E-mail</label>
-                            {{ form.username }}
-                            {{ form.errors.username }}
-                        </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        {{ form.username }}
+                        {{ form.errors.username }}
+                    </div>
 
-                        <div class="form-group" style="margin-top: 20px;">
-                            <label for="password">Password</label>
-                            {{ form.password }}
-                            {{ form.errors.password }}
-                        </div>
+                    <div class="form-group mt-4">
+                        <label for="password">Password</label>
+                        {{ form.password }}
+                        {{ form.errors.password }}
+                    </div>
 
-                        <div class="mobile mb-1">
-                            <span>Don't have an account?<a href="{% url 'accounts:signup' %}"> Sign Up</a></span> 
-                        </div>
-                        <div class="terms">
-                            <span><a href="">Forgot Password?</a></span>
-                        </div>
+                    <div class="d-lg-none mb-1 mt-3">
+                        <span>Don't have an account?<a href="{% url 'accounts:signup' %}"> Sign Up</a></span> 
+                    </div>
+                    <div class="terms">
+                        <span><a href="">Forgot Password?</a></span>
+                    </div>
 
-                        {% if form.non_field_errors %}
-                        <ul class='form-errors'>
-                            {% for error in form.non_field_errors %}
-                            <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
+                    {% if form.non_field_errors %}
+                    <ul class='form-errors'>
+                        {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
 
-                        <input type="submit" class="submit-btn" value="Log In">
+                    <input type="submit" class="submit-btn" value="Log In">
 
-                    </form>
-                </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+            <div style="background: url('{% static 'img/dot-grid.svg' %}') 100% 0 no-repeat;">
+                <img src="{% static 'img/login.svg' %}" alt="" class="login-img">
+                <!-- <img src="{% static 'img/dot-grid.svg' %}" class="dot-grid" alt="" style="margin-top: -87px; margin-left: -137px;"> -->
             </div>
 
-            <div class="col-md-6 second-part" style="padding-left: 100px;">
-                <div class="illustration-cont">
-                    <img src="{% static 'img/login.svg' %}" alt="" class="login-img">
-                    <img src="{% static 'img/Dot Grid.svg' %}" class="dot-grid" alt=""
-                        style="margin-top: -87px; margin-left: -137px;">
-                </div>
-
-                <div style="width: 388px; text-align: center; margin-top: 15px;">
-                    <p>Don't have an account?<a href="{% url 'accounts:signup' %}?next={{ request.GET.next }}"> Sign Up</a></p>
-                </div>
+            <div style="width: 388px;" class="text-center mt-3">
+                <p>Don't have an account?<a href="{% url 'accounts:signup' %}?next={{ request.GET.next }}"> Sign Up</a></p>
             </div>
-
         </div>
     </div>
-</div>
+</main>
 
 {% endblock %}

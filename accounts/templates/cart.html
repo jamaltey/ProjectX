@@ -9,12 +9,12 @@
 
 {% block content %}
 
-<div class="main container-fluid" style="padding: 75px; padding-top: 26px;">
+<main>
 
-	<div class="d-flex mb-5">
-		<h3 class="mr-auto">My cart ({{ cart.products.count }})</h3>
+	<div class="d-flex justify-content-between mb-5">
+		<h3>My cart ({{ cart.products.count }})</h3>
 		{% if cart.products.all %}
-		<a class="btn btn-dark" href="{% url 'accounts:cart-clear' %}">
+		<a id="cart-clear-btn" class="btn btn-dark" href="{% url 'accounts_api:cart-clear' %}">
 			Clear cart
 		</a>
 		{% endif %}
@@ -23,7 +23,7 @@
 {% if cart.products.all %}
 	<div class="row">
 		{% for i in cart.products.all %}
-		<div id="{{ i.id }}" class="col-md-12 cart-object">
+		<div id="{{ i.id }}" class="col-md-12 cart-item">
 			<img src="{{ i.image.url }}" alt="{{ i.title }}">
 			<div class="container-fluid">
 				<h2 style="margin: 0;">
@@ -51,19 +51,21 @@
 
 			<div class="btn-container">
 				<div style="gap: 10px;" class="counter-elements d-flex">
-					<div onclick="changeQuantity({{ i.id }}, -1)" class="counter-button">
+					<div onclick="changeQuantity('{{ i.id }}', -1)" class="counter-button">
 						<img src="/static/img/minus.svg" alt="">
 					</div>
 					<span class="counter" style="margin-top: 4px;">{{ i.quantity }}</span>
-					<div onclick="changeQuantity({{ i.id }}, 1)" class="counter-button">
+					<div onclick="changeQuantity('{{ i.id }}', 1)" class="counter-button">
 						<img src="/static/img/plus.svg" alt="">
 					</div>
 				</div>
 	
 				<a class="btn view-details" href="{% url 'accounts:cart-detail' i.id %}">View details »</a>
-				<a class="btn" href="{% url 'accounts:cart-remove' i.id %}"><img style="height: 30px;" src="{% static 'img/remove.svg' %}?" alt=""></a>
+				<button class="btn" onclick="removeItem('{{ i.id }}')">
+					<img style="height: 30px;" src="{% static 'img/remove.svg' %}?" alt="">
+				</button>
 			</div>
-			
+
 		</div>
 		{% endfor %} 
 	</div>
@@ -78,24 +80,30 @@
 			<p>Total price: <span class="price">{{ cart.total_price }} $</span></p>
 		</div>
 
-		<a href="{% url 'accounts:checkout' %}"><button style="margin: 0 auto;" class="basket-add">
+		<a href="{% url 'accounts:checkout' %}">
+			<button id="checkout-btn">
 			Checkout
-		</button></a>
+			</button>
+		</a>
 
 	</div>
 
+	<div style="display: none;" id="cart-empty" class="no-products">
+		<img src="{% static 'img/no-products.svg' %}" alt="">
+		<p style="color: #BDBDBD; margin-top: 40px;">Your cart is empty</p>
+	</div>
 
 {% else %}
-	<div class="no-products">
+	<div id="cart-empty" class="no-products">
 		<img src="{% static 'img/no-products.svg' %}" alt="">
 		<p style="color: #BDBDBD; margin-top: 40px;">Your cart is empty</p>
 	</div>
 {% endif %}
 
-</div>
+</main>
 
 {% endblock content %}
 
 {% block js %}
-<script src="{% static 'js/change-quantity.js' %}?1"></script>
+<script src="{% static 'js/cart.js' %}?????"></script>
 {% endblock js %}

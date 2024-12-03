@@ -1,7 +1,10 @@
-body.dark{
-    background-color: #1d2a35 !important;
-    color: white !important;
+[data-bs-theme=dark] {
+    --bs-body-bg: #1d2a35;
 }
+
+/* body.dark{
+    color: white;
+} */
 
 body.dark h1,
 body.dark h2,
@@ -33,16 +36,21 @@ body.dark .dropdown-menu{
     background-color: #1d2124 !important;
 }
 
+body.dark .dropdown-item {
+    color: white !important;
+}
+
 body.dark .dropdown-item:hover{
     background-color: #243341 !important;
 }
 
-body.dark .profile-main{
+body.dark #profile-main{
     background-color: #243341 !important;
 }
 
-body.dark .profile-inputs div,
-body.dark .profile-sections,
+body.dark #empty-wishlist,
+body.dark .profile-inputs,
+body.dark #profile-tabs,
 body.dark .blocks-cont{
     background-color: #3a5169 !important;
 }

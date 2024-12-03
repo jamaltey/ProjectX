@@ -1,0 +1,14 @@
+* { box-sizing: border-box; }
+html, body, div, span, iframe, h2, h3, h4, h5, h6, pre,
+a, img, sub, sup, b, u, i, dl, dt, dd, ol, ul, menu, li,
+fieldset, form, label, legend, table, caption, thead, tbody, 
+tfoot, tr, th, td, article, aside, 
+figure, figcaption, footer, header, nav, section, summary {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+ul, menu { list-style: none; }
+table { border-collapse: collapse; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; }

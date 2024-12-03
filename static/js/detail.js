@@ -14,7 +14,7 @@ function showInfoPart(){
 }
 
 $('button.wishlist-add').on('click', function(){
-    const url = `/accounts/wishlist/update/${productId}`
+    const url = `/api/wishlist/toggle/${productId}/`
     const btnText = $(this).find('span')
     $.get(url, function(data){
         if (data.is_favorite) {
@@ -134,7 +134,6 @@ function renderComment(comment){
         $(stars).append('<img src="/static/img/star-empty.svg">')
     }
 
-    
     $('.comments').append(commentElement)
 }
 
@@ -149,7 +148,7 @@ function sendComment(rating=0, text){
       }, ( data ) => {
         $('#comment-text').val('')
         setRating(0)
-        
+
         data.author = user_full_name
         renderComment( data )
       }

@@ -1,18 +1,27 @@
-.mobile, .profile-name-mobile{
+.mobile, .profile-name-mobile {
     display: none !important;
 }
 
-.mobile-tabs button{
+.mobile-tabs button {
     padding: 15px;
     border: 1px solid #EDF1F7;
     width: 100%;
     height: 100%;
     border-radius: 0;
 }
- 
-@media (min-width: 361px) and (max-width: 767px) {
+
+@media screen and (min-width: 992px) {
+    #sidebar, .sidebar {
+        height: fit-content;
+        position: sticky;
+        top: 10px;
+        left: 0;
+    }
+}
+
+/* @media screen and (max-width: 992px) { 
     .mobile, .profile-name-mobile {
-        display: inherit !important;
+        display: initial !important;
     }
     .navbar {
         padding: 20px !important;
@@ -26,11 +35,8 @@
     .cards-container {
         padding: 25px !important;
     }
-    .col-md-3 {
+    .col-md-3.product {
         margin-bottom: 70px;
-    }
-    .col-md-4{
-        padding: 0 !important;
     }
     .banners-inner {
         padding: 25px !important;
@@ -81,10 +87,6 @@
     label {
         margin-right: 0 !important;
     }
-    .first-list-part {
-        padding-left: 0 !important;
-        display: none;
-    }
     .list-row {
         padding: 0 !important;
         padding-top: 42px !important;
@@ -110,127 +112,19 @@
     .payment-card {
         width: auto !important;
     }
-    #info-part{
+    #info-part {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-    #info-part .col-md-6{
+    #info-part .col-md-6 {
         padding: 0 !important;
     }
-    
+    #sidebar {
+        display: none;
+    }
 }
-@media (max-width: 360px) {
-    .navbar {
-        padding-left: 20px !important;
-    }
-    .nav-form {
-        margin-left: 0 !important;
-    }
-    .nav-icons {
-        margin: 0 auto !important;
-    }
-    .cards-container {
-        padding: 25px !important;
-    }
-    .col-md-3 {
-        margin-bottom: 70px;
-    }
-    .banners-inner {
-        padding: 25px !important;
-    }
-    .cards-container2 {
-        padding: 25px !important;
-    }
-    .nav-tabs {
-        display: none;
-    }
-    .nav-inp {
-        width: 250px !important;
-    }
-    .second-part {
-    display: none;
-    }
-    .terms {
-        margin-left: 0 !important;
-        width: auto !important;
-    }
-    .submit-btn {
-        width: 100px;
-    }
-    .first-part {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-    .fullname-inp {
-        width: 303px !important;
-    }
-    .whole-input {
-        width: 303px !important;
-        margin: 0 auto !important;
-        text-align: start; 
-    }
-    .fullname-label {
-        width: 86px;
-    }
-    .email-label {
-        width:50px;
-    }
-    .number-label {
-        width: 100px;
-    }
-    .password-t-label {
-        width: 92px;
-    }
-    .submit-btn {
-        width: 303px !important;
-    }
-    label {
-        margin-right: 0 !important;
-    }
-    .social {
-        width: 50%;
-    }
-    .social-span {
-        font-size: 12px;
-    }
-    .soc-item {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-    .first-list-part {
-        padding-left: 0 !important;
-        display: none;
-    }
-    #accordion {
-        width: 100% !important;
-    }
-    .list-row {
-        padding: 0 !important;
-        padding-top: 42px !important;
-    }
-    .card {
-        margin: 0 auto;
-    }
-    .list-path {
-        display: none !important;
-    }
-    .web-drop {
-        display: none;
-    }
-    .mobile-tabs {
-        display: flex !important;
-    }
-    .inner-payment {
-        display: block !important;
-    }
-    .message-payment {
-        width: 279px !important;
-    }
-    .payment-card {
-        width: auto !important;
-    }
 
-}
+
 @media (min-width: 768px) and (max-width: 841px) {
     .navbar {
         padding-left: 20px !important;
@@ -296,23 +190,6 @@
     .submit-btn {
         width: 303px !important;
     }
-    label {
-        margin-right: 0 !important;
-    }
-    .social {
-        width: 50%;
-    }
-    .social-span {
-        font-size: 12px;
-    }
-    .soc-item {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-    }
-    .first-list-part {
-        padding-left: 0 !important;
-        display: none;
-    }
     #accordion {
         width: 100% !important;
     }
@@ -338,8 +215,4 @@
     .message-payment {
         width: 279px !important;
     }
-    .payment-card {
-        width: auto !important;
-    }
-
-}
+} */

@@ -1,0 +1,8 @@
+asgiref
+daphne
+django
+django-colorfield
+djangorestframework
+pillow
+python-dotenv
+sqlparse

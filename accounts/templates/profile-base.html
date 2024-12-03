@@ -8,25 +8,23 @@
 {% endblock css %}
 
 {% block content %}
-<div class="profile-main" style="background-color: #FAF9F9; padding-bottom: 158px;">
-    <div class="container-fluid">
-        <div class="row">
-            {% include 'includes/profile-tabs.html' %}
-            <div class="col-md-9 profile-cards-cont" style="margin-top: 40px;">
-            {% block profile-content %}
+<main id="profile-main">
+    <div class="row pt-lg-4">
+        {% include 'includes/profile-tabs.html' %}
+        <div class="col-lg-9">
+        {% block profile-content %}
             
-            {% endblock profile-content %}
-            </div>
+        {% endblock profile-content %}
         </div>
     </div>
-</div>
+</main>
 {% endblock content %}
 
 {% block js %}
 
 <script>
 
-let activeProfileTab = location.pathname
+const activeProfileTab = location.pathname
 
 if ( ! $(`.nav-item .nav-link.active`).length ){
 	$(`.nav-item .nav-link#profile-link`).addClass('active')
@@ -36,7 +34,7 @@ if ( ! $(`.nav-item .nav-link.active`).length ){
 {% block profile-js %}
 {% endblock profile-js %}
 <script>
-let icon = $(`.profile-main li a[href="${activeProfileTab}"] img`)[0]
+const icon = $(`.profile-main li a[href="${activeProfileTab}"] img`)[0]
 
 icon.src = icon.src.replace(/.svg$/, '-green.svg')
 $(`.profile-main li a[href="${activeProfileTab}"] span`).addClass('active')
