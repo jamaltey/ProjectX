@@ -1,0 +1,43 @@
+{% load static %}
+
+<nav class="d-flex flex-column h-100 w-100 rounded bg-body-tertiary p-4" id="profile-tabs">
+    <h5 class="text-center text-lg-start pb-0">
+        My Account
+    </h5>
+
+    <hr class="my-2" />
+
+    <ul class="d-flex flex-column flex-sm-row flex-lg-column justify-content-evenly align-items-baseline gap-3 py-2 py-lg-3">
+        <li>
+            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:orders' %}">
+                <i class="fa-regular fa-bag-shopping fs-5"></i>
+                <span>My orders</span>
+            </a>
+        </li>
+        <li>
+            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:wishlist' %}">
+                <i class="fa-regular fa-heart fs-5"></i>
+                <span>Wishlist</span>
+            </a>
+        </li>
+        <li>
+            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:profile-info' %}">
+                <i class="fa-regular fa-user fs-5"></i>
+                <span>Personal Info</span>
+            </a>
+        </li>
+        <li>
+            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:address' %}">
+                <i class="fa-regular fa-location-dot fs-5"></i>
+                <span>Shipping Address</span>
+            </a>
+        </li>
+    </ul>
+
+    <hr class="mt-2" />
+
+    <a class="d-lg-flex align-items-center text-center" href="{% url 'accounts:logout' %}">
+        <i class="fa-regular fa-arrow-right-from-bracket fs-5 me-1 me-lg-3"></i>
+        <span>Log out</span>
+    </a>
+</nav>

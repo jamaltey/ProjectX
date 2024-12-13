@@ -1,16 +1,24 @@
+function clearContent() {
+	$('main .row, main .card').remove()
+	$('.cart-items-count').remove()
+	$('#cart-clear-btn').remove()
+	$('#cart-empty').show()
+}
+
+$('#cart-clear-btn').on('click', () => {
+	$.get(`/api/cart/clear/`, clearContent)
+})
+
 function removeItem(id) {
 	$.ajax({
 		url: `/api/cart/${id}/remove/`,
 		type: 'DELETE',
 		success: ( data ) => {
 			if ( data.is_empty ) {
-				$('.row, .card').remove()
-				$('#cart-items-count').remove()
-				$('#cart-clear-btn').remove()
-				$('#cart-empty').show()
+				clearContent()
 			} else {
 				$(`.cart-item#${id}`).remove()
-				$('#cart-items-count').text( parseInt($('#cart-items-count').text()) - 1 )
+				$('.cart-items-count').text( data.items_count )
 				$('.total-price .old-price').text(`–${ data.discount } $`)
 				$('.total-price .price').text(`${ data.total_price } $`)
 			}

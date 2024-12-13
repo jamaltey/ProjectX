@@ -1,72 +1,22 @@
 
 main {
-    background-color: #FAF9F9;
-    padding-bottom: 100px;
+    background-color: var(--bs-secondary-bg);
 }
 
-input {
-    width: 279px;
-    height: 48px;
+main input {
+    min-height: 3rem;
 }
-input, textarea {
-    background: #F2F2F2;
-    border-radius: 8px;
-    position: inherit;
+main input, main textarea {
     border: none;
-    padding-left: 16px;
-    opacity: 1;
 }
 textarea {
     width: 592px;
     height: 80px;
-    padding-top: 14px;
+    padding: .875rem 0 0 1rem;
     resize: none;
 }
 
-#profile-tabs {
-    max-width: fit-content;
-    border-radius: 5px;
-    margin: 2.5rem auto 1.5rem auto;
-    /* padding: 2rem; */
+.info span:first-child {
+    font-size: .75rem;
+    color: rgba(var(--bs-body-color-rgb), 0.71);
 }
-
-#profile-tabs h5 {
-    color: #4f4f4f;
-}
-
-#profile-tabs img {
-    margin-right: 16px;
-}
-
-.profile-inputs {
-    background-color: white !important;
-    padding: 32px;
-    max-width: 720px;
-}
-
-a {
-    color: inherit;
-}
-
-a span.active {
-    color: #2DD06E !important;
-}
-
-.order-details-btn {
-    width: 160px;
-    height: 40px;
-    background-color: #F2F2F2;
-    border: none;
-    border-radius: 4px;
-}
-.order .card-body div {
-    margin-bottom: 24px;
-}
-.order .card-body div span {
-    color: #828282;
-    font-size: 12px;
-}
-.order .card-body div p {
-    font-size: 16px;
-}
-

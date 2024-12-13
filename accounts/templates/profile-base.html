@@ -8,9 +8,11 @@
 {% endblock css %}
 
 {% block content %}
-<main id="profile-main">
-    <div class="row pt-lg-4">
-        {% include 'includes/profile-tabs.html' %}
+<main class="container-fluid" id="profile-main">
+    <div class="row justify-content-evenly pb-4 pt-lg-4">
+        <div class="col-lg-3 pt-5 pb-3 pb-lg-0">
+            {% include 'components/profile-tabs.html' %}
+        </div>
         <div class="col-lg-9">
         {% block profile-content %}
             

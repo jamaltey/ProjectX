@@ -14,19 +14,14 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        user: User = self.request.user
         products = Product.objects.order_by('-id')
         newproducts = products[:4]
         bestsellers = sorted(products, key=lambda x: x.calculate_rating(), reverse=True)[:4]
 
-        if user.is_authenticated:
-            favorites = user.favorites.all()
-        else:
-            favorites = []
-
-        context['newproducts'] = newproducts
-        context['bestsellers'] = bestsellers
-        context['favorites'] = favorites
+        context.update({
+            'newproducts': newproducts,
+            'bestsellers': bestsellers
+        })
         return context
 
 class ProductDetailView(DetailView):
@@ -79,7 +74,6 @@ class ProductDetailView(DetailView):
 
         return redirect('accounts:cart')
 
-
 def list(request: HttpRequest, sales=False):
     products = Product.objects.order_by('-id')
     filters = ('brand', 'type', 'category')
@@ -120,12 +114,6 @@ def list(request: HttpRequest, sales=False):
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
 
-    user: User = request.user
-    if user.is_authenticated:
-        favorites = user.favorites.all()
-    else:
-        favorites = []
-
     types = ProductType.objects.all()
     categories = ProductType.objects.values_list('category', flat=True).distinct()
 
@@ -134,7 +122,7 @@ def list(request: HttpRequest, sales=False):
         'paginator': paginator, 'search': search,
         'success': success, 'brands': Brand.objects.all(),
         'types': types, 'sort': sort, 'args': args,
-        'favorites': favorites, 'categories': categories,
+        'categories': categories
     }
     return render(request, 'list.html', context)
 

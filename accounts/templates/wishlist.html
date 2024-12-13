@@ -22,53 +22,25 @@
 
 {% block profile-content %}
     
-    <div class="my-3">
-        <!-- <h4 class="profile-name-mobile" style="margin-bottom: 16px; color: #4F4F4F;">My Account</h4> -->
-        <h4 class="text-center text-lg-start pb-3">Wishlist</h4>
+    <div class="text-center text-lg-start py-3">
+        <h4 class="d-md-none mb-3">My Account</h4>
+        <h5>Wishlist</h5>
     </div>
 
     {% if favorites %}
-    <div class="row list-row pb-5">
+    <div class="row gy-5 pb-5 pe-lg-1">
         {% for product in favorites %}
-            <div id="{{product.id}}" class="col-sm-6 col-md-4 col-xl-3 product mb-5">
-                <div class="card">
-                    <a href="{% url 'core:detail' product.id %}">
-                        <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.title }}</h5>
-
-                            <p class="card-text price">
-                                {% if product.old_price %}
-                                <span id="old-price" class="card-text">{{ product.old_price}} $</span>{{ product.price }} $
-                                {% else %}
-                                {{ product.price }} $
-                                {% endif %}
-                            </p>
-
-                            <a class="heart-cont">
-                                <button onclick="updateFavorites({{product.id}})">
-                                    {% if not product in favorites %}
-                                    <img src="{% static 'img/heart2.svg' %}" alt="❤️">
-                                    {% else %}
-                                    <img src="{% static 'img/heart-red.svg' %}?" alt="🤍">
-                                    {% endif %}
-                                </button>
-                            </a>
-                        </div>
-                    </a>
-                </div>
-            </div>
+            {% include 'components/product.html' %}
         {% endfor %}
     </div>
     {% else %}
         <div id="empty-wishlist">
             <img src="{% static 'img/heart-empty.svg' %}" alt="">
-            <p>Your wishlist is empty</p>
+            <h6>Your wishlist is empty</h6>
         </div>
     {% endif %}
 
 {% endblock profile-content %}
-
 
 {% block profile-js %}
 <script src="{% static 'js/update-favorites.js' %}"></script>

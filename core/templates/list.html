@@ -4,13 +4,13 @@
 {% block title %}Products - {% endblock title %}
 
 {% block content %}
-<main style="margin: 10px 0 50px 0;">
+<main class="py-5">
 
 	<div class="row m-0 justify-content-center">
 
-		<div class="mobile-tabs d-flex d-lg-none justify-content-center w-100">
+		<div class="d-flex d-lg-none justify-content-center w-100">
 			<div class="dropdown w-50">
-				<button class="btn w-100 h-100 p-3 rounded-0" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<!-- <img src="{% static 'img/swap.svg' %}" style="width: 25px;" alt=""> -->
 					<i class="fa-regular fa-arrow-up-arrow-down"></i>
 					{{ sort }}
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<div class="w-50">
-				<button class="btn w-100 h-100 p-3 rounded-0" type="button" onclick="$('#sidebar').toggle()">
+				<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" onclick="$('#sidebar').toggle()">
 					<!-- <img src="{% static 'img/filter.svg' %}" style="width: 20px;" alt=""> -->
 					<i class="fa-regular fa-filter"></i>
 					Filters
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-		<div style="display: none;" id="sidebar" class="d-lg-flex flex-column col-9 col-lg-3 gap-3 mt-2">
+		<div style="display: none;" id="sidebar" class="d-lg-flex flex-column col-9 col-lg-3 gap-3 mt-3">
 
 			<!-- <p class="list-path">
 			Home <img src="{% static 'img/arrow.svg' %}">
@@ -127,27 +127,27 @@
 
 		</div>
 
-		<div class="col-12 col-lg-9 second-list-part pt-5">
-		{% if success is True%}
+		<div class="col-12 col-lg-9 pt-4 pt-lg-0">
+		{% if success %}
 			<div class="d-flex justify-content-between align-items-center px-3">
 				<span>{{ page.paginator.count }} products found</span>
 				<div class="dropdown">
-					<button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: 1px solid #BDBDBD;">
+					<button class="btn border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 						Sort: {{ sort }}
 					</button>
-					<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+					<div class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton">
 						{% if request.GET.sort %}
-						<a class="dropdown-item" href="?{{args}}">
+						<a class="dropdown-item py-2" href="?{{args}}">
 							Sort: Newest
 						</a>
 						{% endif %}
 						{% if not request.GET.sort == 'price-asc' %}
-						<a class="dropdown-item" href="?sort=price-asc&{{args}}">
+						<a class="dropdown-item py-2" href="?sort=price-asc&{{args}}">
 							Sort: Cheapest
 						</a>
 						{% endif %}
 						{% if not request.GET.sort == 'price-desc' %}
-						<a class="dropdown-item" href="?sort=price-desc&{{args}}">
+						<a class="dropdown-item py-2" href="?sort=price-desc&{{args}}">
 							Sort: Most Expensive
 						</a>
 						{% endif %}
@@ -155,67 +155,41 @@
 				</div>
             </div>
 
-            <div class="row product-list" style="padding: 50px 0;">
-            {% for product in page %}
-                <div id="{{product.id}}" class="col-sm-6 col-md-4 col-xl-3 product mb-5">
-                    <div class="card">
-						<a href="{% url 'core:detail' product.id %}">
-							<img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
-							<div class="card-body">
-								<h5 class="card-title">{{ product.title }}</h5>
-
-								<p class="card-text price">
-									{% if product.old_price %}
-									<span id="old-price" class="card-text">{{ product.old_price}} $</span>{{ product.price }} $
-									{% else %}
-									{{ product.price }} $
-									{% endif %}
-								</p>
-
-								<a class="heart-cont">
-									<button onclick="updateFavorites({{product.id}})">
-										{% if not product in favorites %}
-										<img src="{% static 'img/heart2.svg' %}" alt="❤️">
-										{% else %}
-										<img src="{% static 'img/heart-red.svg' %}?" alt="🤍">
-										{% endif %}
-									</button>
-								</a>
-							</div>
-						</a>
-					</div>
-                </div>
-            {% endfor %}
+            <div class="row gy-5 py-5">
+			{% with favorites=user.favorites.all %}
+				{% for product in page %}
+					{% include 'components/product.html' %}
+				{% endfor %}
+			{% endwith %}
             </div>
 
             <nav class="d-flex justify-content-center" aria-label="Pagination">
                 <ul class="pagination">
                 {% if page.has_previous %}
-                    <li class="page-item">
-                    <a class="page-link" href="?page=1&{{args}}" aria-label="Previous">
-                        <img src="{% static 'img/pag1.svg' %}" alt="" style="margin-top: -6px;">
-                    </a>
+                    <li class="page-item d-flex align-items-center">
+						<a class="page-link fa-solid fa-angle-left" href="?page=1&{{args}}" aria-label="Previous"></a>
                     </li>
                 {% endif %}
 
                 {% for i in page.paginator.page_range %}
-                    <li class="page-item"><a class="page-link num" href="?page={{i}}&{{args}}" style="font-size: 1.25em; color: #4F4F4F;">{{i}}</a></li>
+                    <li class="page-item d-flex align-items-center">
+						<a class="page-link fs-5" href="?page={{i}}&{{args}}">{{ i }}</a>
+					</li>
                 {% endfor %}
 
                 {% if page.has_next %}
-                    <li class="page-item">
-                    <a class="page-link" href="?page={{ paginator.num_pages }}&{{args}}" aria-label="Next">
-                        <img src="{% static 'img/pag2.svg' %}" alt="" style="margin-top: -6px;">
-                    </a>
+                    <li class="page-item d-flex align-items-center">
+						<a class="page-link fa-solid fa-angle-right" href="?page={{ paginator.num_pages }}&{{args}}" aria-label="Next"></a>
                     </li>
                 {% endif %}
                 </ul>
             </nav>
+
 		{% else %}
-		<div class="no-products">
-			<h1>No products found</h1>
-			<img src="{% static 'img/no-products.svg' %}" alt="">
-		</div>
+			<div class="no-items">
+				<h2>No products found</h2>
+				<img src="{% static 'img/no-items.svg' %}" alt="">
+			</div>
 		{% endif %}
 		</div>
 
@@ -224,7 +198,7 @@
 </main>
 {% endblock content %}
 {% block js %}
-<script src="{% static 'js/update-favorites.js' %}"></script>
+<script src="{% static 'js/update-favorites.js' %}?"></script>
 <script>
 
 if ( ! $(`.nav-item .nav-link.active`).length ){

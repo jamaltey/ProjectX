@@ -28,15 +28,15 @@ class Cart(models.Model):
     @property
     def count(self):
         return self.products.count()
-    
+
     @property
     def discount(self):
         return sum(i.old_price-i.final_price for i in self.products.all() if i.old_price)
-    
+
     @property
     def total_price(self):
         return sum(i.final_price for i in self.products.all())
-    
+
     @property
     def image(self):
         if self.products.first():

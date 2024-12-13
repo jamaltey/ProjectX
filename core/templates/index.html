@@ -1,125 +1,66 @@
 {% extends 'base.html' %} 
 {% load static %}
-<!DOCTYPE html>
+
 {% block content %}
-<main class="position-relative">
 
-<img class="hero" src="{% static 'img/hero-dark.jpeg' %}" alt="Hero" id="hero-dark">
-<img class="hero" src="{% static 'img/hero-light.jpeg' %}" alt="Hero" id="hero-light">
+<main>
 
-    <div class="cards-container">
-        <div class="card-section">
+    <div class="hero">
+        <img class="hero-img" id="hero-light" src="{% static 'img/hero-light.jpeg' %}" alt="Light-themed hero banner">
+        <img class="hero-img" id="hero-dark" src="{% static 'img/hero-dark.jpeg' %}" alt="Dark-themed hero banner">
+    </div>
+
+    <div class="container py-5">
+        {% with favorites=user.favorites.all %}
+        <section>
             <h4>Bestsellers</h4>
-            <div class="cards-row mt-5">
-                <div class="row">
-                {% for product in bestsellers %}
-                    <div id="{{product.id}}" class="col-sm-6 col-md-4 col-xl-3 product mb-5 mb-xl-0">
-                        <div class="card">
-                            <a href="{% url 'core:detail' product.id %}">
-                                <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ product.title }}</h5>
-
-                                    <p class="card-text price">
-                                        {% if product.old_price %}
-                                        <span id="old-price" class="card-text">{{ product.old_price}} $</span>{{ product.price }} $
-                                        {% else %}
-                                        {{ product.price }} $
-                                        {% endif %}
-                                    </p>
-
-                                    <a class="heart-cont">
-                                        <button onclick="updateFavorites({{product.id}})">
-                                            {% if not product in favorites %}
-                                            <img src="{% static 'img/heart2.svg' %}" alt="❤️">
-                                            {% else %}
-                                            <img src="{% static 'img/heart-red.svg' %}?" alt="🤍">
-                                            {% endif %}
-                                        </button>
-                                    </a>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
-                </div>
+            <div class="row gy-5 pt-5">
+				{% for product in bestsellers %}
+					{% include 'components/product.html' %}
+				{% endfor %}
             </div>
-        </div>
-
-        <div class="card-section" style="margin-top: 80px;">
+        </section>
+        
+        <hr class="my-5" />
+        
+        <section>
             <h4>New Arrivals</h4>
-            <div class="cards-row mt-5">
-                <div class="row">
+            <div class="row pt-5">
                 {% for product in newproducts %}
-                    <div id="{{product.id}}" class="col-sm-6 col-md-4 col-xl-3 product mb-5 mb-xl-0">
-                        <div class="card">
-                            <a href="{% url 'core:detail' product.id %}">
-                                <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ product.title }}</h5>
-
-                                    <p class="card-text price">
-                                        {% if product.old_price %}
-                                        <span id="old-price" class="card-text">{{ product.old_price}} $</span>{{ product.price }} $
-                                        {% else %}
-                                        {{ product.price }} $
-                                        {% endif %}
-                                    </p>
-
-                                    <a class="heart-cont">
-                                        <button onclick="updateFavorites({{product.id}})">
-                                            {% if not product in favorites %}
-                                            <img src="{% static 'img/heart2.svg' %}" alt="❤️">
-                                            {% else %}
-                                            <img src="{% static 'img/heart-red.svg' %}?" alt="🤍">
-                                            {% endif %}
-                                        </button>
-                                    </a>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                    {% include 'components/product.html' %}
                 {% endfor %}
-                </div>
+            </div>
+        </section>
+        {% endwith %}
+    </div>
+
+    <div class="container py-5">
+        <div class="row row-gap-4">
+            <div class="col-xl-6">
+                <img class="rounded-2" src="https://cdn1.it4profit.com/AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM/resize:fit:1400:600:0/bg:ffffff/q:100/plain/s3://complex-images/13/2375/2100-ru-1.png@jpeg" alt="">
+            </div>
+            <div class="col-xl-6">
+                <img class="rounded-2" src="https://cdn1.it4profit.com/AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM/resize:fit:1400:600:0/bg:f5f5f7/q:100/plain/s3://complex-images/13/2185/2100-ru-1.png@jpeg" alt="">
             </div>
         </div>
     </div>
 
-    <!-- <div class="banners">
-        <div style="padding: 75px;" class="banners-inner">
-            <div class="row">
-                <div class="col-md-6">
-                    <div>
-                        <img src="https://cdn1.it4profit.com/AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM/resize:fit:1400:600:0/bg:ffffff/q:100/plain/s3://complex-images/13/2375/2100-ru-1.png@jpeg" alt="">
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div>
-                        <img src="https://cdn1.it4profit.com/AfrOrF3gWeDA6VOlDG4TzxMv39O7MXnF4CXpKUwGqRM/resize:fit:1400:600:0/bg:f5f5f7/q:100/plain/s3://complex-images/13/2185/2100-ru-1.png@jpeg" alt="">
-                    </div>
-                </div>
+    <div class="container py-5">
+        <div class="row text-center fs-6">
+            <div class="col-md-4">
+                <img class="pb-5" src="{% static 'img/box.svg' %}" alt="Shipping">
+                <h4 class="pb-4">Shipping</h4>
+                <p class="col-10 mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit </p>
             </div>
-        </div>
-    </div> -->
-
-    <div class="services" style="margin-bottom: 81px;">
-        <div style="padding: 75px;">
-            <div class="row">
-            <div class="col-md-4 text-center">
-                <img src="{% static 'img/box.svg' %}" alt="">
-                <h4>Shipping</h4>
-                <p class="icon-texts">Lorem ipsum dolor sit amet, consectetur adipiscing elit </p>
+            <div class="col-md-4">
+                <img class="pb-5"  src="{% static 'img/card-pos.svg' %}" alt="Credit">
+                <h4 class="pb-4">Credit</h4>
+                <p class="col-10 mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit </p>
             </div>
-            <div class="col-md-4 text-center">
-                <img src="{% static 'img/card-pos.svg' %}" alt="">
-                <h4>Credit</h4>
-                <p class="icon-texts">Lorem ipsum dolor sit amet, consectetur adipiscing elit </p>
-            </div>
-            <div class="col-md-4 text-center">
-                <img src="{% static 'img/medal-star.svg' %}" alt="">
-                <h4>Warranty</h4>
-                <p class="icon-texts">Lorem ipsum dolor sit amet, consectetur adipiscing elit </p>
-            </div>
+            <div class="col-md-4">
+                <img class="pb-5" src="{% static 'img/medal-star.svg' %}" alt="Warranty">
+                <h4 class="pb-4">Warranty</h4>
+                <p class="col-10 mx-auto">Lorem ipsum dolor sit amet, consectetur adipiscing elit </p>
             </div>
         </div>
     </div>

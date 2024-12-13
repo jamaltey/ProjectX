@@ -15,6 +15,7 @@ class CartViewSet(viewsets.ViewSet):
         cart.products.remove(product_version)
         data = {
             "is_empty": not cart.products.exists(),
+            "items_count": cart.products.count(),
             "discount": cart.discount,
             "total_price": cart.total_price
         }
@@ -24,7 +25,7 @@ class CartViewSet(viewsets.ViewSet):
     def clear_cart(self, request):
         cart = request.user.cart
         cart.products.clear()
-        return redirect('accounts:cart')
+        return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='change-quantity', url_name='change-quantity')
     def change_quantity(self, request, pk=None):

@@ -4,99 +4,119 @@
 {% block title %}Orders - {% endblock title %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}?">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <style>
-    .order {
-        margin-bottom: 62px;
+    .order .card {
+        --bs-card-border-radius: 1rem;
     }
-    .order-img-container{
-        /* width: 245px !important; */
-        border-right: 1px solid #F2F2F2;
-        background-color: rgb(245,	245, 247);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+    .order img:first-of-type {
+        border-top-left-radius: var(--bs-card-border-radius);
     }
-    .order-img-container img{
-        height: auto !important;
+    .order img.h-100:first-child, .order img.col-sm-12:first-child, .order img.col-6:nth-child(2) {
+        border-top-right-radius: var(--bs-card-border-radius);
+    }
+    .order-img .g-0:not(:has(img:nth-of-type(3))) img {
+        height: 50%;
+    }
+    .order-img .g-0:has(img:nth-of-type(3)) img {
+        height: 33.33%;
+    }
+    .order-img .row-gap-1 img {
+        height: calc(33.33% - 3px);
+    }
+    @media (min-width: 576px) {
+        .order-img {
+            height: 100%;
+        }
+        .order img {
+            border-top-right-radius: 0 !important;
+        }
+        .order img:not(.col-6):last-of-type, .order img.col-6:nth-child(5) {
+            border-bottom-left-radius: var(--bs-card-border-radius);
+        }
+    }
+    @media (min-width: 576px) {
+        .order .card {
+            max-height: 18rem;
+        }
     }
 </style>
 {% endblock css %}
 
 {% block profile-content %}
 
-    <div class="profile-names-cont">
-        <h4 class="profile-name-mobile mobile" style="margin-bottom: 16px; color: #4F4F4F;">My Account</h4>
-        <h5 style="font-size: 20px; padding-bottom: 16px; color: #4F4F4F; margin-top: 9px;">My Orders</h5>
+    <div class="text-center text-lg-start py-3">
+        <h4 class="d-md-none mb-3">My Account</h4>
+        <h5>Orders</h5>
     </div>
 
-    <div class="row">
+    <div class="row gy-5 pe-lg-1">
         {% for order in orders %}
         <div class="col-md-6 order">
-            <div class="card" style="display: flex;">
-                <div class="d-flex">
+            <div class="card h-100">
+                <div class="row g-0 h-100">
 
-                    <!-- <img class="card-img-top" src="{{order.products.first.image.url}}" alt="Card image cap"> -->
-                    <div class="order-img-container">
-                    {% if order.products.count <= 3 %}
-                        {% for product in order.products.all %}
-                        <img class="card-img-top" src="{{product.image.url}}" alt="Card image cap">
-                        {% endfor %}
+                    <div class="order-img col-sm-5 d-flex">
+                    {% if order.products.count == 1 %}
+                        <div class="d-flex w-100">
+                            <img class="object-fit-cover" src="{{ order.products.first.image.url }}" alt="{{ order }}">
+                        </div>
+                    {% elif order.products.count == 2 or order.products.count == 3 %}
+                        <div class="row g-0">
+                            {% for product in order.products.all %}
+                                <img class="col-sm-12 object-fit-cover" src="{{product.image.url}}" alt="{{ order }}">
+                            {% endfor %}
+                        </div>
                     {% else %}
-                        <div class="row">
+                        <div class="row gx-1 row-gap-1">
                         {% for product in order.products.all %}
-                            <div class="col-md-6">
-                                <img style="width: 100%;" src="{{product.image.url}}" alt="Card image cap">
-                            </div>
+                            <img class="col-6 object-fit-cover" src="{{product.image.url}}" alt="{{ order }}">
                         {% endfor %}
                         </div>
                     {% endif %}
                     </div>
 
-                    <div class="card-body">
-                        <div>
+                    <div class="card-body info col-sm-7">
+                        <div class="d-flex flex-column mb-4">
                             <span>Date: </span>
-                            <p>{{ order.created_at | date:"d.m.Y" }}</p>
+                            <span>{{ order.created_at | date:"d.m.Y" }}</span>
                         </div>
-                        <div>
+                        <div class="d-flex flex-column mb-4">
                             <span>Status: </span>
-                            <p>{{ order.status }}</p>
+                            <span>{{ order.status }}</span>
                         </div>
-                        <div>
+                        <div class="d-flex flex-column mb-4">
                             <span>Total: </span>
-                            <p class="price">{{ order.total_price }} $</p>
+                            <span class="price">{{ order.total_price }} $</span>
                         </div>
-
-                        <a href="{% url 'accounts:order-detail' order.id %}" class="order-details-btn btn">
+        
+                        <a href="{% url 'accounts:order-detail' order.id %}" class="btn btn-dark border">
                             Order Details
                         </a>
-
                     </div>
 
                 </div>
+                <!-- <img src="{{order.products.first.image.url}}" alt="{{ order }}"> -->
             </div>
         </div>
         {% endfor %}
     </div>
 
-</div>
-
 {% endblock profile-content %}
 
 {% block profile-js %}
 <script>
-    $('.order-img-container').each(function(index, element) {
-        if (element.children.length == 1){
-            element.children[0].style.height = "100%";
-        } else if (element.children.length == 2){
-            element.children[0].style.height = "50%";
-            element.children[1].style.height = "50%";
-        } else if (element.children.length == 3){
-            element.children[0].style.height = "33.33%";
-            element.children[1].style.height = "33.33%";
-            element.children[2].style.height = "33.33%";
-        }
-    })
+    // $('.order-img').each(function(index, element) {
+    //     if (element.children.length == 1){
+    //         element.children[0].style.height = "100%";
+    //     } else if (element.children.length == 2){
+    //         element.children[0].style.height = "50%";
+    //         element.children[1].style.height = "50%";
+    //     } else if (element.children.length == 3){
+    //         element.children[0].style.height = "33.33%";
+    //         element.children[1].style.height = "33.33%";
+    //         element.children[2].style.height = "33.33%";
+    //     }
+    // })
 </script>
 {% endblock profile-js %}

@@ -11,5 +11,3 @@ class AddToCartForm(forms.Form):
         super(AddToCartForm, self).__init__(*args, **kwargs)
         self.fields['color'].queryset = product.colors.all()
         self.fields['storage'].queryset = product.storages.all()
-
-    

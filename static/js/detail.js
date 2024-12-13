@@ -1,6 +1,11 @@
+if (location.href.endsWith('#comments')) {
+    showCommentsPart()
+} else {
+    showInfoPart()
+}
 
 function showCommentsPart(){
-    $('#comment-button').css('color', 'black')
+    $('#comment-button').css('color', 'inherit')
     $('#info-button').css('color', '#BDBDBD')
     $('#info-part').hide()
     $('#comment-part').show()
@@ -8,19 +13,22 @@ function showCommentsPart(){
 
 function showInfoPart(){
     $('#comment-button').css('color', '#BDBDBD')
-    $('#info-button').css('color', 'black')
+    $('#info-button').css('color', 'inherit')
     $('#info-part').show()
     $('#comment-part').hide()
 }
 
-$('button.wishlist-add').on('click', function(){
+$('#comment-button').on('click', showCommentsPart)
+$('#info-button').on('click', showInfoPart)
+
+$('#wishlist-btn').on('click', function(){
     const url = `/api/wishlist/toggle/${productId}/`
-    const btnText = $(this).find('span')
-    $.get(url, function(data){
-        if (data.is_favorite) {
-            btnText.text('Remove from wishlist')
+    const $btnText = $(this).find('span')
+    $.get(url, ({ is_favorite }) => {
+        if (is_favorite) {
+            $btnText.text('Remove from wishlist')
         } else {
-            btnText.text('Add to wishlist')
+            $btnText.text('Add to wishlist')
         }
     })
 })
@@ -30,11 +38,11 @@ function selectColor(element){
     $('.color.active').removeClass("active")
     element.addClass("active")
 
-    const colorname = element.attr('colorname')
-    $('input[name="color"]').val(colorname)
-    sessionStorage.setItem('color', colorname)
+    const colorName = element.attr('data-color-name')
+    $('input[name="color"]').val(colorName)
+    sessionStorage.setItem('color', colorName)
 
-    const img = $(`.carousel-item img[colorname="${colorname}"]`)
+    const img = $(`.carousel-item img[data-color-name="${colorName}"]`)
 
     if (img.length) {
         $(".carousel-item.active").removeClass("active")
@@ -47,20 +55,18 @@ function selectStorage(element){
     $('.storage.active').removeClass("active")
     element.addClass("active")
     
-    const storage = element.attr('storage')
+    const storage = element.attr('data-storage')
     $('input[name="storage"]').val(storage)
     sessionStorage.setItem('storage', storage)
     
-    const addPrice = parseInt(element.attr('addprice'))
-    const defaultPrice = parseInt( $('#price').attr('default') )
+    const addPrice = parseInt(element.attr('data-add-price'))
     const quantity = parseInt( $('.quantity span').text() )
 
-    const finalPrice = (defaultPrice + addPrice) * quantity
+    const finalPrice = (initialPrice + addPrice) * quantity
     $('#price').text(`${ finalPrice } $`)
 
     if ($('#old-price').length) {
-        const oldPrice = parseInt( $('#old-price').attr('default') )
-        $('#old-price').text(`${ (oldPrice + addPrice) * quantity } $`)
+        $('#old-price').text(`${ (initialOldPrice + addPrice) * quantity } $`)
     }
 }
 
@@ -101,66 +107,68 @@ function renderComment(comment){
         'en-us',
         { month: 'short', day: 'numeric', year: 'numeric' }
     )
-    const commentElement = $(`
+    const $comment = $(`
         <div class="comment row" id="${comment.id}">
             <div class="col-md-3">
-                <h1>${comment.rating_value ? comment.rating_value : 'No rating'}</h1>
-                <div class="stars">
-
-                </div>
+                <h2>${comment.rating_value ? comment.rating_value : 'No rating'}</h2>
+                <div class="stars"> </div>
             </div>
 
             <div class="col-md-9">
                 <div class="comment-info">
-                    <h6>${comment.author}</h6>
-                    <p>${comment.created_at}</p>
+                    <h5>${comment.author}</h5>
+                    <h6>${comment.created_at}</h6>
                 </div>
 
                 <p>${comment.text}</p>
 
-                <button onclick="deleteComment(${comment.id})" class="btn-dark">
+                <button class="btn btn-dark">
                     Delete comment
                 </button>
             </div>
         </div>
     `)
 
-    const stars = commentElement.find('.stars')
+    $comment.find('.stars')
+    .html( 
+        '<img src="/static/img/star.svg">'.repeat(comment.rating_value) +
+        '<img src="/static/img/star-empty.svg">'.repeat(5 - comment.rating_value)
+    );
 
-    for (let i = 0; i < comment.rating_value; i++) {
-        $(stars).append('<img src="/static/img/star.svg">')
-    }
-    for (let i = comment.rating_value; i < 5; i++) {
-        $(stars).append('<img src="/static/img/star-empty.svg">')
-    }
+    $comment.find('button').on('click', () => {
+        deleteComment(comment.id)
+    })
 
-    $('.comments').append(commentElement)
+    $('.comments').append($comment)
 }
 
-const commentUrl = '/api/comment/'
-
 function sendComment(rating=0, text){
-    $.post(
-      commentUrl, {
-        'rating_value': rating,
-        'text': text,
-        'product': productId
-      }, ( data ) => {
-        $('#comment-text').val('')
-        setRating(0)
-
-        data.author = user_full_name
-        renderComment( data )
-      }
+    $.post('/api/comment/', {
+            'rating_value': rating,
+            'text': text,
+            'product': productId
+        }, ( data ) => {
+            $('#comment-text').val('')
+            setRating(0)
+            data.author = user.fullName
+            renderComment( data )
+        }
     )
 }
 
 function deleteComment(id){
     $.ajax({
-      url: `${commentUrl + id}/`,
-      type: 'DELETE',
-      success: () => {
-        $(`.comment#${id}`).remove()
-      }
+        url: `${commentUrl + id}/`,
+        type: 'DELETE',
+        success: () => {
+            $(`.comment#${id}`).remove()
+        }
     })
 }
+
+$('#comment-form').on('submit', function(e){
+    e.preventDefault()
+    const text = $('#comment-text').val()
+    const rating = $('#comment-rating').val()
+    sendComment(rating, text)
+})
