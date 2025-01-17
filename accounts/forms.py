@@ -7,20 +7,20 @@ class SignUpForm(UserCreationForm):
     password1 = forms.CharField(
         widget = forms.PasswordInput(
             attrs={
-                'placeholder' : 'Password*',
+                'placeholder' : 'Password',
                 'class' : 'form-control',
             }))
 
     password2 = forms.CharField(
         widget = forms.PasswordInput(
             attrs={
-                'placeholder' : 'Confirm password*',
+                'placeholder' : 'Confirm password',
                 'class' : 'form-control',
             }))
-    
+
     class Meta:
         model = User
-        fields = ['email', 'full_name', 'phone', 'password1', 'password2']
+        fields = ['full_name', 'email', 'phone', 'password1', 'password2']
 
         widgets = {
             'full_name': forms.TextInput(attrs={'id': 'full_name', 'placeholder': 'Your full name', 'class': 'form-control'}),

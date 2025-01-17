@@ -5,46 +5,31 @@
 
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
-<style>
-    #carousel {
-        max-height: 50vh;
-    }
-    .carousel-control-prev-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
-        filter: none !important;
-    }
-    .carousel-control-next-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
-        filter: none !important;
-    }
-</style>
 {% endblock css %}
 
 {% block content %}
+<main class="container">
 
-    <div class="container-fluid">
-        <div class="row pt-5">
-
-            <div class="col-lg-6">
-                <!-- <div class="product-path-cont">
-                    <p class="list-path mb-5"> 
-                        <img src="{% static 'img/arrow.svg' %}" alt="">
-                        <span style="color: #828282;">
-                        </span>
-                    </p>
-                </div> -->
-
-                <div id="carousel" class="carousel slide d-flex">
-                    <div class="carousel-inner d-flex">
-                        <div class="carousel-item active">
-                            <img class="w-100 h-100 object-fit-cover" src="{{product.image.url}}" alt="{{product}}">
-                        </div>
-                        {% for image in product.images.all %}
-                        <div class="carousel-item">
-                            <img class="w-100 h-100 object-fit-cover" {% if image.color %} data-color-name="{{image.color.color_name}}" {% endif %} src="{{image.url}}" alt="{{product}}">
-                        </div>
-                        {% endfor %}
+    <div class="row py-5">
+        <div class="col-lg-6">
+            <div id="carousel" class="carousel slide carousel-fade d-flex">
+                <div class="carousel-indicators rounded">
+                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="background-image: url('{{ product.image.url }}');"></button>
+                    {% for i in images %}
+                        <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ forloop.counter }}" aria-label="Slide {{ forloop.counter }}" style="background-image: url('{{ i.url }}');"></button>
+                    {% endfor %}
+                </div>
+                <div class="carousel-inner d-flex">
+                    <div class="carousel-item active">
+                        <img class="w-100 h-100 object-fit-contain rounded bg-white" src="{{ product.image.url }}" alt="{{ product }}">
                     </div>
+                    {% for image in images %}
+                    <div class="carousel-item">
+                        <img class="w-100 h-100 object-fit-cover rounded bg-white" {% if image.color %} data-color-name="{{ image.color.name }}" {% endif %} src="{{ image.url }}" alt="{{ product }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if images %}
                     <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
                         <i class="carousel-control-prev-icon" aria-hidden="true"></i>
                         <span class="visually-hidden">Previous</span>
@@ -53,239 +38,211 @@
                         <i class="carousel-control-next-icon" aria-hidden="true"></i>
                         <span class="visually-hidden">Next</span>
                     </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-6 pt-2">
+            <form method="post">
+                {% csrf_token %}
+
+                <input type="hidden" name="product_id" value="{{ product.id }}">
+
+                <h2 class="product-title">{{ product.title }}</h2>
+
+                <div class="product-rating">
+                {% if product.rating.rating %}
+                    <div class="stars d-inline-block">
+                        {{ product.rating.render_stars_html | safe }}
+                    </div>
+                    <span class="ps-1 pe-2 border-end">{{ product.reviews.count }}</span>
+                    <a href="#comment-part" class="ps-1" style="color: #2D9CDB;">{{ product.comments.count }} comments</a>
+                {% else %}
+                    <p class="rating-text">No reviews</p>
+                {% endif %}
                 </div>
-            </div>
 
-            <div class="col-lg-6 pt-2">
-                <form method="post">
-                    {% csrf_token %}
-
-                    <input type="hidden" name="product_id" value="{{ product.id }}">
-
-                    <h2 class="product-title">{{ product.title }}</h2>
-
-                    <div class="product-rating">
-                    {% if product.rating.rating %}
-                        <div class="stars d-inline-block">
-                            {{ product.rating.render_stars_html | safe }}
-                        </div>
-                        <span class="pe-2 border-end" style="font-size: .75rem;">{{ product.reviews.count }}</span>
-                        <a href="#comment-part" class="ps-1" style="font-size: .9rem; color: #2D9CDB;">{{ product.comments.count }} comments</a>
-                    {% else %}
-                        <p class="rating-text">No reviews</p>
+                <div class="d-flex align-items-baseline">
+                    {% if product.old_price %}
+                        <span class="old-price text-decoration-line-through me-2" id="old-price" >{{ product.old_price }}</span>
                     {% endif %}
-                    </div>
+                    <span class="price" id="price">{{ product.price }}</span>
+                </div>
 
-                    <div class="prices d-flex">
-                        {% if product.old_price %}
-                            <span id="old-price" class="old-price card-text">{{ product.old_price}} $</span>
-                        {% endif %}
-
-                        <span id="price" class="price card-text"> {{ product.price }} $</span>
-                    </div>
-
-                    {% if colors %}
-                    <div id="colors" class="d-flex align-items-center gap-4 pt-4">
-                        <span>Color: </span>
-                        <input type="hidden" name="color">
+                {% if colors %}
+                <div id="color-selector" class="d-flex align-items-center py-4">
+                    <h6 class="me-2">
+                        Color: <span class="ms-1" id="color-name"></span>
+                    </h6>
+                    <div class="d-flex flex-wrap gap-3">
                         {% for i in colors %}
-                            <div onclick="selectColor(this)" class="color rounded-circle border border-light" data-color-name="{{ i.color_name }}" style="background-color: {{ i.color }};"></div>
+                            <div class="color rounded-circle border border-light" data-color-name="{{ i.name }}"
+                                style="background-color: {{ i.color }};">
+                            </div>
                         {% endfor %}
                     </div>
-                    {% endif %}
+                    <input type="hidden" name="color" required>
+                </div>
+                {% endif %}
 
-                    {% if storages %}
-                    <div id="storages" class="d-flex align-items-center gap-4 py-4">
-                        <span>Storage: </span>
-                        <input type="hidden" name="storage">
-                        {% for i in storages %}
-                            <div onclick="selectStorage(this)" class="storage border-0 rounded btn btn-light p-0" data-add-price="{{ i.price }}" data-storage="{{ i.storage }}">{{ i.size_format }}</div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
+                {% if storages %}
+                <div id="storage-selector" class="d-flex align-items-center gap-4 pb-4">
+                    <h6>Storage: </h6>
+                    {% for i in storages %}
+                        <div class="storage border-0 rounded btn btn-light p-0" data-add-price="{{ i.price }}" data-storage="{{ i.storage }}">
+                            {{ i.size_format }}
+                        </div>
+                    {% endfor %}
+                    <input type="hidden" name="storage" required>
+                </div>
+                {% endif %}
 
-                    <hr class="my-1" />
+                <hr class="my-1" />
 
-                    <div id="quantity" class="quantity d-flex gap-4 align-items-center pt-4 pb-5">
-                        <input name="quantity" value="1" type="hidden">
-                        <button class="btn btn-light rounded-circle" onclick="changeCount(-1)">
-                            <i class="fas fa-minus"></i>
-                        </button>
+                <div id="quantity" class="d-flex gap-4 align-items-center justify-content-center justify-content-lg-start py-4">
+                    <input name="quantity" value="1" type="hidden">
+                    <button class="btn btn-light rounded-circle" onclick="changeCount(-1)" type="button">
+                        <i class="fas fa-minus"></i>
+                    </button>
 
-                        <span>1</span>
+                    <span>1</span>
 
-                        <button class="btn btn-light rounded-circle" onclick="changeCount(1)">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
+                    <button class="btn btn-light rounded-circle" onclick="changeCount(1)" type="button">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
 
-                    <div class="d-flex">
-                        <button type="submit" id="cart-btn" class="btn btn-primary py-2 px-4 me-4">
-                            <i class="far fa-cart-shopping me-3"></i>
-                            Add to cart
-                        </button>
+                <div class="d-flex flex-column flex-sm-row gap-4 pt-3">
+                    <button type="submit" id="cart-btn" class="btn btn-primary py-2 px-4">
+                        <i class="far fa-cart-shopping me-3"></i>
+                        <span>Add to cart</span>
+                    </button>
 
-                        <button type="button" id="wishlist-btn" class="btn btn-outline-primary">
-                            <i class="far fa-heart me-2"></i>
-                            {% if not product in user.favorites.all %}
+                    <button type="button" id="wishlist-btn" class="btn btn-outline-primary py-2">
+                        <i class="far fa-heart me-2"></i>
+                        {% if not product in user.favorites.all %}
                             <span>Add to wishlist</span>
-                            {% else %}
+                        {% else %}
                             <span>Remove from wishlist</span>
-                            {% endif %}
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-
+                        {% endif %}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div class="container mt-5">
-        <div class="product-tabs d-flex gap-5 border-bottom mt-5 pb-3">
-            <button id="info-button" class="btn border-0">Specifications</button>
-            <button id="comment-button" class="btn border-0">Comments</button>
-        </div>
+    <div id="product-tabs" class="d-flex gap-5 border-bottom pt-5">
+        <button id="info-button" class="btn border-0 fs-5" type="button">Specifications</button>
+        <button id="comment-button" class="btn border-0 fs-5" type="button">Comments</button>
     </div>
 
-    <section class="container-fluid" id="info-part" style="padding-left: 100px; margin-bottom: 100px; padding-top: 32px;">
+    <section class="py-4" id="info-part">
         <div class="row">
-            <div class="col-md specifications">
-                <h2>Specifications</h2>
-                    <div>
-                        <span>Brand</span>
-                        <span>{{product.brand}}</span>
-                    </div>
-
+            <div class="col-md specifications row px-3">
+                <h5 class="mb-3">Specifications</h5>
+                <div class="d-flex justify-content-between p-3 {% if not product.description %}col-lg-6{% endif %}">
+                    <span>Brand</span>
+                    <span>{{ product.brand }}</span>
+                </div>
                 {% for key, value in product.specifications %}
-                    <div>
+                    <div class="d-flex justify-content-between p-3 {% if not product.description %}col-lg-6{% endif %}">
                         <span>{{ key }}</span>
                         <span>{{ value }}</span>
                     </div>
                 {% endfor %}
             </div>
             {% if product.description %}
-            <div class="col-md specifications">
-                <h2>About this product</h2>
-                <div>
-                    <p>{{product.description}}</p>
-                </div>
+            <div class="col-md-6 specifications">
+                <h5>About this product</h5>
+                <p class="pt-4">{{ product.description }}</p>
             </div>
             {% endif %}
         </div>
     </section>
 
-    <section class="container-fluid" id="comment-part">
-
+    <section class="py-5" id="comment-part">
         {% if user.is_authenticated %}
-        <form id="comment-form" method="post">
-            {% csrf_token %}
-            <h4>Write a review</h4>
+            <form class="pb-3 mx-auto" id="comment-form">
+                <h4 class="text-center mb-4">Write a review</h4>
 
-            <div class="d-flex">
-                <label for="name">Rating</label>
+                <div class="d-flex align-items-center pb-4">
+                    <h6>Rating</h6>
 
-                <select class="d-none" name="comment-rating" id="comment-rating">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
+                    <select class="d-none" name="comment-rating" id="comment-rating">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
 
-                <div class="stars ms-3">
-                    <img onclick="setRating(1)" src="{% static 'img/star-empty.svg' %}" alt="1">
-                    <img onclick="setRating(2)" src="{% static 'img/star-empty.svg' %}" alt="2">
-                    <img onclick="setRating(3)" src="{% static 'img/star-empty.svg' %}" alt="3">
-                    <img onclick="setRating(4)" src="{% static 'img/star-empty.svg' %}" alt="4">
-                    <img onclick="setRating(5)" src="{% static 'img/star-empty.svg' %}" alt="5">
+                    <div class="stars fs-5 ps-3">
+                        {% for i in '12345' %}
+                            <i class="fa-regular fa-star" onclick="setRating('{{ forloop.counter }}')"></i>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
 
-            <div class="text-start">
-                <label for="text">Text</label>
-                <textarea class="form-control mt-1" id="comment-text" rows="4" name="text" placeholder="Your comment..." required></textarea>
-            </div>
+                <div class="text-start pb-4">
+                    <label for="comment-text">Text</label>
+                    <textarea class="form-control mt-1" id="comment-text" rows="4" name="text" placeholder="Your comment..." required></textarea>
+                </div>
 
-            <div class="text-end">
-                <input class="btn btn-primary col-5 col-sm-4 col-md-3" type="submit" value="Submit">
-            </div>
+                <div class="text-end py-1">
+                    <input class="btn btn-primary col-5 col-sm-4 col-md-3" type="submit" value="Submit">
+                </div>
 
-        </form>
+            </form>
         {% endif %}
 
-        {% if comments %}
-        <div id="comments" class="comments">
-            {% for i in comments %}
-            <div class="comment row" id="{{ i.id }}">
+            <div class="{% if user.is_authenticated %}border-top{% endif %} border-bottom py-4" id="comments">
+                {% for i in comments %}
+                <div class="comment row gy-2" id="{{ i.id }}">
 
-                <div class="col-md-3 text-center">
-                    <h2>{{i.rating}}</h2>
-                    <div class="stars">
-                        {{ i.rating.render_stars_html | safe }}
-                    </div>
-                </div>
-
-                <div class="col-md-9">
-                    <div class="comment-info d-flex justify-content-between">
-                        <h5>{{i.author.full_name}}</h5>
-                        <h6>{{i.created_at | date:"M d, Y"}}</h6>
+                    <div class="col-md-3 text-center">
+                        <h2>{{ i.rating }}</h2>
+                        <div class="stars fs-5">
+                            {{ i.rating.render_stars_html | safe }}
+                        </div>
                     </div>
 
-                    <p>{{i.text}}</p>
+                    <div class="col-md-9">
+                        <div class="comment-info d-flex justify-content-between">
+                            <h5>{{i.author.full_name}}</h5>
+                            <h6>{{i.created_at | date:"M d, Y"}}</h6>
+                        </div>
 
-                    {% if i.author == request.user %}
-                        <button onclick="deleteComment('{{i.id}}')" class="btn btn-dark">
-                            Delete comment
-                        </button>
+                        <p>{{i.text}}</p>
+
+                        {% if i.author == request.user %}
+                            <button class="btn btn-dark" type="button" onclick="deleteComment('{{i.id}}')">
+                                Delete comment
+                            </button>
+                        {% endif %}
+                    </div>
+
+                    {% if not forloop.last %}
+                        <hr class="w-100 my-4" />
                     {% endif %}
+
                 </div>
+                {% endfor %}
 
-                {% if not forloop.last %}
-                    <hr class="w-100 mt-4" style="color: #C4C4C4;" />
-                {% endif %}
-
+                <div class="no-items" {% if comments %}style="display: none;"{% endif %} >
+                    <h2>No comments yet...</h2>
+                    <img src="{% static 'img/no-items.svg' %}" alt="">
+                </div>
             </div>
-            {% endfor %}
-        </div>
-        {% else %}
-        <div class="no-items">
-            <h1>No comments yet...</h1>
-            <img src="{% static 'img/no-items.svg' %}" alt="">
-        </div>
-        {% endif %}
-
     </section>
 
+</main>
 {% endblock content %}
 {% block js %}
 <script>
-
-    const productId = parseInt('{{ product.id }}')
-    const initialPrice = parseInt('{{ product.price }}')
-    const initialOldPrice = parseInt('{{ product.old_price }}')
-
+    const productId = parseInt('{{ product.id }}');
+    const initialPrice = parseInt('{{ product.price }}');
+    const initialOldPrice = parseInt('{{ product.old_price }}');
 </script>
-<script src="{% static 'js/detail.js' %}?">
-
-    // {% if colors %}
-    let color = sessionStorage.getItem('color')
-    color = $(`.color[colorname='${color}']`)
-    if (!color.length){
-        color = $('.color').first()
-    }
-    selectColor(color)
-    // {% endif %}
-
-    // {% if storages %}
-    let storage = sessionStorage.getItem('storage')
-    storage = $(`.storage[storage='${storage}']`)
-    if (!storage.length){
-        storage = $('.storage').first()   
-    }
-    selectStorage(storage)
-    // {% endif %}
-
-</script>
+<script src="{% static 'js/detail.js' %}?"></script>
 {% endblock %}

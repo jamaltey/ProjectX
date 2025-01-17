@@ -3,45 +3,50 @@
 
 {% block title %}Wishlist - {% endblock title %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}??">
+{% block profile-css %}
 <style>
     #empty-wishlist {
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: center;
-        border-radius: 5px;
+        align-items: center;
         gap: 1.5rem;
-        height: 100%;
-        background-color: white;
         color: #BDBDBD;
     }
 </style>
-{% endblock css %}
+{% endblock profile-css %}
 
 {% block profile-content %}
-    
+
     <div class="text-center text-lg-start py-3">
         <h4 class="d-md-none mb-3">My Account</h4>
         <h5>Wishlist</h5>
     </div>
 
-    {% if favorites %}
     <div class="row gy-5 pb-5 pe-lg-1">
         {% for product in favorites %}
             {% include 'components/product.html' %}
         {% endfor %}
-    </div>
-    {% else %}
-        <div id="empty-wishlist">
+        <div id="empty-wishlist" class="col-12 bg-body-tertiary rounded py-5" {% if favorites %}style="display: none;"{% endif %}>
             <img src="{% static 'img/heart-empty.svg' %}" alt="">
             <h6>Your wishlist is empty</h6>
         </div>
-    {% endif %}
+    </div>
 
 {% endblock profile-content %}
 
 {% block profile-js %}
 <script src="{% static 'js/update-favorites.js' %}"></script>
+<script>
+    $('.product .heart').on('click', function(){
+        const $product = $(this).closest('.product');
+        updateFavorites($product.prop('id'));
+        $product.fadeOut(150, () => {
+            $product.remove();
+            if (!$('.product').length) {
+                $('#empty-wishlist').show();
+            }
+        });
+    })
+</script>
 {% endblock profile-js %}

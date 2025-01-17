@@ -3,17 +3,38 @@
 
 {% block title %}Products - {% endblock title %}
 
-{% block content %}
-<main class="py-5">
+{% block css %}
+<style>
+	.filter {
+		--bs-card-spacer-x: 1.5rem;
+		label {
+			font-size: 1.15rem;
+			cursor: pointer;
+			.form-check-input {
+				cursor: pointer;
+				border-color: var(--bs-primary);
+				&:checked { background-color: var(--bs-primary); }
+			}
+			&:hover .form-check-input {
+				background-color: rgba(var(--bs-primary-rgb), .25);
+				&:checked { background-color: rgba(var(--bs-primary-rgb), .75); }
+			}
+		}
+	}
+</style>
+{% endblock css %}
 
-	<div class="row m-0 justify-content-center">
+{% block content %}
+<main class="container-fluid py-5">
+
+	<div class="row justify-content-center">
 
 		<div class="d-flex d-lg-none justify-content-center w-100">
 			<div class="dropdown w-50">
 				<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					<!-- <img src="{% static 'img/swap.svg' %}" style="width: 25px;" alt=""> -->
 					<i class="fa-regular fa-arrow-up-arrow-down"></i>
-					{{ sort }}
+					{{ sort | default:'Newest' }}
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					{% if request.GET.sort %}
@@ -35,105 +56,49 @@
 			</div>
 			<div class="w-50">
 				<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" onclick="$('#sidebar').toggle()">
-					<!-- <img src="{% static 'img/filter.svg' %}" style="width: 20px;" alt=""> -->
 					<i class="fa-regular fa-filter"></i>
 					Filters
 				</button>
 			</div>
 		</div>
 
-		<div style="display: none;" id="sidebar" class="d-lg-flex flex-column col-9 col-lg-3 gap-3 mt-3">
-
-			<!-- <p class="list-path">
-			Home <img src="{% static 'img/arrow.svg' %}">
-			Products <img src="{% static 'img/arrow.svg' %}">
-			<span></span>
-			</p> -->
+		<div style="display: none;" id="sidebar" class="d-lg-flex justify-content-center col pt-3">
 
 			<!-- Filters -->
-			<div class="filter card">
-				<div class="card-header">
-					<h5 class="mb-0">
-						Brand ({{brands.count}})
+			<div class="filter card pt-1 px-3 w-100">
+				<div class="card-header bg-transparent">
+					<h5>
+						Brand ({{ brands.count }})
 					</h5>
 				</div>
-				<div class="card-body">
+				<form class="card-body" method="get">
 					<ul>
 					{% for i in brands %}
 						<li>
-							<span>
-								<label>{{i.title}}
-									<input type="checkbox" onchange="applyFilter(this, 'brand', '{{i.title}}')"
-									{% if request.GET.brand.lower == i.title.lower %} checked {% endif %}>
-								</label>
-							</span>
-						</li>
-					{% endfor %}
-					</ul>
-				</div>
-			</div>
-
-			<div class="filter card">
-				<div class="card-header">
-					<h5 class="mb-0">
-						Type ({{types.count}})
-					</h5>
-				</div>
-				<div class="card-body">
-					<ul>
-					{% for i in types %}
-						<li>
-						<span>
-							<label>{{i.title}}
-								<input type="checkbox" onchange="applyFilter(this, 'type', '{{i.title}}')"
-								{% if request.GET.type.lower == i.title.lower %} checked {% endif %}>
+							<label>
+								<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.title }}" {% if i.title in request.GET.brand %}checked{% endif %}>
+								{{ i.title }}
 							</label>
-						</span>
 						</li>
 					{% endfor %}
 					</ul>
-				</div>
-			</div>
 
-			<div class="filter card">
-				<div class="card-header">
-					<h5 class="mb-0">
-						Category ({{categories.count}})
-					</h5>
-				</div>
-
-				<div class="card-body">
-					<ul>
-					{% for i in categories %}
-						<li>
-						<span>
-							<label>{{i}}
-								<input type="checkbox" onchange="applyFilter(this, 'category', '{{i}}')"
-								{% if request.GET.category.lower == i.lower %} checked {% endif %}>
-							</label>
-						</span>
-						</li>
-					{% endfor %}
-					</ul>
-				</div>
-
-			</div>
-
-			<div class="d-flex justify-content-center">
-				<button onclick="location.search=''" class="btn btn-dark">
-				Reset all filters
-				</button>
+					<a href="?" class="btn btn-dark mt-3">
+						Reset all filters
+					</a>
+				</form>
 			</div>
 
 		</div>
 
-		<div class="col-12 col-lg-9 pt-4 pt-lg-0">
-		{% if success %}
-			<div class="d-flex justify-content-between align-items-center px-3">
-				<span>{{ page.paginator.count }} products found</span>
-				<div class="dropdown">
+		<!-- Products -->
+		<div class="col-12 col-lg-9 col-xxl-10 pt-4 pt-lg-0">
+		{% if paginator.count %}
+			<div class="d-flex align-items-center px-3">
+				{% if search %}<span>{{ paginator.count }} products found</span>{% endif %}
+				<div class="dropdown ms-auto">
 					<button class="btn border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-						Sort: {{ sort }}
+						Sort: {{ sort | default:'Newest' }}
 					</button>
 					<div class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton">
 						{% if request.GET.sort %}
@@ -157,12 +122,13 @@
 
             <div class="row gy-5 py-5">
 			{% with favorites=user.favorites.all %}
-				{% for product in page %}
+				{% for product in page_obj %}
 					{% include 'components/product.html' %}
 				{% endfor %}
 			{% endwith %}
             </div>
 
+			{% if is_paginated %}
             <nav class="d-flex justify-content-center" aria-label="Pagination">
                 <ul class="pagination">
                 {% if page.has_previous %}
@@ -171,7 +137,7 @@
                     </li>
                 {% endif %}
 
-                {% for i in page.paginator.page_range %}
+                {% for i in paginator.page_range %}
                     <li class="page-item d-flex align-items-center">
 						<a class="page-link fs-5" href="?page={{i}}&{{args}}">{{ i }}</a>
 					</li>
@@ -184,6 +150,7 @@
                 {% endif %}
                 </ul>
             </nav>
+			{% endif %}
 
 		{% else %}
 			<div class="no-items">
@@ -198,30 +165,30 @@
 </main>
 {% endblock content %}
 {% block js %}
-<script src="{% static 'js/update-favorites.js' %}?"></script>
+<script src="{% static 'js/update-favorites.js' %}???"></script>
 <script>
 
-if ( ! $(`.nav-item .nav-link.active`).length ){
-	$(`.nav-item .nav-link[href="/list/"]`).addClass('active')
-}
-
-function applyFilter(checkbox, key, value) {
-	if (checkbox.checked) {
-		const regex = new RegExp(`(${key}=[^&]*)`)
-		if (regex.test(location.search)) {
-			location.search = location.search.replace(regex, `${key}=${value}`)
-		} else if (!location.search.startsWith('?')) {
-			location.search = `?${key}=${value}`
-		} else {
-			location.search += `&${key}=${value}`
-		}
+	if (!$(`.nav-item .nav-link.active`).length) {
+		$(`.nav-item .nav-link[href="/list/"]`).addClass('active');
 	}
-	else {
-		value = value.replace(' ', '%20')
-		const regex = new RegExp(`(&|\\?)${key}=${value}`)
-		location.search = location.search.replace(regex, '').replace(/^&/, '?')
-	} 
-}
+
+	const params = new URLSearchParams(location.search);
+
+	$('.filter input').each(function(){
+		const brand = this.value;
+		if (params.getAll('brand').includes(brand)) {
+			this.checked = true;
+		}
+	})
+
+	$('.filter input').on('change', function(){
+		if (this.checked) {
+			params.append('brand', this.value);
+		} else {
+			params.delete('brand', this.value);
+		}
+		location.search = params.toString();
+	})
 
 </script>
 {% endblock %}

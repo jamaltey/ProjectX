@@ -1,24 +1,16 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light">
-	<div class="container-fluid py-3 py-lg-4 px-5">
+	<div class="container-fluid pt-3 py-lg-4 px-5">
 		<a class="navbar-brand fs-1" href="{% url 'core:home' %}">
-			Div Telecom
+			Project X
 		</a>
-	
-		<!-- <button class="navbar-toggler py-2" type="button" data-bs-toggle="collapse" data-bs-target="#search" aria-controls="searchToggler" aria-expanded="false" aria-label="Toggle search">
-			<i class="fa-solid fa-search fs-4"></i>
-		</button> -->
-	
-		<button class="navbar-toggler py-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+
+		<button class="navbar-toggler py-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarToggler" aria-expanded="true" aria-label="Toggle navigation">
 			<i class="fa-solid fa-bars fs-4"></i>
 		</button>
 	
-		<div class="collapse navbar-collapse justify-content-between px-3" id="navbar">
-			<form class="d-flex justify-content-center my-2 my-lg-0 mx-auto" method="get" action="{% url 'core:list' %}">
-				<input class="form-control search rounded-4" id="search" value="{% if search %}{{ search }}{% endif %}" type="search" name="search" placeholder="Search..." aria-label="Search">
-				<!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
-			</form>
-	
+		<div class="navbar-collapse justify-content-between px-sm-5 px-lg-3 show" id="navbar">
+
 			<ul class="nav-icons d-flex justify-content-center gap-1">
 				{% if user.is_authenticated %}
 				<li class="nav-item">
@@ -53,35 +45,41 @@
 					</a>
 				</li>
 			</ul>
+
+			<form class="order-lg-first d-flex justify-content-center mt-3 mb-2 my-lg-0 mx-auto" method="get" action="{% url 'core:list' %}">
+				<input class="form-control search rounded-4" id="search" value="{% if search %}{{ search }}{% endif %}" type="search" name="search" placeholder="Search..." aria-label="Search">
+				<!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
+			</form>
+
 		</div>
 	</div>
 </nav>
 
 <div class="container-fluid p-0">
-	<ul class="d-none d-lg-flex nav nav-tabs px-5">
+	<ul class="nav nav-tabs flex-nowrap overflow-y-hidden px-md-2 px-lg-5">
 		<li class="nav-item">
 			<a class="nav-link" href="{% url 'core:home' %}">New</a>
 		</li>
+		<!-- <li class="nav-item text-primary">
+			<a class="nav-link" href="{% url 'core:list' 'sales' %}">Sales</a>
+		</li> -->
 		<li class="nav-item">
 			<a class="nav-link" href="{% url 'core:list' %}">All products</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' %}?type=Phone">Phones</a>
+			<a class="nav-link" href="{% url 'core:list' 'phones' %}">Phones</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' %}?type=Tablet">Tablets</a>
+			<a class="nav-link" href="{% url 'core:list' 'tablets' %}">Tablets</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' %}?type=Watch">Watches</a>
+			<a class="nav-link" href="{% url 'core:list' 'smartwatches' %}">Smartwatches</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' %}?type=Headphones">Headphones</a>
+			<a class="nav-link" href="{% url 'core:list' 'headphones' %}">Headphones</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' %}?category=Accessories">Accessories</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:sales' %}">Sales</a>
+			<a class="nav-link" href="{% url 'core:list' 'accessories' %}">Accessories</a>
 		</li>
 	</ul>
 </div>

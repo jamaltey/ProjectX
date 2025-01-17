@@ -3,8 +3,6 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     username = None
-    first_name = None
-    last_name = None
     full_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
     email = models.EmailField(('Email Address'), unique=True)
@@ -41,10 +39,6 @@ class Cart(models.Model):
     def image(self):
         if self.products.first():
             return self.products.first().image
-
-    def clear_cart(self):
-        for product in self.products.all():
-            self.products.remove(product)
 
     def __str__(self):
         return f"{self.user.full_name}'s cart"
@@ -93,7 +87,7 @@ class Order(models.Model):
     @property
     def shipping_price(self):
         return self.SHIPPING_PRICE
-    
+
     @property
     def price(self):
         return sum(i.final_price for i in self.products.all())

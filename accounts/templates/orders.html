@@ -3,45 +3,33 @@
 
 {% block title %}Orders - {% endblock title %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% block profile-css %}
 <style>
-    .order .card {
-        --bs-card-border-radius: 1rem;
+    .order {
+        .card { --bs-card-border-radius: 1rem; }
+
+        img { background: white; }
+        img:first-of-type { border-top-left-radius: var(--bs-card-border-radius); }
+        img.h-100:first-child,
+        img.col-sm-12:first-child,
+        img.col-6:nth-child(2) { border-top-right-radius: var(--bs-card-border-radius); }
+
+        .img-wrap .g-0:not(:has(img:nth-of-type(3))) img { height: 50%; }
+        .img-wrap .g-0:has(.col-sm-12:nth-of-type(3), .col-6:nth-of-type(5)) img { height: 33.33%; }
     }
-    .order img:first-of-type {
-        border-top-left-radius: var(--bs-card-border-radius);
-    }
-    .order img.h-100:first-child, .order img.col-sm-12:first-child, .order img.col-6:nth-child(2) {
-        border-top-right-radius: var(--bs-card-border-radius);
-    }
-    .order-img .g-0:not(:has(img:nth-of-type(3))) img {
-        height: 50%;
-    }
-    .order-img .g-0:has(img:nth-of-type(3)) img {
-        height: 33.33%;
-    }
-    .order-img .row-gap-1 img {
-        height: calc(33.33% - 3px);
-    }
+
     @media (min-width: 576px) {
-        .order-img {
-            height: 100%;
-        }
-        .order img {
-            border-top-right-radius: 0 !important;
-        }
-        .order img:not(.col-6):last-of-type, .order img.col-6:nth-child(5) {
-            border-bottom-left-radius: var(--bs-card-border-radius);
-        }
-    }
-    @media (min-width: 576px) {
-        .order .card {
-            max-height: 18rem;
+        .order {
+            .card { max-height: 18rem; }
+
+            .img-wrap { height: 100%; }
+            img { border-top-right-radius: 0 !important; }
+            img:not(.col-6):last-of-type,
+            img.col-6:nth-child(5) { border-bottom-left-radius: var(--bs-card-border-radius); }
         }
     }
 </style>
-{% endblock css %}
+{% endblock profile-css %}
 
 {% block profile-content %}
 
@@ -56,7 +44,7 @@
             <div class="card h-100">
                 <div class="row g-0 h-100">
 
-                    <div class="order-img col-sm-5 d-flex">
+                    <div class="img-wrap col-sm-5 d-flex">
                     {% if order.products.count == 1 %}
                         <div class="d-flex w-100">
                             <img class="object-fit-cover" src="{{ order.products.first.image.url }}" alt="{{ order }}">
@@ -68,7 +56,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="row gx-1 row-gap-1">
+                        <div class="row g-0">
                         {% for product in order.products.all %}
                             <img class="col-6 object-fit-cover" src="{{product.image.url}}" alt="{{ order }}">
                         {% endfor %}
@@ -87,7 +75,7 @@
                         </div>
                         <div class="d-flex flex-column mb-4">
                             <span>Total: </span>
-                            <span class="price">{{ order.total_price }} $</span>
+                            <span class="price">{{ order.total_price }}</span>
                         </div>
         
                         <a href="{% url 'accounts:order-detail' order.id %}" class="btn btn-dark border">
@@ -103,20 +91,3 @@
     </div>
 
 {% endblock profile-content %}
-
-{% block profile-js %}
-<script>
-    // $('.order-img').each(function(index, element) {
-    //     if (element.children.length == 1){
-    //         element.children[0].style.height = "100%";
-    //     } else if (element.children.length == 2){
-    //         element.children[0].style.height = "50%";
-    //         element.children[1].style.height = "50%";
-    //     } else if (element.children.length == 3){
-    //         element.children[0].style.height = "33.33%";
-    //         element.children[1].style.height = "33.33%";
-    //         element.children[2].style.height = "33.33%";
-    //     }
-    // })
-</script>
-{% endblock profile-js %}

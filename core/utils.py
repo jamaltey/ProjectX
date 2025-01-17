@@ -1,5 +1,3 @@
-isEmpty = lambda string: str(string).isspace() or not string or string == 'None'
-
 class Rating:
     def __init__(self, rating=0):
         if not rating:
@@ -13,9 +11,9 @@ class Rating:
 
     def render_stars_html(self):
         return (
-            '<img src="/static/img/star.svg" alt="⭐️">\n' * self.rating
+            '<i class="fa-sharp fa-solid fa-star"></i>\n' * self.rating
             +
-            '<img src="/static/img/star-empty.svg" alt="⭐️">\n' * (5 - self.rating)
+            '<i class="fa-regular fa-star"></i>\n' * (5 - self.rating)
         )
 
     def __repr__(self) -> str:

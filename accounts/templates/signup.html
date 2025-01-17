@@ -2,91 +2,103 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+<style>
+    main a {
+        color: #0d6efd;
+        text-decoration: underline;
+    }
+    .d-lg-block div:has(img) {
+        background: url("{% static 'img/dot-grid.svg' %}") 100% 0 no-repeat;
+    }
+    .errorlist { color: var(--bs-danger); }
+</style>
 {% endblock css %}
 
 {% block content %}
 
-<div class="main" style="margin-top: 100px; margin-bottom: 110px;">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6 first-part" style="padding-left: 55px;">
-                <div class="user-form">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <h3>Sign Up</h3>
+<main style="padding: 7rem 0;">
+    <div class="row px-5 row-gap-5">
+        <div class="col-12 col-lg-6 d-flex justify-content-center align-items-center">
+            <form class="d-flex flex-column gap-3" style="width: 400px;" method="post">
+                {% csrf_token %}
+                <h4 class="text-center">Sign Up</h4>
 
-                        <div class="form-group">
-                            <label for="full_name">Full Name</label>
-                            {{ form.full_name }}
-                            {{ form.errors.full_name }}
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">E-mail</label>
-                            {{ form.email }}
-                            {{ form.errors.email }}
-                        </div>
-
-                        <div class="form-group">
-                            <label for="number">Phone number</label>
-                            {{ form.phone }}
-                            {{ form.errors.phone }}
-                        </div>
-
-                        <div class="form-group" style="margin-top: 20px;">
-                            <label for="password">Password</label>
-                            {{ form.password1 }}
-                            {{ form.password1.errors }}
-                        </div>
-
-                        <div class="form-group" style="margin-top: 20px;">
-                            <label for="password">Confirm Password</label>
-                            {{ form.password2 }}
-                            {{ form.password2.errors }}
-                        </div>
-
-                        <div class="terms">
-                            <input type="checkbox">
-                            <span>I agree with <a href="">Terms and Conditions</a></span>
-                        </div>
-                        <div class="mobile mt-1">
-                            <span>Already have an account?<a href="{% url 'accounts:login' %}"> Log In</a></span> 
-                        </div>
-
-                        <input type="submit" class="submit-btn" disabled value="Sign Up">
-
-                    </form>
+                <div>
+                    <label for="email">Full name<span class="text-danger">*</span></label>
+                    {{ form.full_name }}
+                    {{ form.errors.full_name }}
                 </div>
+
+                <div>
+                    <label for="email">E-mail<span class="text-danger">*</span></label>
+                    {{ form.email }}
+                    {{ form.errors.email }}
+                </div>
+
+                <div>
+                    <label for="username">Phone number</label>
+                    {{ form.phone }}
+                    {{ form.errors.phone }}
+                </div>
+
+                <div>
+                    <label for="password">Password<span class="text-danger">*</span></label>
+                    {{ form.password1 }}
+                    {{ form.errors.password1 }}
+                </div>
+
+                <div>
+                    <label for="password">Confirm Password<span class="text-danger">*</span></label>
+                    {{ form.password2 }}
+                    {{ form.errors.password2 }}
+                </div>
+
+                <div>
+                    <input class="form-check-input me-1" type="checkbox" name="terms" required> I agree to the <a href="">Terms of Service</a> and <a href="">Privacy Policy</a>
+                    <br class="my-2" />
+                    <span class="d-lg-none">Already have an account?<a href="{% url 'accounts:login' %}"> Log In</a></span> 
+                </div>
+
+                {% if form.non_field_errors %}
+                <ul class='form-errors'>
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                <input class="btn btn-primary border-0 py-2 mt-2 w-100" type="submit" value="Sign Up" disabled>
+
+            </form>
+        </div>
+
+        <div class="d-none d-lg-block col-lg-6 flex-column align-items-center">
+            <div>
+                <img src="{% static 'img/login.svg' %}" alt="Sign Up" class="w-100">
             </div>
 
-            <div class="col-md-6 second-part" style="padding-left: 100px;">
-                <div class="illustration-cont">
-                    <img src="{% static 'img/login.svg' %}" alt="" class="login-img">
-                    <img src="{% static 'img/Dot Grid.svg' %}" class="dot-grid" alt="" style="margin-top: -87px; margin-left: -137px;">
-                </div>
-
-                <div style="width: 388px; text-align: center; margin-top: 15px;">
-                    <p>Already have an account?<a href="{% url 'accounts:login' %}"> Log In</a></p> 
-                </div>
-            </div>
-
+            <p class="text-center mt-3">
+                Already have an account?
+                <a href="{% url 'accounts:login' %}?next={{ request.GET.next }}">
+                    Log In
+                </a>
+            </p>
         </div>
     </div>
-</div>
+</main>
 
 
 {% endblock %}
 
 {% block js %}
 <script>
-    let checkbox = $("div.terms input[type=checkbox]");
-    let submit_btn = $("form input[type=submit]");
-    checkbox.on("change", function(){
-        if (checkbox.prop("checked")) {
-            submit_btn.prop("disabled", false);
+    const $checkbox = $("input:checkbox");
+    const $submit_btn = $("form input[type=submit]");
+    $checkbox.on("change", () => {
+        if ($checkbox.prop("checked")) {
+            $submit_btn.prop("disabled", false);
         } else {
-            submit_btn.prop("disabled", true);
+            $submit_btn.prop("disabled", true);
         }
     })
 </script>

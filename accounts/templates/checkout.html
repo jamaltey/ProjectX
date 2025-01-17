@@ -2,120 +2,99 @@
 {% load static %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}?">
-<link rel="stylesheet" href="{% static 'css/checkout.css' %}">
-<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+<style>
+	main .form-control {
+		min-height: 3rem;
+		max-height: 6rem;
+	}
+</style>
 {% endblock css %}
 
 {% block content %}
 
-    <div class="checkout-main main">
-        <div class="container">
-            <h5 style="font-size: 24px; margin-bottom: 32px; margin-top: 56px;">Checkout</h5>
-            <div class="row">
-                <div class="col-md-7">
-					<form action="" method="post">
-					{% csrf_token %}
+<main class="container-md pb-3">
+	<h4 class="mt-5 mb-4">Checkout</h4>
+	<div class="row gy-4">
+		<div class="col-lg-4 order-lg-last">
+			<div class="shadow p-4">
+				<h5>Summary</h5>
 
-					<div>
-						<div class="card-header">
-							<h5 class="mb-0">
-								Shipping address
-							</h5>
-						</div>
+				<div class="d-flex justify-content-between py-3">
+					<span>Amount</span>
+					<span class="price fs-6">{{ user.cart.total_price }}</span>
+				</div>
 
-						<div class="address-form">
-							<div class="d-flex">
-								<div>
-									<p>Address<span style="color: red;">*</span></p>
-									{{ form.address }}
-									{{ form.errors.address }}
-								</div>
-								<div>
-									<p>House/Apartment number</p>
-									{{ form.house }}
-									{{ form.errors.house }}
-								</div>
-							</div>
-			
-							<div class="d-flex">
-								<div>
-									<p>Additional instructions</p>
-									{{ form.instructions }}
-									{{ form.errors.instructions }}
-								</div>
-							</div>
-							
-						</div>
+				<div class="d-flex justify-content-between">
+					<span>Shipping</span>
+					<span class="price fs-6">{{ shipping_price }}</span>
+				</div>
 
+				<hr />
+
+				<div class="d-flex justify-content-between">
+					<span>Total price</span>
+					<span class="price">{{ total_price }}</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-lg-8">
+			<form class="shadow p-4" method="post">
+				{% csrf_token %}
+
+				<h5 class="border-bottom pb-2 mb-3">
+					Shipping address
+				</h5>
+
+				<div class="row gy-4 pb-4">
+					<div class="col-md-6">
+						<label for="address">Address<span class="text-danger">*</span></label>
+						{{ form.address }}
+						{{ form.errors.address }}
 					</div>
-
-					<div style="margin-bottom: 120px;">
-						<div class="card-header">
-							<h5 class="mb-0">
-								Payment method
-							</h5>
-						</div>
-
-						<div class="payment-methods-container card-body">
-							<div class="btn-container">
-
-								<button type="button" id="card" disabled class="payment-method">
-									<img src="{% static 'img/card-gray.svg' %}" alt="">
-									Pay now with card 
-								</button>
-
-								<button type="button" id="cash" onclick="selectPaymentMethod(this)" class="payment-method active">
-									<img src="{% static 'img/cash.svg' %}" alt="">
-									Pay at door with cash
-								</button>
-
-							</div>
-
-							<div class="text-center" style="margin-top: 30px;">
-								<select style="display: none;" name="payment-method">
-									<option value="cash">Cash</option>
-									<option value="card">Card</option>
-								</select>
-								<input type="submit" value="Submit">
-							</div>
-
-						</div>
-
+					<div class="col-md-6">
+						<label for="house">Your house/apartment number<span class="text-danger">*</span></label>
+						{{ form.house }}
+						{{ form.errors.house }}
 					</div>
-                </div>
+					<div class="col-12">
+						<label for="instructions">Additional instructions for delivery</label>
+						{{ form.instructions }}
+						{{ form.errors.instructions }}
+					</div>
+				</div>
+
+				<h5 class="mb-3">Payment method</h5>
+
+				<div class="d-flex flex-wrap flex-md-nowrap gap-3">
+					<select class="d-none" name="payment-method">
+						<option value="cash">Cash</option>
+						<option value="card">Card</option>
+					</select>
+					<button class="payment-method btn btn-outline-secondary w-100" id="card" type="button" disabled>
+						<i class="far fa-credit-card"></i>
+						Pay now with card 
+					</button>
+					<button class="payment-method btn btn-secondary w-100" id="cash" type="button">
+						<i class="far fa-money-bill-wave"></i>
+						Pay at door with cash
+					</button>
+				</div>
+
+				<input class="btn btn-primary fs-5 px-4 mt-4" type="submit" value="Order">
+
 			</form>
-
-                <div class="col-md-5" style="margin-top: -50px;">
-                    <div class="card payment-card">
-						<h5>Summary</h5>
-                        <div style="border-bottom: 1px solid #828282;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                                <span>Amount</span>
-                                <span>{{ user.cart.total_price }} $</span>
-                            </div>
-							<div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                                <span>Shipping</span>
-                                <span>{{ shipping_price }} $</span>
-                            </div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; margin-top: 16px;">
-                            <span>Total price</span>
-							<span class="price">{{ total_price }} $</span>
-                        </div>
-                       
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		</div>
+	</div>
+</main>
 
 {% endblock %}
 
 {% block js %}
 <script>
-	function selectPaymentMethod(element){
-		element.classList.add('active')
-	}
+	$('.payment-method:not(:disabled)').on('click', function(){
+		$(this).addClass('active');
+		$('select[name="payment-method"]').val(this.id);
+	})
 </script>
 {% endblock js %}

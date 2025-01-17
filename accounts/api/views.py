@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from core.models import Product, Cart
 
 class CartViewSet(viewsets.ViewSet):
@@ -12,7 +12,7 @@ class CartViewSet(viewsets.ViewSet):
     def remove_from_cart(self, request, pk=None):
         cart = request.user.cart
         product_version = get_object_or_404(cart.products, id=pk)
-        cart.products.remove(product_version)
+        product_version.delete()
         data = {
             "is_empty": not cart.products.exists(),
             "items_count": cart.products.count(),
@@ -24,7 +24,7 @@ class CartViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['get'], url_path='clear', url_name='clear')
     def clear_cart(self, request):
         cart = request.user.cart
-        cart.products.clear()
+        cart.products.all().delete()
         return Response(status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'], url_path='change-quantity', url_name='change-quantity')

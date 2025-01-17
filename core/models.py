@@ -6,14 +6,15 @@ import re, math
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to="images/")
     brand = models.ForeignKey("Brand", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
+    category = models.ForeignKey("Category", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
     specifications = models.ForeignKey("Specifications", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
+    colors = models.ManyToManyField("Color", related_name="products", blank=True)
     storages = models.ManyToManyField("Storage", related_name="products", blank=True)
-    type = models.ForeignKey("ProductType", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
     price = models.PositiveSmallIntegerField()
-    old_price = models.PositiveIntegerField(blank=True, null=True)
+    old_price = models.PositiveSmallIntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -22,13 +23,6 @@ class Product(models.Model):
             return int((self.old_price - self.price) / self.old_price * 100)
         else:
             return 0
-
-    @property
-    def category(self):
-        if self.type:
-            return self.type.category
-        else:
-            return None
 
     @property
     def reviews(self):
@@ -40,22 +34,19 @@ class Product(models.Model):
         return Rating(self.calculate_rating())
 
     def calculate_rating(self):
-        reviews = self.reviews
-        count = reviews.count()
-        if count > 0:
-            summ = sum(i.rating_value for i in reviews)
-            avg = math.ceil(summ / count)
-            return avg
-        else:
-            return 0
+        avg_rating = self.reviews.aggregate(models.Avg('rating_value'))['rating_value__avg']
+        return math.ceil(avg_rating) if avg_rating else 0
 
     def __str__(self):
-        return f"{self.brand} {self.title}"
+        return self.title if self.title.startswith(str(self.brand)) else f"{self.brand} {self.title}"
+
+    class Meta:
+        ordering = ['-created_at']
 
 class Specifications(models.Model):
     FIELDS = {'operating_system':'Operating system',
             'cellular_technology':'Cellular technology',
-            'display_type':'Display type',
+            'display':'Display',
             'camera':'Camera',
             'cpu':'CPU',
             'ram':'RAM',
@@ -65,23 +56,21 @@ class Specifications(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     operating_system = models.CharField(max_length=100, null=True, blank=True)
     cellular_technology = models.CharField(max_length=100, null=True, blank=True)
-    display_type = models.CharField(max_length=100, null=True, blank=True)
+    display = models.CharField(max_length=100, null=True, blank=True)
     camera = models.CharField(max_length=100, null=True, blank=True)
     cpu = models.CharField(max_length=100, null=True, blank=True)
     ram = models.CharField(max_length=100, null=True, blank=True)
     battery = models.CharField(max_length=100, null=True, blank=True)
     water_and_dust_rating = models.CharField(max_length=100, null=True, blank=True)
-    additional_specifications = models.JSONField(null=True, blank=True)
+    additional_specifications = models.JSONField(null=True, blank=True, default=dict)
 
     @property
     def dict(self):
-        FIELDS = self.FIELDS
-        result = self.additional_specifications or {}
-        for i in FIELDS:
-            value = getattr(self, i)
-            if value:
-                result[FIELDS[i]] = value
-        return result
+        return {
+            self.FIELDS[key]: getattr(self, key)
+            for key in self.FIELDS
+            if getattr(self, key)
+        } | (self.additional_specifications or {})
     
     def __iter__(self):
         return iter(self.dict.items())
@@ -106,26 +95,25 @@ class ProductImage(models.Model):
     def __str__(self):
         filename = re.search(r'images/(.*)', self.image.url).group(1)
         if self.color:
-            return f"{self.product} ({self.color.color_name}) —— {filename}"
+            return f"{self.product} ({self.color.name}) —— {filename}"
         return f"{self.product} —— {filename}"
     
     class Meta:
-        ordering = ['color__color_name']
+        ordering = ['product']
 
 class Color(models.Model):
-    color_name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     color = ColorField()
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="colors")
 
     def __str__(self):
-        return f"{self.color_name} ({self.color}) —— {self.product}"
+        return f"{self.name} ({self.color})"
     
     class Meta:
-        ordering = ['color_name']
+        ordering = ['name']
 
 class Storage(models.Model):
-    storage = models.PositiveSmallIntegerField() # in GB
-    price = models.PositiveSmallIntegerField(default=0)
+    storage = models.PositiveSmallIntegerField(help_text="In GB")
+    price = models.PositiveSmallIntegerField(blank=True, default=0)
 
     @property
     def size_format(self):
@@ -143,9 +131,8 @@ class Brand(models.Model):
     def __str__(self):
         return self.title
 
-class ProductType(models.Model):
+class Category(models.Model):
     title = models.CharField(max_length=100)
-    category = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -186,17 +173,15 @@ class ProductVersion(models.Model):
     @property
     def image(self):
         try:
-            return self.product.images.get(color__color_name=self.color.color_name).image
+            return self.product.images.get(color__name=self.color.name).image
         except:
             return self.product.image
 
     @property
     def old_price(self):
-        old_price = self.product.old_price
-        if not old_price:
-            return 0
+        old_price = self.product.old_price or 0
         if self.storage:
-            old_price = old_price + self.storage.price
+            old_price += self.storage.price
         return old_price * self.quantity
 
     @property
@@ -206,19 +191,10 @@ class ProductVersion(models.Model):
             final_price += self.storage.price
         return final_price * self.quantity
 
-    @classmethod
-    def delete_empty(cls):
-        n = 0
-        for i in cls.objects.all():
-            if not i.carts.count() and not i.orders.count():
-                i.delete()
-                n += 1
-        return n
-
     def __str__(self):
         result = str(self.product)
         if self.color:
-            result += f" {self.color.color_name}"
+            result += f" {self.color.name}"
         if self.storage:
             result += f" {self.storage.size_format}"
         return result + f" x{self.quantity}"

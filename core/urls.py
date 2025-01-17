@@ -6,6 +6,6 @@ app_name = 'core'
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('detail/<int:pk>', ProductDetailView.as_view(), name='detail'),
-    path('list/', list, name='list'),
-    path('list/sales/', lambda r: list(r, sales=True), name='sales'),
+    path('list/', ProductListView.as_view(), name='list'),
+    path('list/<str:category>/', ProductListView.as_view(), name='list'),
 ]

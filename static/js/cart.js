@@ -19,8 +19,8 @@ function removeItem(id) {
 			} else {
 				$(`.cart-item#${id}`).remove()
 				$('.cart-items-count').text( data.items_count )
-				$('.total-price .old-price').text(`–${ data.discount } $`)
-				$('.total-price .price').text(`${ data.total_price } $`)
+				$('#total-price .old-price').text(`${ data.discount } $`)
+				$('#total-price .price').text(`${ data.total_price } $`)
 			}
 		}
 	})
@@ -36,9 +36,10 @@ function changeQuantity(id, count) {
 		`/api/cart/${id}/change-quantity/`, { 'quantity': quantity },
 		success = ( data ) => {
 			counter.text(quantity)
-			$(`.cart-item#${id} .price`).text(`${ data.price } $`)
-			$('.total-price .old-price').text(`–${ data.discount } $`)
-			$('.total-price .price').text(`${ data.total_price } $`)
+			console.log(data)
+			$(`.cart-item#${id} .price`).text(data.price)
+			$('#total-price .old-price').text(data.discount)
+			$('#total-price .price').text(data.total_price)
 		}
 	)
-} 
+}

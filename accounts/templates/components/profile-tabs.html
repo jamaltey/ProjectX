@@ -9,9 +9,9 @@
 
     <ul class="d-flex flex-column flex-sm-row flex-lg-column justify-content-evenly align-items-baseline gap-3 py-2 py-lg-3">
         <li>
-            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:orders' %}">
-                <i class="fa-regular fa-bag-shopping fs-5"></i>
-                <span>My orders</span>
+            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:profile-info' %}">
+                <i class="fa-regular fa-user fs-5"></i>
+                <span>Personal Info</span>
             </a>
         </li>
         <li>
@@ -21,9 +21,9 @@
             </a>
         </li>
         <li>
-            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:profile-info' %}">
-                <i class="fa-regular fa-user fs-5"></i>
-                <span>Personal Info</span>
+            <a class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center" href="{% url 'accounts:orders' %}">
+                <i class="fa-regular fa-bag-shopping fs-5"></i>
+                <span>My orders</span>
             </a>
         </li>
         <li>
@@ -36,8 +36,9 @@
 
     <hr class="mt-2" />
 
-    <a class="d-lg-flex align-items-center text-center" href="{% url 'accounts:logout' %}">
+    <form class="d-lg-flex align-items-center text-center" action="{% url 'accounts:logout' %}" method="post">
+        {% csrf_token %}
         <i class="fa-regular fa-arrow-right-from-bracket fs-5 me-1 me-lg-3"></i>
-        <span>Log out</span>
-    </a>
+        <button class="btn border-0 p-0" type="submit">Log out</button>
+    </form>
 </nav>

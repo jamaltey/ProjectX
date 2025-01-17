@@ -3,17 +3,13 @@
 
 {% block title %}Order {{ order.id }} Details - {% endblock title %}
 
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% block profile-css %}
 <style>
-    [data-bs-theme=light] main ul {
-        color: #1D2123;
-    }
-    .info{
-        gap: 1rem 2rem;
-    }
+    [data-bs-theme=light] main ul { color: #1D2123; }
+    .info { gap: 1rem 2rem; }
+    .order-item img { background: white; }
 </style>
-{% endblock css %}
+{% endblock profile-css %}
 
 {% block profile-content %}
 
@@ -48,7 +44,7 @@
     {% for product in order.products.all %}
     <div class="order-item row pt-2">
         <a class="col-sm-3 d-flex" href="{% url 'core:detail' product.product.id %}">
-            <img class="object-fit-cover" src="{{product.image.url}}" alt="">
+            <img class="object-fit-cover" src="{{ product.image.url }}" alt="">
         </a>
 
         <div class="product-info d-flex flex-column py-2 col-sm-9">
@@ -59,7 +55,7 @@
                 {% if product.color %}
                 <div class="d-flex flex-column">
                     <span>Color: </span>
-                    <span>{{ product.color.color_name }}</span>
+                    <span>{{ product.color.name }}</span>
                 </div>
                 {% endif %}
 
@@ -109,35 +105,26 @@
 
         <h5 class="pb-4">Payment details</h5>
         <div class="d-flex justify-content-between">
-            <div>
-                <ul class="d-flex flex-column gap-2 ps-3">
-                    <li>Payment method</li>
-                    <li>Amount</li>
-                    <li>Shipping</li>
-                </ul>
-            </div>
-            <div>
-                <ul class="d-flex flex-column gap-2 ps-3">
-                    <li style="color: rgba(var(--bs-body-color-rgb), 0.71);">{{ order.payment_method }}</li>
-                    <li class="price fs-6">{{ order.price }} $</li>
-                    <li class="price fs-6">{{ order.shipping_price }} $</li>
-                </ul>
-            </div>
+            <ul class="d-flex flex-column gap-2 ps-3">
+                <li>Payment method</li>
+                <li>Amount</li>
+                <li>Shipping</li>
+            </ul>
+
+            <ul class="d-flex flex-column gap-2 ps-3">
+                <li style="color: rgba(var(--bs-body-color-rgb), 0.71);">{{ order.payment_method }}</li>
+                <li class="price fs-6">{{ order.price }}</li>
+                <li class="price fs-6">{{ order.shipping_price }}</li>
+            </ul>
         </div>
 
     </div>
 
     <hr />
-    <div class="total-price d-flex justify-content-between px-3 pt-3">
+    <div class="d-flex justify-content-between px-3 pt-3">
 		<h5 class="pb-4">Total</h5>
-		<span class="price">{{ order.total_price }} $</span>
+		<span class="price">{{ order.total_price }}</span>
     </div>
 </div>
 
 {% endblock profile-content %}
-
-{% block profile-js %}
-<script>
-    activeProfileTab = '/accounts/orders/'
-</script>
-{% endblock profile-js %}

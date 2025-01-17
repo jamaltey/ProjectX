@@ -4,43 +4,43 @@
 {% block title %}{% endblock title %}
 
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+    <style>
+        main {
+            background-color: var(--bs-secondary-bg);
+            .form-control {
+                min-height: 3rem;
+                max-height: 6rem;
+            }
+        }
+
+        #profile-tabs a.active { color: var(--bs-emphasis-color); }
+
+        .info span:first-child {
+            font-size: .75rem;
+            color: rgba(var(--bs-body-color-rgb), 0.71);
+        }
+    </style>
+    {% block profile-css %}{% endblock profile-css %}
 {% endblock css %}
 
 {% block content %}
-<main class="container-fluid" id="profile-main">
-    <div class="row justify-content-evenly pb-4 pt-lg-4">
-        <div class="col-lg-3 pt-5 pb-3 pb-lg-0">
-            {% include 'components/profile-tabs.html' %}
+    <main class="container-fluid">
+        <div class="row justify-content-center pb-4 pt-lg-4">
+            <div class="col-lg-3 pt-5 pb-3 pb-lg-0">
+                {% include 'components/profile-tabs.html' %}
+            </div>
+            <div class="col-lg-9">
+            {% block profile-content %}
+                
+            {% endblock profile-content %}
+            </div>
         </div>
-        <div class="col-lg-9">
-        {% block profile-content %}
-            
-        {% endblock profile-content %}
-        </div>
-    </div>
-</main>
+    </main>
 {% endblock content %}
 
 {% block js %}
-
-<script>
-
-const activeProfileTab = location.pathname
-
-if ( ! $(`.nav-item .nav-link.active`).length ){
-	$(`.nav-item .nav-link#profile-link`).addClass('active')
-}
-
-</script>
-{% block profile-js %}
-{% endblock profile-js %}
-<script>
-const icon = $(`.profile-main li a[href="${activeProfileTab}"] img`)[0]
-
-icon.src = icon.src.replace(/.svg$/, '-green.svg')
-$(`.profile-main li a[href="${activeProfileTab}"] span`).addClass('active')
-
-</script>
-
+    <script>
+        $(`#profile-tabs a[href="${location.pathname.replace(/\d*$/, '')}"]`).addClass('active');
+    </script>
+    {% block profile-js %}{% endblock profile-js %}
 {% endblock js %}
