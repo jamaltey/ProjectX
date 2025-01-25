@@ -1,0 +1,199 @@
+@font-face {
+    font-family: myFont;
+    src: url('../fonts/Euclid\ Circular/EuclidCircularA-Medium.ttf');
+  }
+body {
+    font-family: myFont;
+}
+.form-inline {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar {
+    background-color: white !important;
+    padding-top: 20px;
+}
+
+.nav-inp {
+    width: 600px !important;
+    background-color: #F7F9FC;
+    border-radius: 7px;
+    color: #495057 !important;
+}
+
+.zero {
+    background-color: #2DD06E;
+    color: white;
+    border-radius: 50%;
+    padding: 1px 7px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.nav-item {
+    margin-right: 10px;
+}
+
+.nav-link {
+    color: black;
+}
+
+.nav-link:hover {
+    color: #2DD06E;
+}
+
+.container {
+    max-width: 1300px !important;
+}
+
+.active {
+    color: #2DD06E;
+}
+
+
+.btn-primary {
+    width: 125px;
+    text-align: center;
+    justify-content: center;
+}
+
+.card-title {
+    font-size: 16px;
+}
+
+.text-main {
+    padding-left: 175px;
+    padding-top: 100px;
+}
+
+.cards {
+    display: flex !important;
+    justify-content: center !important;
+    justify-content: space-evenly !important;
+}
+
+.zero {
+    background-color: #2DD06E;
+    color: white;
+    border-radius: 50%;
+    padding: 1px 7px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.imgreklam {
+    width: 600px;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+  }
+  
+  .card {
+    width: 250px; 
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+  }
+  
+  
+  .card img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .card-content {
+    padding: 10px;
+  }
+  
+  .card-content h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .card-content p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .card-price {
+    color: #DB2C66;
+  }
+
+  .phones {
+    background-color: #F2F2F2;
+    border-radius: 8px;
+    padding: 30px 0 0 27px;
+  }
+
+  .watch {
+    background-color: #F2F2F2;
+    border-radius: 8px;
+    padding: 30px 0 0 27px;
+    margin-bottom: 20px;
+  }
+
+  .aksesuar {
+    background-color: #F2F2F2;
+    border-radius: 8px;
+    padding: 30px 0 0 27px;
+  }
+
+  .image-bag {
+    display: flex;
+    justify-content: right;
+    margin-top: -50px;
+  }
+
+  .image-bag2 {
+    display: flex;
+    justify-content: right;
+    margin-top: -70px;
+  }
+
+
+.box-text {
+  padding-top: 45px;
+}
+
+.lorem {
+  padding-top: 20px;
+  width: 320px;
+  margin: 0 auto;
+}
+
+.services {
+  padding-top: 75px;
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.pagination a {
+  padding: 5px 10px;
+  margin: 0 20px;
+}
+
+.pagination i {
+  border: 1px solid rgb(222, 222, 222);
+  padding: 7px 10px;
+  border-radius: 100px;
+}
+
+.pagination a:hover {
+background-color: rgb(222, 222, 222)
+}
+
+.pagination i:hover {
+  background-color: rgb(222, 222, 222)
+  }

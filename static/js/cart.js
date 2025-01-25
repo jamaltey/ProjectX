@@ -36,7 +36,6 @@ function changeQuantity(id, count) {
 		`/api/cart/${id}/change-quantity/`, { 'quantity': quantity },
 		success = ( data ) => {
 			counter.text(quantity)
-			console.log(data)
 			$(`.cart-item#${id} .price`).text(data.price)
 			$('#total-price .old-price').text(data.discount)
 			$('#total-price .price').text(data.total_price)

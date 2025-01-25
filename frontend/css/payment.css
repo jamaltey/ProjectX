@@ -1,0 +1,39 @@
+.payment-card {
+    box-shadow: none !important;
+    background-color: white !important;
+}
+
+.card-header {
+    background-color: white !important;
+    border-top: 1px solid black;
+    border-bottom: none;
+}
+
+.btn {
+    font-size: 20px;
+    color: black;
+    text-decoration: none;
+    padding-left: 0;
+}
+
+.card-header {
+    padding-left: 0;
+}
+
+.accordion {
+    width: 90%;
+}
+
+.paymant-inp {
+    border-radius: 8px;
+    padding: 10px;
+    border: none;
+    background-color: #f2f2f2;
+}
+
+.payment-inp-inp {
+    border-radius: 8px;
+    border: none;
+    background-color: #f2f2f2;
+    padding: 10px;
+}

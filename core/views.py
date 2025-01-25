@@ -4,8 +4,6 @@ from accounts.models import *
 from .models import *
 from .utils import *
 from django.views.generic import *
-from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
-from django.db.models import Q
 
 class HomeView(TemplateView):
     template_name = 'index.html'
@@ -76,7 +74,7 @@ class ProductListView(ListView):
     model = Product
     template_name = 'list.html'
     context_object_name = 'products'
-    paginate_by = 16
+    paginate_by = 8
     filters = ('brand')
 
     def get_queryset(self):
@@ -84,7 +82,10 @@ class ProductListView(ListView):
 
         search = self.request.GET.get('search')
         if search and not search.isspace():
-            products = products.filter(title__icontains=search)
+            search = search.strip()
+            products = products.filter(
+                models.Q(title__icontains=search) | models.Q(brand__title__icontains=search)
+            )
 
         category = self.kwargs.get('category')
         if category:
@@ -110,8 +111,8 @@ class ProductListView(ListView):
         context = super().get_context_data(**kwargs)
 
         args = QueryDict(self.request.GET.urlencode(), mutable=True)
-        if 'sort' in args:
-            args.pop('sort')
+        args.pop('sort', None)
+        args.pop('page', None)
         args = args.urlencode()
 
         sort = self.request.GET.get('sort')
@@ -122,7 +123,8 @@ class ProductListView(ListView):
 
         context.update({
             'search': self.request.GET.get('search'),
-            'category': self.kwargs.get('category'),
+            'category': self.kwargs.get('category', ''),
+            'brandlist': self.request.GET.getlist('brand'),
             'brands': Brand.objects.all(),
             'args': args,
             'page': context.get('page_obj'),

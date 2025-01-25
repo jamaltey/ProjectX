@@ -1,0 +1,61 @@
+.about-header {
+    height: 280px;
+    background: linear-gradient(to left, #92F596, #2DD06E);
+}
+
+.path-link {
+    color: white;
+    margin: 0;
+}
+
+.about {
+    width: 83%;
+    margin: 0 auto;
+    height: 325px;
+    padding: 40px;
+    margin-top: -70px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.idea-icon {
+    background-color: #2DD06E;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    padding-top: 7px !important;
+    text-align: center;
+    padding: 3px;
+    margin-right: 5px;
+}
+
+.idea {
+    display: flex;
+    justify-content: space-evenly;
+    width: 500px;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 8px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+    height: 160px;
+    
+}
+
+.idea2{
+    margin-top: 150px;
+}
+
+.ideas{
+    width: 83%;
+    margin: 0 auto;
+}
+
+.idea-row {
+    margin-bottom: 40px;
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+

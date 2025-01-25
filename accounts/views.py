@@ -90,7 +90,10 @@ class CheckoutView(AddressView):
 
         address = self.get_object()
         order = user.orders.create(address=address)
-        order.products.set(cart.products.all())
+        for i in cart.products.all():
+            order.products.add(i)
+            i.product.sales += 1
+            print(i.product.sales)
         order.save()
 
         cart.products.clear()

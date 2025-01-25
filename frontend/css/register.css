@@ -1,0 +1,66 @@
+.facebook {
+    background-color: #4267B2;
+    border-radius: 50%;
+    width: 32px;
+    text-align: center;
+    padding: 3px;
+    margin-right: 5px;
+}
+
+.google {
+    background-color: #DB4437;
+    border-radius: 50%;
+    width: 32px;
+    text-align: center;
+    padding: 3px;
+    margin-right: 5px;
+}
+
+.fb-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.socials {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly
+}
+
+.register {
+    margin-top: 80px;
+}
+
+.reg-inp {
+    border: none;
+    background-color: #f2f2f2;
+    height: 48px;
+    width: 410px;
+    border-radius: 8px;
+    padding-left: 20px;
+}
+
+.reg-inp-cont {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.reg-btn {
+    border: none;
+    height: 48px;
+    width: 410px !important;
+    background-color: #2DD06E;
+    border-radius: 8px;
+    color: white;
+    margin-top: 10px;
+}
+
+.reg-log {
+    width: 420px;
+    text-align: center;
+    margin-top: 25px;
+}

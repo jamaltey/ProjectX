@@ -54,24 +54,13 @@
 		})
 	}
 
-	const $search = $('input[name="search"]');
-	const searchValueLength = $search.val().length;
-	if (searchValueLength) {
-		$search.focus(() => {
-			const inputElement = $search.get(0);
-			inputElement.setSelectionRange(searchValueLength, searchValueLength)
-		});
-		$search.focus()
-	}
+	const $search = $('input#search');
+	const $searchForm = $('#search-form');
 
-	// let searchTimeout;
-	// $search.on("input", () => {
-	// 	const query = $search.val();
-	// 	clearTimeout(searchTimeout);
-	// 	searchTimeout = setTimeout(() => {
-	// 		location.href = `{% url 'core:list' %}?search=${query}`;
-	// 	}, 500);
-	// });
+	$searchForm.on('submit', function(e){
+		const search = $search.val();
+		return !!search.trim();
+	})
 
 	function toggleTheme() {
 		const isDark = localStorage.getItem('theme') === 'dark';

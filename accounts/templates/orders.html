@@ -23,9 +23,11 @@
             .card { max-height: 18rem; }
 
             .img-wrap { height: 100%; }
-            img { border-top-right-radius: 0 !important; }
-            img:not(.col-6):last-of-type,
-            img.col-6:nth-child(5) { border-bottom-left-radius: var(--bs-card-border-radius); }
+            img {
+                border-top-right-radius: 0 !important;
+                &:not(.col-6):last-of-type,
+                &.col-6:nth-child(5) { border-bottom-left-radius: var(--bs-card-border-radius); }
+            }
         }
     }
 </style>
@@ -38,7 +40,7 @@
         <h5>Orders</h5>
     </div>
 
-    <div class="row gy-5 pe-lg-1">
+    <div class="row gy-4 pe-lg-1 pb-3">
         {% for order in orders %}
         <div class="col-md-6 order">
             <div class="card h-100">

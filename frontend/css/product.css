@@ -1,0 +1,186 @@
+.carousel-control-prev-icon {
+    background-image: url("https://muradaghazade.github.io/phones/img/detail-left.svg") !important;
+}
+
+.carousel-control-next-icon {
+    background-image: url("https://muradaghazade.github.io/phones/img/detail-right.svg");
+}
+
+.product {
+    margin-top: 50px;
+}
+
+.rating-span {
+    font-size: 12px;
+    border-right: 2px solid #f2f2f2;
+    padding-right: 5px;
+}
+
+
+.price {
+    border-bottom: 2px solid #f2f2f2;
+}
+
+.colors {
+    display: flex;
+    padding-top: 20px;
+}
+
+.all-colors {
+    display: flex;
+    justify-content: space-evenly;
+    width: 40%;
+}
+
+.counter {
+    display: flex;
+    width: 125px;
+    justify-content: space-between;
+    padding-top: 20px;
+}
+
+.minus-plus {
+    background-color: #F2F2F2;
+    border-radius: 50%;
+    padding: 5px 11px;
+}
+
+.minus-plus img {
+    margin-top: -3px;
+}
+
+.count {
+    margin-top: 5px;
+}
+
+.active {
+    border: none !important;
+    color: black !important;
+}
+
+.nav-link:hover {
+    border: none !important;
+}
+
+.nav-link {
+    font-size: 20px;
+    border: none !important;
+}
+
+.specs-comment {
+    margin-top: 100px;
+}
+
+.tech-title {
+    font-size: 20px;
+}
+
+.tech-div {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+    width: 350px;
+    margin-bottom: 20px;
+}
+
+.tech-span {
+    color: #828282;
+}
+
+.info-div {
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 20px;
+    margin-bottom: 20px;
+    padding-right: 40px;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #c4c4c4 !important;
+}
+
+.comment {
+    padding-bottom: 40px;
+    border-bottom: 1px solid #c4c4c4;
+    margin-bottom: 50px;
+}
+
+.comment-rating {
+    text-align: center;
+}
+
+.title-div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.comment-body {
+    border-left: 1px solid #c4c4c4;
+    padding-left: 30px;
+}
+
+.comment-form {
+    text-align: center;
+}
+
+.inp {
+    width: 350px;
+    background-color: #F2F2F2;
+    border: none;
+    height: 50px;
+    padding-left: 20px;
+    border-radius: 8px;
+}
+
+.first-last {
+    display: flex;
+    justify-content: space-around;
+}
+
+.c-form {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.inp-div {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.message-inp {
+    background-color: #F2F2F2;
+    border: none;
+    width: 94%;
+    border-radius: 8px;
+    padding-left: 20px;
+    padding-top: 14px;
+    height: 115px;
+    resize: none;
+}
+
+.message-div {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.comment-btn {
+    background-color: #2DD06E;
+    border: none;
+    color: white;
+    border-radius: 8px;
+    width: 175px;
+    height:45px;
+}
+
+.btn-div {
+    margin-top: 30px;
+    text-align: right;
+    width: 97%;
+}
+

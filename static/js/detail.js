@@ -54,18 +54,18 @@ function selectColor($color) {
     $('.color.active').removeClass("active");
     $color.addClass("active");
 
-    const colorName = $color.attr('data-color-name');
+    const colorName = $color.data('color-name');
     $('#color-name').text(colorName);
     $('input[name="color"]').val(colorName);
     sessionStorage.setItem(`product-${productId}-color`, colorName);
 
-    const $img = $(`#carousel .carousel-item img[data-color-name="${colorName}"]`);
+    const $slide = $(`#carousel .carousel-item:has(img[data-color-name="${colorName}"])`);
 
-    if ($img.length) {
-        const index = $img.parent().index();
+    if ($slide.length) {
+        const index = $slide.index();
         carousel.to(index);
         // $(".carousel-item.active").removeClass("active");
-        // $img.parent().addClass("active");
+        // $slide.addClass("active");
     }
 }
 
@@ -77,11 +77,11 @@ function selectStorage($storage) {
     $('.storage.active').removeClass("active");
     $storage.addClass("active");
 
-    const storage = $storage.attr('data-storage');
+    const storage = $storage.data('storage');
     $('input[name="storage"]').val(storage);
     sessionStorage.setItem(`product-${productId}-storage`, storage);
 
-    const addPrice = parseInt($storage.attr('data-add-price'));
+    const addPrice = parseInt($storage.data('add-price'));
     const quantity = parseInt($quantity.text());
 
     const finalPrice = (initialPrice + addPrice) * quantity;

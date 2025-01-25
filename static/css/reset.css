@@ -9,6 +9,5 @@ figure, figcaption, footer, header, nav, section, summary {
 	border: 0;
 }
 ul, menu { list-style: none; }
-table { border-collapse: collapse; }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; }

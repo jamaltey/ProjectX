@@ -6,10 +6,10 @@
 {% block css %}
     <style>
         main {
-            background-color: var(--bs-secondary-bg);
             .form-control {
                 min-height: 3rem;
                 max-height: 6rem;
+                resize: none;
             }
         }
 
@@ -24,7 +24,7 @@
 {% endblock css %}
 
 {% block content %}
-    <main class="container-fluid">
+    <main class="container-fluid bg-body-secondary bg-opacity-50">
         <div class="row justify-content-center pb-4 pt-lg-4">
             <div class="col-lg-3 pt-5 pb-3 pb-lg-0">
                 {% include 'components/profile-tabs.html' %}

@@ -1,4 +1,4 @@
-[data-bs-theme=light] { --bs-border-color: #C4C4C4; }
+[data-bs-theme=light] main { --bs-border-color: #C4C4C4; }
 
 #carousel {
     height: 400px;
@@ -12,7 +12,6 @@
     }
     .carousel-indicators {
         margin: 0;
-        /* bottom: -50px; */
         button {
             background: transparent no-repeat center/cover;
             height: 50px;
@@ -27,6 +26,7 @@ hr {
 }
 
 .color, .storage { transition: .3s; }
+#color-selector .color { cursor: pointer; }
 
 .color {
     width: 2rem;
@@ -82,7 +82,6 @@ hr {
 
 #comment-form {
     max-width: 800px;
-    /* margin: 3rem auto; */
     .stars > * { cursor: pointer; }
     textarea {
         background-color: var(--bs-secondary-bg);

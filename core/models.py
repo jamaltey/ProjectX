@@ -15,14 +15,12 @@ class Product(models.Model):
     storages = models.ManyToManyField("Storage", related_name="products", blank=True)
     price = models.PositiveSmallIntegerField()
     old_price = models.PositiveSmallIntegerField(blank=True, null=True)
+    sales = models.PositiveIntegerField(default=0, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def discount(self):
-        if self.old_price:
-            return int((self.old_price - self.price) / self.old_price * 100)
-        else:
-            return 0
+        return int((self.old_price - self.price) / self.old_price * 100) if self.old_price else 0
 
     @property
     def reviews(self):
@@ -44,20 +42,24 @@ class Product(models.Model):
         ordering = ['-created_at']
 
 class Specifications(models.Model):
-    FIELDS = {'operating_system':'Operating system',
-            'cellular_technology':'Cellular technology',
-            'display':'Display',
-            'camera':'Camera',
-            'cpu':'CPU',
-            'ram':'RAM',
-            'battery':'Battery',
-            'water_and_dust_rating':'Water and dust rating'}
+    FIELDS = {
+        'operating_system':'Operating system',
+        'cellular_technology':'Cellular technology',
+        'display':'Display',
+        'camera':'Camera',
+        'chip': 'Chip',
+        'cpu':'CPU',
+        'ram':'RAM',
+        'battery':'Battery',
+        'water_and_dust_rating':'Water and dust rating'
+    }
 
     name = models.CharField(max_length=100, null=True, blank=True)
     operating_system = models.CharField(max_length=100, null=True, blank=True)
     cellular_technology = models.CharField(max_length=100, null=True, blank=True)
     display = models.CharField(max_length=100, null=True, blank=True)
     camera = models.CharField(max_length=100, null=True, blank=True)
+    chip = models.CharField(max_length=100, null=True, blank=True)
     cpu = models.CharField(max_length=100, null=True, blank=True)
     ram = models.CharField(max_length=100, null=True, blank=True)
     battery = models.CharField(max_length=100, null=True, blank=True)
@@ -71,7 +73,7 @@ class Specifications(models.Model):
             for key in self.FIELDS
             if getattr(self, key)
         } | (self.additional_specifications or {})
-    
+
     def __iter__(self):
         return iter(self.dict.items())
 
@@ -133,6 +135,9 @@ class Brand(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = "Categories"
 
     def __str__(self):
         return self.title

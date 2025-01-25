@@ -1,0 +1,64 @@
+.path {
+    padding-top: 20px;  
+}
+
+.path-link {
+    color: black;
+    text-decoration: none;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.path-link:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.filters {
+    padding-top: 50px;
+}
+
+.filter-card {
+    /* border: none !important; */
+    box-shadow: none !important;
+    background-color: white !important;
+    border-bottom: 1px solid rgba(0, 0, 0, .125) !important;
+    width: 100% !important;
+    
+}
+
+.card-header {
+    background-color: white;
+}
+
+.card {
+    color: black;
+}
+
+.btn-link {
+    color: #4F4F4F;
+}
+
+.btn-link:hover {
+    color: #4F4F4F;
+    text-decoration: none;
+}
+
+.filter-item {
+    list-style: none;
+}
+
+.dropdown-toggle {
+    
+    background-color: white;
+    color: black;
+    border: 1px solid #bdbdbd;
+    padding: 8px 40px;
+}
+
+.content-info {
+    padding-top: 60px;
+    display: flex;
+    justify-content: space-between;
+    
+}

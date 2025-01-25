@@ -1,0 +1,59 @@
+.order-card {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    /* width: 480px; */
+}
+
+.order-main {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    padding: 20px;
+    margin-bottom: 100px;
+
+}
+
+.order-info-button {
+    border: none !important;
+    height: 40px;
+    width: 150px;
+    border-radius: 5px;
+}
+
+.order-detail {
+    display: flex;
+    border-bottom: 1px solid #bdbdbd;
+}
+
+.order-detail-pro-pro {
+    padding-top: 49px;
+}
+
+
+.order-detail-pro-max {
+    border-bottom: 1px solid #bdbdbd;
+    margin-bottom: 50px;
+}
+
+.odeme-methodu {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-left: 20px;
+}
+
+.payment-pro-max {
+    border-bottom: 1px solid #bdbdbd;
+    margin-bottom: 10px;
+}
+
+.payment-finish {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}

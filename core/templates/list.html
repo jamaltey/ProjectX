@@ -5,122 +5,113 @@
 
 {% block css %}
 <style>
-	.filter {
-		--bs-card-spacer-x: 1.5rem;
-		label {
-			font-size: 1.15rem;
+	.filter label {
+		font-size: 1.15rem;
+		cursor: pointer;
+		.form-check-input {
 			cursor: pointer;
-			.form-check-input {
-				cursor: pointer;
-				border-color: var(--bs-primary);
-				&:checked { background-color: var(--bs-primary); }
-			}
-			&:hover .form-check-input {
-				background-color: rgba(var(--bs-primary-rgb), .25);
-				&:checked { background-color: rgba(var(--bs-primary-rgb), .75); }
-			}
+			border-color: var(--bs-primary);
+			&:checked { background-color: var(--bs-primary); }
+		}
+		&:hover .form-check-input {
+			background-color: rgba(var(--bs-primary-rgb), .25);
+			&:checked { background-color: rgba(var(--bs-primary-rgb), .75); }
 		}
 	}
 </style>
 {% endblock css %}
 
 {% block content %}
-<main class="container-fluid py-5">
+<main class="container-fluid px-3 py-5">
+
+	<div class="d-flex d-lg-none justify-content-center w-100">
+		<!-- <div class="dropdown w-50">
+			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="fa-regular fa-arrow-up-arrow-down"></i>
+				{{ sort | default:'Newest' }}
+			</button>
+			<div class="dropdown-menu p-0">
+				{% if request.GET.sort %}
+				<a class="dropdown-item py-2" href="?{{args}}">
+					Sort: Newest
+				</a>
+				{% endif %}
+				{% if not request.GET.sort == 'price-asc' %}
+				<a class="dropdown-item py-2" href="?sort=price-asc&{{args}}">
+					Sort: Cheapest
+				</a>
+				{% endif %}
+				{% if not request.GET.sort == 'price-desc' %}
+				<a class="dropdown-item py-2" href="?sort=price-desc&{{args}}">
+					Sort: Most Expensive
+				</a>
+				{% endif %}
+			</div>
+		</div> -->
+		<div class="w-100">
+			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="true" type="button">
+				<i class="fa-regular fa-filter"></i>
+				Filters
+			</button>
+		</div>
+	</div>
 
 	<div class="row justify-content-center">
 
-		<div class="d-flex d-lg-none justify-content-center w-100">
-			<div class="dropdown w-50">
-				<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<!-- <img src="{% static 'img/swap.svg' %}" style="width: 25px;" alt=""> -->
-					<i class="fa-regular fa-arrow-up-arrow-down"></i>
-					{{ sort | default:'Newest' }}
-				</button>
-				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					{% if request.GET.sort %}
-					<a class="dropdown-item" href="?{{args}}">
-						Sort: Newest
-					</a>
-					{% endif %}
-					{% if not request.GET.sort == 'price-asc' %}
-					<a class="dropdown-item" href="?sort=price-asc&{{args}}">
-						Sort: Cheapest
-					</a>
-					{% endif %}
-					{% if not request.GET.sort == 'price-desc' %}
-					<a class="dropdown-item" href="?sort=price-desc&{{args}}">
-						Sort: Most Expensive
-					</a>
-					{% endif %}
-				</div>
-			</div>
-			<div class="w-50">
-				<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" onclick="$('#sidebar').toggle()">
-					<i class="fa-regular fa-filter"></i>
-					Filters
-				</button>
-			</div>
-		</div>
-
-		<div style="display: none;" id="sidebar" class="d-lg-flex justify-content-center col pt-3">
-
+		<div id="sidebar" class="collapse show d-lg-flex col pt-3">
 			<!-- Filters -->
-			<div class="filter card pt-1 px-3 w-100">
-				<div class="card-header bg-transparent">
-					<h5>
-						Brand ({{ brands.count }})
-					</h5>
-				</div>
-				<form class="card-body" method="get">
-					<ul>
-					{% for i in brands %}
-						<li>
-							<label>
-								<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.title }}" {% if i.title in request.GET.brand %}checked{% endif %}>
-								{{ i.title }}
-							</label>
-						</li>
-					{% endfor %}
-					</ul>
+			<div class="filter shadow p-3 pt-1 w-100">
+				<h5 class="border-bottom py-2 px-3">
+					Brands ({{ brands.count }})
+				</h5>
 
-					<a href="?" class="btn btn-dark mt-3">
-						Reset all filters
-					</a>
-				</form>
+				<ul class="py-3 px-4">
+				{% for i in brands %}
+					<li>
+						<label>
+							<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.title }}" {% if i.title in brandlist %}checked{% endif %}>
+							{{ i.title }}
+						</label>
+					</li>
+				{% endfor %}
+				</ul>
+
+				<a href="?" class="btn btn-dark mx-4">
+					Reset all filters
+				</a>
 			</div>
-
 		</div>
 
 		<!-- Products -->
-		<div class="col-12 col-lg-9 col-xxl-10 pt-4 pt-lg-0">
+		<div class="col-12 col-lg-9 col-xxl-10 pt-4 pt-lg-0" id="products">
 		{% if paginator.count %}
 			<div class="d-flex align-items-center px-3">
 				{% if search %}<span>{{ paginator.count }} products found</span>{% endif %}
 				<div class="dropdown ms-auto">
-					<button class="btn border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 						Sort: {{ sort | default:'Newest' }}
 					</button>
-					<div class="dropdown-menu p-0" aria-labelledby="dropdownMenuButton">
-						{% if request.GET.sort %}
-						<a class="dropdown-item py-2" href="?{{args}}">
+					<div class="dropdown-menu p-0">
+						{% if request.GET.sort and request.GET.sort.lower != 'newest' %}
+						<button class="dropdown-item py-2" onclick="updateParam('sort', 'newest')">
 							Sort: Newest
-						</a>
+						</button>
 						{% endif %}
 						{% if not request.GET.sort == 'price-asc' %}
-						<a class="dropdown-item py-2" href="?sort=price-asc&{{args}}">
+						<button class="dropdown-item py-2" onclick="updateParam('sort', 'price-asc')">
 							Sort: Cheapest
-						</a>
+						</button>
 						{% endif %}
 						{% if not request.GET.sort == 'price-desc' %}
-						<a class="dropdown-item py-2" href="?sort=price-desc&{{args}}">
+						<button class="dropdown-item py-2" onclick="updateParam('sort', 'price-desc')">
 							Sort: Most Expensive
-						</a>
+						</button>
 						{% endif %}
 					</div>
 				</div>
             </div>
 
-            <div class="row gy-5 py-5">
+            <div class="row gy-5 py-5" id="products-list">
 			{% with favorites=user.favorites.all %}
 				{% for product in page_obj %}
 					{% include 'components/product.html' %}
@@ -129,23 +120,29 @@
             </div>
 
 			{% if is_paginated %}
-            <nav class="d-flex justify-content-center" aria-label="Pagination">
-                <ul class="pagination">
+            <nav aria-label="Pagination">
+                <ul class="pagination justify-content-center">
                 {% if page.has_previous %}
-                    <li class="page-item d-flex align-items-center">
-						<a class="page-link fa-solid fa-angle-left" href="?page=1&{{args}}" aria-label="Previous"></a>
+                    <li class="page-item d-flex">
+						<button class="page-link d-flex align-items-center" onclick="updateParam('page', '{{ page.previous_page_number }}')" aria-label="Previous">
+							<i class="fas fa-angle-left"></i>
+						</button>
                     </li>
                 {% endif %}
 
                 {% for i in paginator.page_range %}
-                    <li class="page-item d-flex align-items-center">
-						<a class="page-link fs-5" href="?page={{i}}&{{args}}">{{ i }}</a>
+                    <li class="page-item d-flex">
+						<button class="page-link d-flex align-items-center {% if page.number == i %}active{% endif %}" onclick="updateParam('page', '{{ i }}')">
+							{{ i }}
+						</button>
 					</li>
                 {% endfor %}
 
                 {% if page.has_next %}
-                    <li class="page-item d-flex align-items-center">
-						<a class="page-link fa-solid fa-angle-right" href="?page={{ paginator.num_pages }}&{{args}}" aria-label="Next"></a>
+                    <li class="page-item d-flex">
+						<button class="page-link d-flex align-items-center" onclick="updateParam('page', '{{ page.next_page_number }}')" aria-label="Next">
+							<i class="fas fa-angle-right"></i>
+						</button>
                     </li>
                 {% endif %}
                 </ul>
@@ -164,30 +161,50 @@
 
 </main>
 {% endblock content %}
+
 {% block js %}
-<script src="{% static 'js/update-favorites.js' %}???"></script>
+<script src="{% static 'js/update-favorites.js' %}"></script>
 <script>
 
-	if (!$(`.nav-item .nav-link.active`).length) {
-		$(`.nav-item .nav-link[href="/list/"]`).addClass('active');
+	if (!$(`.nav-link.active`).length) {
+		$(`.nav-link[href="{% url 'core:list' %}"]`).addClass('active');
 	}
 
 	const params = new URLSearchParams(location.search);
 
-	$('.filter input').each(function(){
-		const brand = this.value;
-		if (params.getAll('brand').includes(brand)) {
-			this.checked = true;
+	function updateContent() {
+		const url = `${location.pathname}?${params.toString()}`;
+		history.replaceState(null, '', url);
+		$('#products').load(`${url} #products > *`);
+	}
+
+	function updateParam(name, value, multiple=false) {
+		if (!multiple && value === params.get(name)) return
+		if (name != 'page') params.delete('page');
+		if (multiple) {
+			params.has(name, value) ? params.delete(name, value) : params.append(name, value);
+		} else {
+			value ? params.set(name, value) : params.delete(name);
 		}
+		updateContent();
+	}
+
+	let searchTimeout;
+	$('#search').on("input", function(){
+		clearTimeout(searchTimeout);
+		searchTimeout = setTimeout(updateParam, 500, name='search', value=this.value.trim());
 	})
 
-	$('.filter input').on('change', function(){
-		if (this.checked) {
-			params.append('brand', this.value);
-		} else {
-			params.delete('brand', this.value);
-		}
-		location.search = params.toString();
+	$('#search-form').on('submit', function(e){
+		e.preventDefault();
+		updateParam('search', $('#search').val().trim());
+	})
+
+	const $brandCheckboxes = $('input:checkbox[name="brand"]');
+	$brandCheckboxes.on('change', function(){
+		const brand = this.value;
+		if (params.has('brand', brand) == this.checked) return true;
+		updateParam('brand', brand, multiple=true);
 	})
 
 </script>
