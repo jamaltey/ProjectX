@@ -4,6 +4,7 @@
 {% block title %}{{ product.title }} - {% endblock title %}
 
 {% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" integrity="sha512-rd0qOHVMOcez6pLWPVFIv7EfSdGKLt+eafXh4RO/12Fgr41hDQxfGvoi1Vy55QIVcQEujUE1LQrATCLl2Fs+ag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 {% endblock css %}
 
@@ -12,33 +13,22 @@
 
     <div class="row py-5">
         <div class="col-lg-6">
-            <div id="carousel" class="carousel slide carousel-fade d-flex">
-                <div class="carousel-indicators rounded">
-                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="background-image: url('{{ product.image.url }}');"></button>
-                    {% for i in images %}
-                        <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ forloop.counter }}" aria-label="Slide {{ forloop.counter }}" style="background-image: url('{{ i.url }}');"></button>
-                    {% endfor %}
-                </div>
-                <div class="carousel-inner d-flex">
-                    <div class="carousel-item active">
+            <div id="swiper" class="swiper d-flex">
+                <div class="swiper-wrapper d-flex">
+                    <div class="swiper-slide">
                         <img class="w-100 h-100 object-fit-contain rounded bg-white" src="{{ product.image.url }}" alt="{{ product }}">
                     </div>
                     {% for image in images %}
-                    <div class="carousel-item">
+                    <div class="swiper-slide">
                         <img class="w-100 h-100 object-fit-cover rounded bg-white" {% if image.color %} data-color-name="{{ image.color.name }}" {% endif %} src="{{ image.url }}" alt="{{ product }}">
                     </div>
                     {% endfor %}
                 </div>
                 {% if images %}
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
-                        <i class="carousel-control-prev-icon" aria-hidden="true"></i>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
-                        <i class="carousel-control-next-icon" aria-hidden="true"></i>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    <button class="swiper-button-prev btn border-0 text-secondary" type="button"></button>
+                    <button class="swiper-button-next btn border-0 text-secondary" type="button"></button>
                 {% endif %}
+                <div class="swiper-pagination rounded"></div>
             </div>
         </div>
 
@@ -70,10 +60,8 @@
                 </div>
 
                 {% if colors %}
-                <div id="color-selector" class="d-flex align-items-center py-4">
-                    <h6 class="me-2">
-                        Color: <span class="ms-1" id="color-name"></span>
-                    </h6>
+                <div id="color-selector" class="d-flex align-items-center gap-2 py-4">
+                    <h6>Color:</h6>
                     <div class="d-flex flex-wrap gap-3">
                         {% for i in colors %}
                             <div class="color rounded-circle border border-light" data-color-name="{{ i.name }}"
@@ -81,6 +69,7 @@
                             </div>
                         {% endfor %}
                     </div>
+                    <h6 id="color-name"></h6>
                     <input type="hidden" name="color" required>
                 </div>
                 {% endif %}
@@ -198,8 +187,7 @@
 
             <div class="{% if user.is_authenticated %}border-top{% endif %} border-bottom py-4" id="comments">
                 {% for i in comments %}
-                <div class="comment row gy-2" id="{{ i.id }}">
-
+                <div class="comment row gy-3" id="{{ i.id }}">
                     <div class="col-md-3 text-center">
                         <h2>{{ i.rating }}</h2>
                         <div class="stars fs-5">
@@ -225,7 +213,6 @@
                     {% if not forloop.last %}
                         <hr class="w-100 my-4" />
                     {% endif %}
-
                 </div>
                 {% endfor %}
 
@@ -239,10 +226,11 @@
 </main>
 {% endblock content %}
 {% block js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js" integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    const productId = parseInt('{{ product.id }}');
-    const initialPrice = parseInt('{{ product.price }}');
-    const initialOldPrice = parseInt('{{ product.old_price }}');
+    const productId = +'{{ product.id }}';
+    const initialPrice = +'{{ product.price }}';
+    const initialOldPrice = +'{{ product.old_price }}';
 </script>
-<script src="{% static 'js/detail.js' %}?"></script>
+<script src="{% static 'js/detail.js' %}?v=5"></script>
 {% endblock %}

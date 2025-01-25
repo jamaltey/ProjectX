@@ -1,23 +1,25 @@
 // user is defined in base.html
 // productId, initialPrice, initialOldPrice are defined in detail.html
 
-const $wishlistBtn = $('#wishlist-btn');
-
-$wishlistBtn.on('click', () => {
-    const url = `/api/wishlist/toggle/${productId}/`;
-    $.get(url, ({ is_favorite }) => {
-        const text = is_favorite ? 'Remove from wishlist' : 'Add to wishlist';
-        $wishlistBtn.find('span').text(text);
-    }).fail((xhr) => {
-        if (xhr.status === 403) {
-            location.replace('/accounts/login/');
-        } else {
-            alert(`Failed to add product to wishlist. Please try again. Error: ${xhr.status}`);
-        }
-    });
+const swiper = new Swiper('#swiper', {
+    loop: true,
+    effect: 'fade',
+    speed: 500,
+    navigation: {
+        prevEl: '.swiper-button-prev',
+        nextEl: '.swiper-button-next',
+    },
+    pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true,
+        renderBullet: function (index, className) {
+            const src = $(`#swiper [data-swiper-slide-index='${index}'] img`).attr('src');
+            return `<button class="swiper-pagination-bullet ${className}" style="background-image: url('${src}')"></button>`;
+        },
+    },
 });
 
-const carousel = new bootstrap.Carousel('#carousel')
 const $colors = $('.color');
 const $storages = $('.storage');
 const $quantity = $('#quantity span');
@@ -29,22 +31,13 @@ $storages.on('click', function(){
     selectStorage($(this));
 });
 
-const color = sessionStorage.getItem(`product-${productId}-color`);
+const color = sessionStorage.getItem(`product#${productId}-color`);
 let $color = $(`.color[data-color-name='${color}']`);
-if (!$color.length) {
-    $color = $colors.first();
-}
-const $carouselItems = $('#carousel .carousel-item');
-$carouselItems.css('transition-duration', '0s');
-selectColor($color);
-$carouselItems.css('transition-duration', '.6s');
+selectColor($color.length ? $color : $colors.first());
 
-const storage = sessionStorage.getItem(`product-${productId}-storage`);
+const storage = sessionStorage.getItem(`product#${productId}-storage`);
 let $storage = $(`.storage[data-storage='${storage}']`);
-if (!$storage.length) {
-    $storage = $storages.first();   
-}
-selectStorage($storage);
+selectStorage($storage.length ? $storage : $storages.first());
 
 function selectColor($color) {
     if (!$color.length) {
@@ -57,15 +50,12 @@ function selectColor($color) {
     const colorName = $color.data('color-name');
     $('#color-name').text(colorName);
     $('input[name="color"]').val(colorName);
-    sessionStorage.setItem(`product-${productId}-color`, colorName);
+    sessionStorage.setItem(`product#${productId}-color`, colorName);
 
-    const $slide = $(`#carousel .carousel-item:has(img[data-color-name="${colorName}"])`);
-
+    const $slide = $(`#swiper .swiper-slide:has(img[data-color-name="${colorName}"])`);
     if ($slide.length) {
         const index = $slide.index();
-        carousel.to(index);
-        // $(".carousel-item.active").removeClass("active");
-        // $slide.addClass("active");
+        swiper.slideTo(index);
     }
 }
 
@@ -79,7 +69,7 @@ function selectStorage($storage) {
 
     const storage = $storage.data('storage');
     $('input[name="storage"]').val(storage);
-    sessionStorage.setItem(`product-${productId}-storage`, storage);
+    sessionStorage.setItem(`product#${productId}-storage`, storage);
 
     const addPrice = parseInt($storage.data('add-price'));
     const quantity = parseInt($quantity.text());
@@ -110,6 +100,21 @@ function changeCount(count) {
         $('#old-price').text(oldPrice/prevCount * quantity);
     }
 }
+
+const $wishlistBtn = $('#wishlist-btn');
+$wishlistBtn.on('click', () => {
+    const url = `/api/wishlist/toggle/${productId}/`;
+    $.get(url, ({ is_favorite }) => {
+        const text = is_favorite ? 'Remove from wishlist' : 'Add to wishlist';
+        $wishlistBtn.find('span').text(text);
+    }).fail((xhr) => {
+        if (xhr.status === 403) {
+            location.replace('/accounts/login/');
+        } else {
+            alert(`Failed to add product to wishlist. Please try again. Error: ${xhr.status}`);
+        }
+    });
+});
 
 const $commentBtn = $('#comment-button');
 const $infoBtn = $('#info-button');
@@ -161,28 +166,28 @@ function generateStars(ratingValue) {
             '<i class="fa-regular fa-star"></i>\n'.repeat(5 - ratingValue);
 }
 
-function renderComment(comment) {
-    comment.created_at = new Date(comment.created_at).toLocaleString(
+function renderComment({id, rating_value, author, created_at, text}) {
+    created_at = new Date(created_at).toLocaleString(
         'en-us',
         { month: 'short', day: 'numeric', year: 'numeric' }
     );
 
     const $comment = $(`
-        <div class="comment row" id="${comment.id}">
+        <div class="comment row gy-3" id="${id}">
             <div class="col-md-3 text-center">
-                <h2>${comment.rating_value || 'No rating'}</h2>
-                <div class="stars fs-5">${generateStars(comment.rating_value)}</div>
+                <h2>${rating_value || 'No rating'}</h2>
+                <div class="stars fs-5">${generateStars(rating_value)}</div>
             </div>
 
             <div class="col-md-9">
                 <div class="comment-info d-flex justify-content-between">
-                    <h5>${comment.author}</h5>
-                    <h6>${comment.created_at}</h6>
+                    <h5>${author}</h5>
+                    <h6>${created_at}</h6>
                 </div>
 
-                <p>${comment.text}</p>
+                <p>${text}</p>
 
-                <button class="btn btn-dark">
+                <button class="btn btn-dark" onclick="deleteComment(${id}}">
                     Delete comment
                 </button>
             </div>
@@ -190,10 +195,6 @@ function renderComment(comment) {
             <hr class="w-100 my-4" />
         </div>
     `);
-
-    $comment.find('button').on('click', () => {
-        deleteComment(comment.id);
-    });
 
     $('#comments').prepend($comment);
 }
@@ -221,12 +222,11 @@ function deleteComment(id) {
         type: 'DELETE',
         success: () => {
             $(`.comment#${id}`).remove();
-            if ($('.comment').length) {
-                if ($('.comment').length == 1) {
-                    $('#comments hr').remove();
-                }
-            } else {
+            const commentsLength = $('.comment').length;
+            if (!commentsLength) {
                 $('#comments .no-items').show();
+            } else if (commentsLength == 1) {
+                $('#comments hr').remove();
             }
         },
         error: () => {

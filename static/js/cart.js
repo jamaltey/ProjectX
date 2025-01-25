@@ -13,8 +13,8 @@ function removeItem(id) {
 	$.ajax({
 		url: `/api/cart/${id}/remove/`,
 		type: 'DELETE',
-		success: ( data ) => {
-			if ( data.is_empty ) {
+		success: (data) => {
+			if (data.is_empty) {
 				clearContent()
 			} else {
 				$(`.cart-item#${id}`).remove()
@@ -34,7 +34,7 @@ function changeQuantity(id, count) {
 	}
 	$.post(
 		`/api/cart/${id}/change-quantity/`, { 'quantity': quantity },
-		success = ( data ) => {
+		success = (data) => {
 			counter.text(quantity)
 			$(`.cart-item#${id} .price`).text(data.price)
 			$('#total-price .old-price').text(data.discount)

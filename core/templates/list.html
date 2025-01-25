@@ -200,8 +200,7 @@
 		updateParam('search', $('#search').val().trim());
 	})
 
-	const $brandCheckboxes = $('input:checkbox[name="brand"]');
-	$brandCheckboxes.on('change', function(){
+	$(':checkbox[name="brand"]').on('change', function(){
 		const brand = this.value;
 		if (params.has('brand', brand) == this.checked) return true;
 		updateParam('brand', brand, multiple=true);
