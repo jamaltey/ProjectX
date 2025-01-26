@@ -39,10 +39,31 @@
 					</a>
 				</li>
 				{% endif %}
-				<li class="nav-item theme-toggle">
-					<a class="nav-link btn">
-						<i class="fa-solid fa-circle-half-stroke"></i>
-					</a>
+				<li class="nav-item dropdown" id="theme-dropdown">
+					<button class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						<i class="fas fa-circle-half-stroke me-1"></i>
+						Auto
+					</button>
+					<ul class="dropdown-menu dropdown-menu-end p-0">
+						<li>
+							<button class="dropdown-item" data-theme-value="light">
+								<i class="fas fa-sun me-1"></i>
+								Light
+							</button>
+						</li>
+						<li>
+							<button class="dropdown-item" data-theme-value="dark">
+								<i class="fas fa-moon me-1"></i>
+								Dark
+							</button>
+						</li>
+						<li>
+							<button class="dropdown-item" data-theme-value="auto">
+								<i class="fas fa-circle-half-stroke me-1"></i>
+								Auto
+							</button>
+						</li>
+					</ul>
 				</li>
 			</ul>
 

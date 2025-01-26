@@ -25,29 +25,35 @@
 <main class="container-fluid px-3 py-5">
 
 	<div class="d-flex d-lg-none justify-content-center w-100">
-		<!-- <div class="dropdown w-50">
+		<div class="dropdown w-50">
 			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<i class="fa-regular fa-arrow-up-arrow-down"></i>
 				{{ sort | default:'Newest' }}
 			</button>
-			<div class="dropdown-menu p-0">
+			<ul class="dropdown-menu p-0">
 				{% if request.GET.sort %}
-				<a class="dropdown-item py-2" href="?{{args}}">
-					Sort: Newest
-				</a>
+				<li>
+					<a class="dropdown-item py-2" href="?{{args}}">
+						Sort: Newest
+					</a>
+				</li>
 				{% endif %}
 				{% if not request.GET.sort == 'price-asc' %}
-				<a class="dropdown-item py-2" href="?sort=price-asc&{{args}}">
-					Sort: Cheapest
-				</a>
+				<li>
+					<a class="dropdown-item py-2" href="?sort=price-asc&{{args}}">
+						Sort: Cheapest
+					</a>
+				</li>
 				{% endif %}
 				{% if not request.GET.sort == 'price-desc' %}
-				<a class="dropdown-item py-2" href="?sort=price-desc&{{args}}">
-					Sort: Most Expensive
-				</a>
+				<li>
+					<a class="dropdown-item py-2" href="?sort=price-desc&{{args}}">
+						Sort: Most Expensive
+					</a>
+				</li>
 				{% endif %}
-			</div>
-		</div> -->
+			</ul>
+		</div>
 		<div class="w-100">
 			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="true" type="button">
 				<i class="fa-regular fa-filter"></i>
@@ -86,28 +92,37 @@
 		<div class="col-12 col-lg-9 col-xxl-10 pt-4 pt-lg-0" id="products">
 		{% if paginator.count %}
 			<div class="d-flex align-items-center px-3">
+				<div class="spinner-border text-primary me-3" id="loading" role="status" style="display: none;">
+					<span class="visually-hidden">Loading...</span>
+				</div>
 				{% if search %}<span>{{ paginator.count }} products found</span>{% endif %}
 				<div class="dropdown ms-auto">
 					<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
 						Sort: {{ sort | default:'Newest' }}
 					</button>
-					<div class="dropdown-menu p-0">
+					<ul class="dropdown-menu p-0">
 						{% if request.GET.sort and request.GET.sort.lower != 'newest' %}
-						<button class="dropdown-item py-2" onclick="updateParam('sort', 'newest')">
-							Sort: Newest
-						</button>
+						<li>
+							<button class="dropdown-item" onclick="updateParam('sort', 'newest')">
+								Sort: Newest
+							</button>
+						</li>
 						{% endif %}
 						{% if not request.GET.sort == 'price-asc' %}
-						<button class="dropdown-item py-2" onclick="updateParam('sort', 'price-asc')">
-							Sort: Cheapest
-						</button>
+						<li>
+							<button class="dropdown-item" onclick="updateParam('sort', 'price-asc')">
+								Sort: Cheapest
+							</button>
+						</li>
 						{% endif %}
 						{% if not request.GET.sort == 'price-desc' %}
-						<button class="dropdown-item py-2" onclick="updateParam('sort', 'price-desc')">
-							Sort: Most Expensive
-						</button>
+						<li>
+							<button class="dropdown-item" onclick="updateParam('sort', 'price-desc')">
+								Sort: Most Expensive
+							</button>
+						</li>
 						{% endif %}
-					</div>
+					</ul>
 				</div>
             </div>
 
@@ -148,7 +163,6 @@
                 </ul>
             </nav>
 			{% endif %}
-
 		{% else %}
 			<div class="no-items">
 				<h2>No products found</h2>
@@ -175,17 +189,19 @@
 	function updateContent() {
 		const url = `${location.pathname}?${params.toString()}`;
 		history.replaceState(null, '', url);
+		$('#loading').show();
 		$('#products').load(`${url} #products > *`);
 	}
 
 	function updateParam(name, value, multiple=false) {
-		if (!multiple && value === params.get(name)) return
 		if (name != 'page') params.delete('page');
 		if (multiple) {
 			params.has(name, value) ? params.delete(name, value) : params.append(name, value);
-		} else {
-			value ? params.set(name, value) : params.delete(name);
-		}
+		} else if (value && value != params.get(name)) {
+			params.set(name, value);
+		} else if (!value && params.has(name)) {
+			params.delete(name);
+		} else return;
 		updateContent();
 	}
 

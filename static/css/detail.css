@@ -52,9 +52,7 @@ hr {
     }
 }
 
-#product-tabs button:not(.active) {
-    color: #BDBDBD;
-}
+#product-tabs button:not(.active) { color: #BDBDBD; }
 
 .specifications {
     max-width: 95%;

@@ -13,8 +13,6 @@
     
     .form-control { background: var(--bs-secondary-bg); }
     
-    nav .theme-toggle i { rotate: 180deg; }
-    
     #hero-light { display: none; }
     #hero-dark { display: initial; }
     
