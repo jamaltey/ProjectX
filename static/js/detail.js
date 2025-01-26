@@ -2,7 +2,6 @@
 // productId, initialPrice, initialOldPrice are defined in detail.html
 
 const swiper = new Swiper('#swiper', {
-    loop: true,
     effect: 'fade',
     speed: 500,
     navigation: {
@@ -12,10 +11,25 @@ const swiper = new Swiper('#swiper', {
     pagination: {
         el: '.swiper-pagination',
         type: 'bullets',
+        dynamicBullets: true,
         clickable: true,
         renderBullet: function (index, className) {
-            const src = $(`#swiper [data-swiper-slide-index='${index}'] img`).attr('src');
-            return `<button class="swiper-pagination-bullet ${className}" style="background-image: url('${src}')"></button>`;
+            const src = $(`#swiper .swiper-slide img`).eq(index).attr('src');
+            return `<button class="${className}" style="background-image: url('${src}')"></button>`;
+        },
+    },
+    breakpoints: {
+        768: {
+            pagination: {
+                dynamicBullets: false,
+            }
+        }
+    },
+    on: {
+        slideChange: function() {
+            const index = this.realIndex;
+            const colorName = $(`#swiper .swiper-slide img`).eq(index).data('color-name');
+            selectColor($(`.color[data-color-name="${colorName}"]`));
         },
     },
 });
@@ -60,9 +74,7 @@ function selectColor($color) {
 }
 
 function selectStorage($storage) {
-    if (!$storage.length) {
-        return;
-    }
+    if (!$storage.length) return;
 
     $('.storage.active').removeClass("active");
     $storage.addClass("active");
@@ -121,11 +133,8 @@ const $infoBtn = $('#info-button');
 const $commentPart = $('#comment-part');
 const $infoPart = $('#info-part');
 
-if (location.href.endsWith('#comment-part')) {
-    showCommentsPart();
-} else {
-    showInfoPart();
-}
+if (location.href.endsWith('#comment-part')) showCommentsPart();
+else showInfoPart();
 
 function showCommentsPart() {
     $commentBtn.addClass('active');
@@ -162,7 +171,7 @@ $('#comment-form').on('submit', (e) => {
 });
 
 function generateStars(ratingValue) {
-    return '<i class="fa-sharp fa-solid fa-star"></i>\n'.repeat(ratingValue) +
+    return  '<i class="fa-sharp fa-solid fa-star"></i>\n'.repeat(ratingValue) +
             '<i class="fa-regular fa-star"></i>\n'.repeat(5 - ratingValue);
 }
 

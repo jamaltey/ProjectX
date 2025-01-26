@@ -5,9 +5,9 @@
     .swiper-pagination-bullet {
         background: transparent no-repeat center/cover;
         border-radius: 0;
-        height: 50px;
-        width: 50px;
-        max-width: 10vw !important;
+        height: 75px;
+        width: 75px;
+        max-width: 20vw !important;
     }
 }
 
@@ -93,5 +93,9 @@ p {
 }
 
 @media (min-width: 768px) {
+    #swiper .swiper-pagination-bullet {
+        height: 50px;
+        width: 50px;
+    }
     .comment .col-md-3 { border-width: 0 1px 0 0; }
 }
