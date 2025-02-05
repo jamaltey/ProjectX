@@ -5,7 +5,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" integrity="sha512-rd0qOHVMOcez6pLWPVFIv7EfSdGKLt+eafXh4RO/12Fgr41hDQxfGvoi1Vy55QIVcQEujUE1LQrATCLl2Fs+ag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/detail.css' %}" />
 {% endblock css %}
 
 {% block content %}
@@ -36,7 +36,7 @@
             <form method="post">
                 {% csrf_token %}
 
-                <input type="hidden" name="product_id" value="{{ product.id }}">
+                <input type="hidden" name="product_id" value="{{ product.id }}" />
 
                 <h2 class="product-title">{{ product.title }}</h2>
 
@@ -70,7 +70,7 @@
                         {% endfor %}
                     </div>
                     <h6 id="color-name"></h6>
-                    <input type="hidden" name="color" required>
+                    <input type="hidden" name="color" required />
                 </div>
                 {% endif %}
 
@@ -82,14 +82,14 @@
                             {{ i.size_format }}
                         </div>
                     {% endfor %}
-                    <input type="hidden" name="storage" required>
+                    <input type="hidden" name="storage" required />
                 </div>
                 {% endif %}
 
                 <hr class="my-1" />
 
                 <div id="quantity" class="d-flex gap-4 align-items-center justify-content-center justify-content-lg-start py-4">
-                    <input name="quantity" value="1" type="hidden">
+                    <input name="quantity" value="1" type="hidden" />
                     <button class="btn btn-light rounded-circle" onclick="changeCount(-1)" type="button">
                         <i class="fas fa-minus"></i>
                     </button>
@@ -179,7 +179,7 @@
                 </div>
 
                 <div class="text-end py-1">
-                    <input class="btn btn-primary col-5 col-sm-4 col-md-3" type="submit" value="Submit">
+                    <input class="btn btn-primary col-5 col-sm-4 col-md-3" type="submit" value="Submit" />
                 </div>
 
             </form>
