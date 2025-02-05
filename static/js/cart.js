@@ -27,19 +27,15 @@ function removeItem(id) {
 }
 
 function changeQuantity(id, count) {
-	const counter = $(`.cart-item#${id} span.counter`);
-	const quantity = parseInt(counter.text()) + count;
+	const $counter = $(`.cart-item#${id} .counter`);
+	const quantity = parseInt($counter.text()) + count;
 	if (quantity < 1) {
 		return;
 	}
-	$.post(
-		`/api/cart/${id}/change-quantity/`,
-		{ quantity: quantity },
-		(success = (data) => {
-			counter.text(quantity);
-			$(`.cart-item#${id} .price`).text(data.price);
-			$('#total-price .old-price').text(data.discount);
-			$('#total-price .price').text(data.total_price);
-		})
-	);
+	$.post(`/api/cart/${id}/change-quantity/`, { quantity: quantity }, (data) => {
+		$counter.text(quantity);
+		$(`.cart-item#${id} .price`).text(data.price);
+		$('#total-price .old-price').text(data.discount);
+		$('#total-price .price').text(data.total_price);
+	});
 }
