@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from colorfield.fields import ColorField
 from accounts.models import User
 from .utils import Rating
@@ -14,8 +15,8 @@ class Product(models.Model):
     specifications = models.ForeignKey("Specifications", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
     colors = models.ManyToManyField("Color", related_name="products", blank=True)
     storages = models.ManyToManyField("Storage", related_name="products", blank=True)
-    price = models.PositiveSmallIntegerField()
-    old_price = models.PositiveSmallIntegerField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
+    old_price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)], blank=True, null=True)
     sales = models.PositiveIntegerField(default=0, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -68,8 +69,7 @@ class Specifications(models.Model):
     water_and_dust_rating = models.CharField(max_length=100, null=True, blank=True)
     additional_specifications = models.JSONField(null=True, blank=True, default=dict)
 
-    @property
-    def dict(self):
+    def to_dict(self):
         return {
             self.FIELDS[key]: getattr(self, key)
             for key in self.FIELDS
@@ -77,15 +77,13 @@ class Specifications(models.Model):
         } | (self.additional_specifications or {})
 
     def __iter__(self):
-        return iter(self.dict.items())
+        return iter(self.to_dict().items())
 
     class Meta:
         verbose_name_plural = verbose_name = "Specifications"
 
     def __str__(self):
-        if self.name:
-            return self.name
-        return str(self.dict)
+        return self.name if self.name else str(self.to_dict())
 
 class ProductImage(models.Model):
     image = models.ImageField(upload_to="images/")
@@ -192,7 +190,7 @@ class ProductVersion(models.Model):
     def image(self):
         try:
             return self.product.images.get(color__name=self.color.name).image
-        except ProductImage.DoesNotExist:
+        except:
             return self.product.image
 
     @property
