@@ -43,9 +43,7 @@ input#search {
     min-width: 40vw;
     height: 40px;
     transition: none;
-    &:focus {
-        box-shadow: none;
-    }
+    &:focus { box-shadow: none; }
 }
 
 .badge { --bs-badge-font-size: .9rem; }
@@ -87,7 +85,7 @@ input#search {
 }
 
 .price, .old-price, #price, #old-price {
-    &::after { content: ' $'; }
+    &::before { content: '$'; }
 }
 
 .price, #price {
@@ -102,7 +100,7 @@ input#search {
 }
 
 .heart.btn {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     width: 2.25rem;
