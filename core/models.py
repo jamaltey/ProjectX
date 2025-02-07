@@ -201,14 +201,14 @@ class ProductVersion(models.Model):
     def old_price(self):
         old_price = self.product.old_price or 0
         if self.storage:
-            old_price += self.storage.price
+            old_price += self.storage.add_price
         return old_price * self.quantity
 
     @property
     def final_price(self):
         final_price = self.product.price
         if self.storage:
-            final_price += self.storage.price
+            final_price += self.storage.add_price
         return final_price * self.quantity
 
     def __str__(self):
