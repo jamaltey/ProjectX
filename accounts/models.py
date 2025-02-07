@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from decimal import Decimal
 
 class User(AbstractUser):
     username = None
@@ -71,7 +72,7 @@ class Order(models.Model):
         ('Cash', 'Cash'),
         ('Card', 'Card'),
     )
-    SHIPPING_PRICE = 9.99
+    SHIPPING_PRICE = Decimal("9.99")
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     products = models.ManyToManyField("core.ProductVersion", related_name="orders")

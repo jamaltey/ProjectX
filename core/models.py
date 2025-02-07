@@ -17,7 +17,7 @@ class Product(models.Model):
     storages = models.ManyToManyField("Storage", related_name="products", blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
     old_price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)], blank=True, null=True)
-    sales = models.PositiveIntegerField(default=0, editable=False)
+    sold_units = models.PositiveIntegerField(default=0, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -126,11 +126,13 @@ class Color(models.Model):
 
 class Storage(models.Model):
     storage = models.PositiveSmallIntegerField(help_text="In GB")
-    price = models.PositiveSmallIntegerField(blank=True, default=0, help_text="The price that will be added to the price of the product")
+    add_price = models.PositiveSmallIntegerField(
+        blank=True, default=0, help_text="The price that will be added to the price of the product"
+    )
 
     @property
     def size_format(self):
-        return f"{self.storage} GB" if self.storage < 1024 else f"{self.storage//1024} TB"
+        return f"{self.storage} GB" if self.storage < 1024 else f"{self.storage // 1024} TB"
 
     def __str__(self):
         return f"{self.size_format}, +{self.price}$"
@@ -147,11 +149,11 @@ class Brand(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=100)
 
-    class Meta:
-        verbose_name_plural = "Categories"
-
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = "Categories"
 
 class Comment(models.Model):
     RATING_CHOICES =(
@@ -175,7 +177,7 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.author.full_name}: {self.text}'
-    
+
     class Meta:
         ordering = ['-rating_value']
 
@@ -188,10 +190,12 @@ class ProductVersion(models.Model):
 
     @property
     def image(self):
-        try:
-            return self.product.images.get(color__name=self.color.name).image
-        except:
-            return self.product.image
+        if self.color:
+            try:
+                return self.product.images.get(color__name=self.color.name).image
+            except ProductImage.DoesNotExist:
+                pass
+        return self.product.image
 
     @property
     def old_price(self):

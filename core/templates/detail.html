@@ -78,7 +78,7 @@
                 <div id="storage-selector" class="d-flex align-items-center gap-4 pb-4">
                     <h6>Storage: </h6>
                     {% for i in storages %}
-                        <div class="storage border-0 rounded btn btn-light p-0" data-add-price="{{ i.price }}" data-storage="{{ i.storage }}">
+                        <div class="storage border-0 rounded btn btn-light p-0" data-add-price="{{ i.add_price }}" data-storage="{{ i.storage }}">
                             {{ i.size_format }}
                         </div>
                     {% endfor %}

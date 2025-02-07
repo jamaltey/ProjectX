@@ -10,9 +10,9 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        products = Product.objects.order_by('-id')
+        products = Product.objects.all()
         newproducts = products[:4]
-        bestsellers = sorted(products, key=lambda x: x.calculate_rating(), reverse=True)[:4]
+        bestsellers = products.order_by('-sold_units')[:4]
 
         context.update({
             'newproducts': newproducts,

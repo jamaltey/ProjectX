@@ -8,6 +8,7 @@ from .mixins import RedirectAuthenticatedMixin
 from .forms import SignUpForm, LoginForm, EditProfileForm, AddressForm
 from core.models import Product, ProductVersion
 from accounts.models import User, Cart, Order, Address
+from decimal import Decimal
 
 class CustomLoginView(RedirectAuthenticatedMixin, LoginView):
     form_class = LoginForm
@@ -93,8 +94,7 @@ class CheckoutView(AddressView):
         order = user.orders.create(address=address)
         for i in cart.products.all():
             order.products.add(i)
-            i.product.sales += 1
-            print(i.product.sales)
+            i.product.sold_units += 1
         order.save()
 
         cart.products.clear()
