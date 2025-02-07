@@ -1,8 +1,9 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from colorfield.fields import ColorField
-from accounts.models import *
+from accounts.models import User
 from .utils import Rating
-import re, math
+import os, math
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
@@ -36,6 +37,7 @@ class Product(models.Model):
         return math.ceil(avg_rating) if avg_rating else 0
 
     def __str__(self):
+        # Some product titles start with brand name, we don't want to duplicate this name in the title
         return self.title if self.title.startswith(str(self.brand)) else f"{self.brand} {self.title}"
 
     class Meta:
@@ -90,16 +92,27 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
     color = models.ForeignKey("Color", on_delete=models.CASCADE, related_name="images", null=True, blank=True)
 
+    def clean(self):
+        max_images_count = 5
+        if self.product.colors.exists():
+            max_images_count = self.product.colors.count() + 1
+        if not self.pk and self.product.images.count() >= max_images_count:
+            raise ValidationError(f"This product can't have more than {max_images_count} images")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     @property
     def url(self):
         return self.image.url
 
     def __str__(self):
-        filename = re.search(r'images/(.*)', self.image.url).group(1)
+        filename = os.path.basename(self.image.name)
         if self.color:
             return f"{self.product} ({self.color.name}) —— {filename}"
         return f"{self.product} —— {filename}"
-    
+
     class Meta:
         ordering = ['product']
 
@@ -115,7 +128,7 @@ class Color(models.Model):
 
 class Storage(models.Model):
     storage = models.PositiveSmallIntegerField(help_text="In GB")
-    price = models.PositiveSmallIntegerField(blank=True, default=0)
+    price = models.PositiveSmallIntegerField(blank=True, default=0, help_text="The price that will be added to the price of the product")
 
     @property
     def size_format(self):
@@ -179,7 +192,7 @@ class ProductVersion(models.Model):
     def image(self):
         try:
             return self.product.images.get(color__name=self.color.name).image
-        except:
+        except ProductImage.DoesNotExist:
             return self.product.image
 
     @property

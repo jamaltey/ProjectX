@@ -3,10 +3,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
 from django.urls import reverse_lazy
-from django.views.generic import *
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from .mixins import RedirectAuthenticatedMixin
 from .forms import SignUpForm, LoginForm, EditProfileForm, AddressForm
-from core.models import *
+from core.models import Product, ProductVersion
+from accounts.models import User, Cart, Order, Address
 
 class CustomLoginView(RedirectAuthenticatedMixin, LoginView):
     form_class = LoginForm

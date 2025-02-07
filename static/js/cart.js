@@ -29,9 +29,8 @@ function removeItem(id) {
 function changeQuantity(id, count) {
 	const $counter = $(`.cart-item#${id} .counter`);
 	const quantity = parseInt($counter.text()) + count;
-	if (quantity < 1) {
-		return;
-	}
+	if (quantity < 1) return;
+
 	$.post(`/api/cart/${id}/change-quantity/`, { quantity: quantity }, (data) => {
 		$counter.text(quantity);
 		$(`.cart-item#${id} .price`).text(data.price);

@@ -14,10 +14,6 @@ class User(AbstractUser):
     def __str__(self):
         return f"{self.full_name} ({self.email})"
 
-    class Meta:
-        verbose_name = "User"
-        verbose_name_plural = "Users"
-
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="cart")
     products = models.ManyToManyField("core.ProductVersion", related_name="carts", blank=True)
@@ -37,7 +33,7 @@ class Cart(models.Model):
 
     @property
     def image(self):
-        if self.products.first():
+        if self.products.exists():
             return self.products.first().image
 
     def __str__(self):

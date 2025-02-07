@@ -23,7 +23,6 @@
 
 {% block content %}
 <main class="container-fluid px-3 py-5">
-
 	<div class="d-flex d-lg-none justify-content-center w-100">
 		<div class="dropdown w-50">
 			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -63,7 +62,6 @@
 	</div>
 
 	<div class="row justify-content-center">
-
 		<div id="sidebar" class="collapse show d-lg-flex col pt-3">
 			<!-- Filters -->
 			<div class="filter shadow p-3 pt-1 w-100">
@@ -170,16 +168,13 @@
 			</div>
 		{% endif %}
 		</div>
-
 	</div>
-
 </main>
 {% endblock content %}
 
 {% block js %}
 <script src="{% static 'js/update-favorites.js' %}"></script>
 <script>
-
 	if (!$(`.nav-link.active`).length) {
 		$(`.nav-link[href="{% url 'core:list' %}"]`).addClass('active');
 	}
@@ -221,6 +216,5 @@
 		if (params.has('brand', brand) == this.checked) return true;
 		updateParam('brand', brand, multiple=true);
 	})
-
 </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django import forms
 from accounts.models import User
-from core.models import Address
+from accounts.models import Address
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 class SignUpForm(UserCreationForm):

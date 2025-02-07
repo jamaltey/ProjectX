@@ -1,9 +1,9 @@
 from django.shortcuts import redirect
 from django.http import *
-from accounts.models import *
-from .models import *
-from .utils import *
-from django.views.generic import *
+from django.db.models import Q
+from accounts.models import Cart
+from .models import Product, Brand
+from django.views.generic import TemplateView, DetailView, ListView
 
 class HomeView(TemplateView):
     template_name = 'index.html'
@@ -84,7 +84,7 @@ class ProductListView(ListView):
         if search and not search.isspace():
             search = search.strip()
             products = products.filter(
-                models.Q(title__icontains=search) | models.Q(brand__title__icontains=search)
+                Q(title__icontains=search) | Q(brand__title__icontains=search)
             )
 
         category = self.kwargs.get('category')
