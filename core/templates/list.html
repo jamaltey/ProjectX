@@ -23,10 +23,10 @@
 
 {% block content %}
 <main class="container-fluid px-3 py-5">
-	<div class="d-flex d-lg-none justify-content-center w-100">
+	<div class="d-flex d-lg-none justify-content-center w-100 pb-3">
 		<div class="dropdown w-50">
 			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="fa-regular fa-arrow-up-arrow-down"></i>
+				<i class="far fa-arrow-up-arrow-down"></i>
 				{{ sort | default:'Newest' }}
 			</button>
 			<ul class="dropdown-menu p-0">
@@ -55,14 +55,14 @@
 		</div>
 		<div class="w-50">
 			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="true" type="button">
-				<i class="fa-regular fa-filter"></i>
+				<i class="far fa-filter"></i>
 				Filters
 			</button>
 		</div>
 	</div>
 
 	<div class="row justify-content-center">
-		<div id="sidebar" class="collapse show d-lg-flex col pt-3">
+		<div id="sidebar" class="collapse show d-lg-flex col">
 			<!-- Filters -->
 			<div class="filter shadow p-3 pt-1 w-100">
 				<h5 class="border-bottom py-2 px-3">

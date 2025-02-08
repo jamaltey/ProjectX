@@ -57,9 +57,7 @@ hr {
 .specifications {
     max-width: 95%;
     margin-bottom: 2rem;
-    p, span {
-        color: #828282;
-    }
+    p, span { color: #828282; }
 }
 
 .stars {

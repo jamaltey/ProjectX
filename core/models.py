@@ -135,7 +135,7 @@ class Storage(models.Model):
         return f"{self.storage} GB" if self.storage < 1024 else f"{self.storage // 1024} TB"
 
     def __str__(self):
-        return f"{self.size_format}, +{self.price}$"
+        return f"{self.size_format}, +{self.add_price}$"
     
     class Meta:
         ordering = ['storage']
