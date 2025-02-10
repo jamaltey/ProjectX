@@ -3,19 +3,6 @@
 
 {% block title %}Wishlist - {% endblock title %}
 
-{% block profile-css %}
-<style>
-    #empty-wishlist {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 1.5rem;
-        color: #BDBDBD;
-    }
-</style>
-{% endblock profile-css %}
-
 {% block profile-content %}
 
     <div class="text-center text-lg-start py-3">
@@ -27,9 +14,9 @@
         {% for product in favorites %}
             {% include 'components/product.html' %}
         {% endfor %}
-        <div id="empty-wishlist" class="col-12 bg-body-tertiary rounded py-5" {% if favorites %}style="display: none;"{% endif %}>
+        <div id="empty-wishlist" class="col-12 no-items bg-body-tertiary" {% if favorites %}style="display: none;"{% endif %}>
             <img src="{% static 'img/heart-empty.svg' %}" alt="">
-            <h6>Your wishlist is empty</h6>
+            <h6 class="my-4">Your wishlist is empty</h6>
         </div>
     </div>
 

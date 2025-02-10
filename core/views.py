@@ -1,5 +1,5 @@
 from django.shortcuts import redirect
-from django.http import *
+from django.http import QueryDict
 from django.db.models import Q
 from accounts.models import Cart
 from .models import Product, Brand
@@ -43,19 +43,24 @@ class ProductDetailView(DetailView):
 
         # Add to cart
         product = self.get_object()
-        quantity = int(request.POST.get('quantity', 1))
-        color = None ; storage = None
+        try:
+            quantity = int(request.POST.get('quantity', 1))
+        except (ValueError, TypeError):
+            quantity = 1
+
+        color = None
+        storage = None
 
         if product.colors.exists():
-            color = request.POST.get('color')
-            if color:
-                color = product.colors.get(name=color)
+            color_name = request.POST.get('color')
+            if color_name:
+                color = product.colors.get(name=color_name)
 
         if product.storages.exists():
-            storage = request.POST.get('storage')
-            if storage:
-                storage = int(storage)
-                storage = product.storages.get(storage=storage)
+            storage_val = request.POST.get('storage')
+            if storage_val:
+                storage_val = int(storage_val)
+                storage = product.storages.get(storage=storage_val)
 
         cart = Cart.objects.get_or_create(user=user)[0]
         product_version, created = cart.products.get_or_create(product=product, color=color, storage=storage)
@@ -75,7 +80,7 @@ class ProductListView(ListView):
     template_name = 'list.html'
     context_object_name = 'products'
     paginate_by = 8
-    filters = ('brand')
+    filters = ('brand',)
 
     def get_queryset(self):
         products = Product.objects.all()
@@ -89,8 +94,8 @@ class ProductListView(ListView):
 
         category = self.kwargs.get('category')
         if category:
-            category = category.lower().capitalize()
-            if category == 'Sales':
+            category = category.lower()
+            if category == 'sales':
                 products = products.filter(old_price__isnull=False)
             else:
                 products = products.filter(category__title__iexact=category)
@@ -124,7 +129,7 @@ class ProductListView(ListView):
         context.update({
             'search': self.request.GET.get('search'),
             'category': self.kwargs.get('category', ''),
-            'brandlist': self.request.GET.getlist('brand'),
+            'brand_list': self.request.GET.getlist('brand'),
             'brands': Brand.objects.all(),
             'args': args,
             'page': context.get('page_obj'),

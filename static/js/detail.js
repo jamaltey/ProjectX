@@ -46,11 +46,11 @@ $storages.on('click', function () {
 });
 
 const color = sessionStorage.getItem(`product#${productId}-color`);
-let $color = $(`.color[data-color-name='${color}']`);
+const $color = $(`.color[data-color-name='${color}']`);
 selectColor($color.length ? $color : $colors.first());
 
 const storage = sessionStorage.getItem(`product#${productId}-storage`);
-let $storage = $(`.storage[data-storage='${storage}']`);
+const $storage = $(`.storage[data-storage='${storage}']`);
 selectStorage($storage.length ? $storage : $storages.first());
 
 function selectColor($color) {
@@ -178,28 +178,28 @@ function renderComment({ id, rating_value, author, created_at, text }) {
 	created_at = new Date(created_at).toLocaleString('en-us', { month: 'short', day: 'numeric', year: 'numeric' });
 
 	const $comment = $(`
-        <div class="comment row gy-3" id="${id}">
-            <div class="col-md-3 text-center">
-                <h2>${rating_value || 'No rating'}</h2>
-                <div class="stars fs-5">${generateStars(rating_value)}</div>
-            </div>
+		<div class="comment row gy-3" id="${id}">
+			<div class="col-md-3 text-center">
+				<h2>${rating_value || 'No rating'}</h2>
+				<div class="stars fs-5">${generateStars(rating_value)}</div>
+			</div>
 
-            <div class="col-md-9">
-                <div class="comment-info d-flex justify-content-between">
-                    <h5>${author}</h5>
-                    <h6>${created_at}</h6>
-                </div>
+			<div class="col-md-9">
+				<div class="comment-info d-flex justify-content-between">
+					<h5>${author}</h5>
+					<h6>${created_at}</h6>
+				</div>
 
-                <p>${text}</p>
+				<p>${text}</p>
 
-                <button class="btn btn-dark" onclick="deleteComment(${id}}">
-                    Delete comment
-                </button>
-            </div>
+				<button class="btn btn-dark" onclick="deleteComment(${id})">
+					Delete comment
+				</button>
+			</div>
 
-            <hr class="w-100 my-4" />
-        </div>
-    `);
+			<hr class="w-100 my-4" />
+		</div>
+	`);
 
 	$('#comments').prepend($comment);
 }

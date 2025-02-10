@@ -73,16 +73,18 @@
 				{% for i in brands %}
 					<li>
 						<label>
-							<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.title }}" {% if i.title in brandlist %}checked{% endif %}>
+							<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.title }}" {% if i.title in brand_list %}checked{% endif %}>
 							{{ i.title }}
 						</label>
 					</li>
 				{% endfor %}
 				</ul>
 
-				<a href="?" class="btn btn-dark mx-4">
-					Reset all filters
-				</a>
+				<div class="px-4">
+					<button class="btn btn-dark" id="reset-filter" type="button">
+						Reset
+					</button>
+				</div>
 			</div>
 		</div>
 
@@ -174,47 +176,5 @@
 
 {% block js %}
 <script src="{% static 'js/update-favorites.js' %}"></script>
-<script>
-	if (!$(`.nav-link.active`).length) {
-		$(`.nav-link[href="{% url 'core:list' %}"]`).addClass('active');
-	}
-
-	const params = new URLSearchParams(location.search);
-
-	function updateContent() {
-		const url = `${location.pathname}?${params.toString()}`;
-		history.replaceState(null, '', url);
-		$('#loading').show();
-		$('#products').load(`${url} #products > *`);
-	}
-
-	function updateParam(name, value, multiple=false) {
-		if (name != 'page') params.delete('page');
-		if (multiple) {
-			params.has(name, value) ? params.delete(name, value) : params.append(name, value);
-		} else if (value && value != params.get(name)) {
-			params.set(name, value);
-		} else if (!value && params.has(name)) {
-			params.delete(name);
-		} else return;
-		updateContent();
-	}
-
-	let searchTimeout;
-	$('#search').on("input", function(){
-		clearTimeout(searchTimeout);
-		searchTimeout = setTimeout(updateParam, 500, name='search', value=this.value.trim());
-	})
-
-	$('#search-form').on('submit', function(e){
-		e.preventDefault();
-		updateParam('search', $('#search').val().trim());
-	})
-
-	$(':checkbox[name="brand"]').on('change', function(){
-		const brand = this.value;
-		if (params.has('brand', brand) == this.checked) return true;
-		updateParam('brand', brand, multiple=true);
-	})
-</script>
+<script src="{% static 'js/list.js' %}"></script>
 {% endblock %}

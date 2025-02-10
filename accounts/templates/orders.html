@@ -17,6 +17,7 @@
         .img-wrap .g-0:not(:has(img:nth-of-type(3))) img { height: 50%; }
         .img-wrap .g-0:has(.col-sm-12:nth-of-type(3), .col-6:nth-of-type(5)) img { height: 33.33%; }
     }
+    /* #empty-orders { color: #BDBDBD; } */
 
     @media (min-width: 576px) {
         .order {
@@ -88,6 +89,11 @@
                 </div>
                 <!-- <img src="{{order.products.first.image.url}}" alt="{{ order }}"> -->
             </div>
+        </div>
+        {% empty %}
+        <div class="col-12 no-items bg-body-tertiary rounded" id="empty-orders">
+            <img src="{% static 'img/shopping-cart.svg' %}" alt="" />
+            <h6 class="my-4">You have no orders</h6>
         </div>
         {% endfor %}
     </div>
