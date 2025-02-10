@@ -1,13 +1,10 @@
 class Rating:
     def __init__(self, rating=0):
-        if not rating:
+        if not rating or rating < 0:
             self.rating = 0
         else:
             rating = int(rating)
-            if rating <= 5:
-                self.rating = rating
-            else:
-                self.rating = 5
+            self.rating = rating if rating <= 5 else 5
 
     def render_stars_html(self):
         return (
@@ -16,7 +13,7 @@ class Rating:
             '<i class="fa-regular fa-star"></i>\n' * (5 - self.rating)
         )
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f'<Rating object "{str(self)}">'
 
     def __str__(self):
