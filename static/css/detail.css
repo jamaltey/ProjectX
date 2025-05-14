@@ -41,8 +41,8 @@ hr {
 }
 
 #quantity {
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
     button {
         display: flex;
         align-items: center;
@@ -63,8 +63,8 @@ hr {
 .stars {
     color: #F2994A;
     cursor: default;
-    user-select: none;
     -webkit-user-select: none;
+    user-select: none;
 }
 
 #comment-form {

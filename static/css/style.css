@@ -91,7 +91,7 @@ input#search {
 }
 
 .price, .old-price, #price, #old-price {
-    &::before { content: '$'; }
+    &::before { content: '$ '; }
 }
 
 .price, #price {

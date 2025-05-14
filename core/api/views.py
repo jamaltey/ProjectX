@@ -3,7 +3,7 @@ from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from core.models import *
+from core.models import Comment
 
 class CommentViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
     serializer_class = CommentSerializer

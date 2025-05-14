@@ -136,7 +136,7 @@ class Storage(models.Model):
 
     def __str__(self):
         return f"{self.size_format}, +{self.add_price}$"
-    
+
     class Meta:
         ordering = ['storage']
 
