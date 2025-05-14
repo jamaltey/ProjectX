@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 from decimal import Decimal
 
@@ -92,6 +93,9 @@ class Order(models.Model):
     @property
     def total_price(self):
         return self.price + self.shipping_price
+
+    def get_absolute_url(self):
+        return reverse("order_detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return f"{self.user.full_name}'s order {self.id} ({self.status}) ${self.total_price}"

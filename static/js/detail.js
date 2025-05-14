@@ -26,7 +26,7 @@ const swiper = new Swiper('#swiper', {
         },
     },
     on: {
-        slideChange: function () {
+        slideChange() {
             const index = this.realIndex;
             const colorName = $(`#swiper .swiper-slide img`).eq(index).data('color-name');
             selectColor($(`.color[data-color-name="${colorName}"]`));
@@ -54,9 +54,7 @@ const $storage = $(`.storage[data-storage='${storage}']`);
 selectStorage($storage.length ? $storage : $storages.first());
 
 function selectColor($color) {
-    if (!$color.length) {
-        return;
-    }
+    if (!$color.length) return;
 
     $('.color.active').removeClass('active');
     $color.addClass('active');
@@ -113,12 +111,11 @@ function changeCount(count) {
     }
 }
 
-const $wishlistBtn = $('#wishlist-btn');
-$wishlistBtn.on('click', () => {
+$('#wishlist-btn').on('click', function () {
     const url = `/api/wishlist/toggle/${productId}/`;
     $.get(url, ({ is_favorite }) => {
         const text = is_favorite ? 'Remove from wishlist' : 'Add to wishlist';
-        $wishlistBtn.find('span').text(text);
+        $(this).find('span').text(text);
     }).fail(xhr => {
         if (xhr.status === 403) {
             location.replace('/accounts/login/');
@@ -228,7 +225,7 @@ function deleteComment(id) {
     $.ajax({
         url: `/api/comment/${id}/`,
         type: 'DELETE',
-        success: () => {
+        success() {
             $(`.comment#${id}`).remove();
             const commentsLength = $('.comment').length;
             if (!commentsLength) {
@@ -237,7 +234,7 @@ function deleteComment(id) {
                 $('#comments hr').remove();
             }
         },
-        error: () => {
+        error() {
             alert('Failed to delete comment. Please try again.');
         },
     });

@@ -55,13 +55,13 @@
                     {% elif order.products.count == 2 or order.products.count == 3 %}
                         <div class="row g-0">
                             {% for product in order.products.all %}
-                                <img class="col-sm-12 object-fit-cover" src="{{product.image.url}}" alt="{{ order }}">
+                                <img class="col-sm-12 object-fit-cover" src="{{ product.image.url }}" alt="{{ order }}">
                             {% endfor %}
                         </div>
                     {% else %}
                         <div class="row g-0">
                         {% for product in order.products.all %}
-                            <img class="col-6 object-fit-cover" src="{{product.image.url}}" alt="{{ order }}">
+                            <img class="col-6 object-fit-cover" src="{{ product.image.url }}" alt="{{ order }}">
                         {% endfor %}
                         </div>
                     {% endif %}
@@ -81,7 +81,7 @@
                             <span class="price">{{ order.total_price }}</span>
                         </div>
         
-                        <a href="{% url 'accounts:order-detail' order.id %}" class="btn btn-dark border">
+                        <a href="{ order.get_absolute_url }" class="btn btn-dark border">
                             Order Details
                         </a>
                     </div>

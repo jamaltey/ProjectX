@@ -110,7 +110,7 @@
         $.ajax({
             url: "{% url 'accounts_api:cart-remove' object.id %}",
             type: 'DELETE',
-            success: () => {
+            success() {
                 location.href = "{% url 'accounts:cart' %}";
             }
         });

@@ -8,7 +8,6 @@ from .mixins import RedirectAuthenticatedMixin
 from .forms import SignUpForm, LoginForm, EditProfileForm, AddressForm
 from core.models import Product, ProductVersion
 from accounts.models import User, Cart, Order, Address
-from decimal import Decimal
 
 class CustomLoginView(RedirectAuthenticatedMixin, LoginView):
     form_class = LoginForm
@@ -24,7 +23,7 @@ class SignUpView(RedirectAuthenticatedMixin, CreateView):
         self.object = form.save()
         login(self.request, self.object) # Login the user
         Cart.objects.get_or_create(user=self.object) # Create a cart for the user
-        return redirect(self.get_success_url())
+        return redirect(self.success_url)
 
 class OrdersView(LoginRequiredMixin, ListView):
     model = Order
@@ -38,14 +37,14 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'order-detail.html'
 
-    def get_object(self, queryset=None):
-        return self.request.user.orders.get(id=self.kwargs['pk'])
+    def get_queryset(self):
+        return self.request.user.orders.all()
 
 class CartView(LoginRequiredMixin, DetailView):
     model = Cart
     template_name = 'cart.html'
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         return self.request.user.cart
 
 class CartDetailView(LoginRequiredMixin, DetailView):
@@ -70,9 +69,9 @@ class AddressView(LoginRequiredMixin, CreateView, UpdateView):
     template_name = 'address.html'
     success_url = reverse_lazy('accounts:address')
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         user: User = self.request.user
-        return user.address if hasattr(user, 'address') else None
+        return getattr(user, 'address', None)
 
     def form_valid(self, form):
         address = form.save(commit=False)
@@ -117,5 +116,5 @@ class EditProfile(LoginRequiredMixin, UpdateView):
     template_name = 'profile-info.html'
     success_url = reverse_lazy('accounts:profile-info')
 
-    def get_object(self, queryset=None):
+    def get_object(self):
         return self.request.user

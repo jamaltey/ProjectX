@@ -1,3 +1,5 @@
+from django.urls import reverse
+from django.utils.text import slugify
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -19,6 +21,18 @@ class Product(models.Model):
     old_price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)], blank=True, null=True)
     sold_units = models.PositiveIntegerField(default=0, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self)
+            slug = base_slug
+            counter = 1
+            while Product.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
     @property
     def discount(self):
@@ -40,6 +54,9 @@ class Product(models.Model):
     def __str__(self):
         # Some product titles start with brand name, we don't want to duplicate this name in the title
         return self.title if self.title.startswith(str(self.brand)) else f"{self.brand} {self.title}"
+
+    def get_absolute_url(self):
+        return reverse('core:detail', kwargs={'slug': self.slug})
 
     class Meta:
         ordering = ['-created_at']

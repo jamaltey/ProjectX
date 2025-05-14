@@ -13,7 +13,7 @@ function removeItem(id) {
 	$.ajax({
 		url: `/api/cart/${id}/remove/`,
 		type: 'DELETE',
-		success: (data) => {
+		success(data) {
 			if (data.is_empty) {
 				clearContent();
 			} else {
