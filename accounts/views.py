@@ -4,20 +4,25 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView, DetailView, ListView
-from .mixins import RedirectAuthenticatedMixin
 from .forms import SignUpForm, LoginForm, EditProfileForm, AddressForm
 from core.models import Product, ProductVersion
 from accounts.models import User, Cart, Order, Address
 
-class CustomLoginView(RedirectAuthenticatedMixin, LoginView):
+class CustomLoginView(LoginView):
     form_class = LoginForm
     template_name = 'login.html'
     success_url = reverse_lazy('core:home') 
+    redirect_authenticated_user = True
 
-class SignUpView(RedirectAuthenticatedMixin, CreateView):
+class SignUpView(CreateView):
     form_class = SignUpForm
     template_name = 'signup.html'
     success_url = reverse_lazy('core:home')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect(self.success_url)
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.object = form.save()
