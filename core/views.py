@@ -1,9 +1,12 @@
-from django.shortcuts import redirect
-from django.http import QueryDict
 from django.db.models import Q
+from django.http import QueryDict
+from django.shortcuts import redirect
+from django.views.generic import DetailView, ListView, TemplateView
+
 from accounts.models import Cart
-from .models import Product, Brand
-from django.views.generic import TemplateView, DetailView, ListView
+
+from .models import Brand, Product
+
 
 class HomeView(TemplateView):
     template_name = 'index.html'
@@ -102,7 +105,7 @@ class ProductListView(ListView):
 
         for key, value in self.request.GET.lists():
             if key in self.filters and value:
-                products = products.filter(**{f"{key}__title__in": value})
+                products = products.filter(**{f'{key}__title__in': value})
 
         sort = self.request.GET.get('sort')
         if sort == 'price-asc':

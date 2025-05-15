@@ -1,9 +1,12 @@
-from .serializers import *
-from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import GenericViewSet
+
 from core.models import Comment
+
+from .serializers import *
+
 
 class CommentViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
     serializer_class = CommentSerializer

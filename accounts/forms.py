@@ -1,7 +1,8 @@
 from django import forms
-from accounts.models import User
-from accounts.models import Address
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+
+from accounts.models import Address, User
+
 
 class SignUpForm(UserCreationForm):
     password1 = forms.CharField(

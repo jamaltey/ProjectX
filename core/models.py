@@ -1,22 +1,27 @@
-from django.urls import reverse
-from django.utils.text import slugify
-from django.db import models
+import math
+import os
+
+from colorfield.fields import ColorField
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from colorfield.fields import ColorField
+from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
+
 from accounts.models import User
+
 from .utils import Rating
-import os, math
+
 
 class Product(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to="images/")
-    brand = models.ForeignKey("Brand", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
-    category = models.ForeignKey("Category", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
-    specifications = models.ForeignKey("Specifications", on_delete=models.CASCADE, related_name="products", null=True, blank=True)
-    colors = models.ManyToManyField("Color", related_name="products", blank=True)
-    storages = models.ManyToManyField("Storage", related_name="products", blank=True)
+    image = models.ImageField(upload_to='images/')
+    brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    specifications = models.ForeignKey('Specifications', on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    colors = models.ManyToManyField('Color', related_name='products', blank=True)
+    storages = models.ManyToManyField('Storage', related_name='products', blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
     old_price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)], blank=True, null=True)
     sold_units = models.PositiveIntegerField(default=0, editable=False)
@@ -29,7 +34,7 @@ class Product(models.Model):
             slug = base_slug
             counter = 1
             while Product.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
+                slug = f'{base_slug}-{counter}'
                 counter += 1
             self.slug = slug
         super().save(*args, **kwargs)
@@ -53,7 +58,7 @@ class Product(models.Model):
 
     def __str__(self):
         # Some product titles start with brand name, we don't want to duplicate this name in the title
-        return self.title if self.title.startswith(str(self.brand)) else f"{self.brand} {self.title}"
+        return self.title if self.title.startswith(str(self.brand)) else f'{self.brand} {self.title}'
 
     def get_absolute_url(self):
         return reverse('core:detail', kwargs={'slug': self.slug})
@@ -97,15 +102,15 @@ class Specifications(models.Model):
         return iter(self.to_dict().items())
 
     class Meta:
-        verbose_name_plural = verbose_name = "Specifications"
+        verbose_name_plural = verbose_name = 'Specifications'
 
     def __str__(self):
         return self.name if self.name else str(self.to_dict())
 
 class ProductImage(models.Model):
-    image = models.ImageField(upload_to="images/")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
-    color = models.ForeignKey("Color", on_delete=models.CASCADE, related_name="images", null=True, blank=True)
+    image = models.ImageField(upload_to='images/')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    color = models.ForeignKey('Color', on_delete=models.CASCADE, related_name='images', null=True, blank=True)
 
     def clean(self):
         max_images_count = 5
@@ -125,8 +130,8 @@ class ProductImage(models.Model):
     def __str__(self):
         filename = os.path.basename(self.image.name)
         if self.color:
-            return f"{self.product} ({self.color.name}) —— {filename}"
-        return f"{self.product} —— {filename}"
+            return f'{self.product} ({self.color.name}) —— {filename}'
+        return f'{self.product} —— {filename}'
 
     class Meta:
         ordering = ['product']
@@ -136,23 +141,23 @@ class Color(models.Model):
     color = ColorField()
 
     def __str__(self):
-        return f"{self.name} ({self.color})"
-    
+        return f'{self.name} ({self.color})'
+
     class Meta:
         ordering = ['name']
 
 class Storage(models.Model):
-    storage = models.PositiveSmallIntegerField(help_text="In GB")
+    storage = models.PositiveSmallIntegerField(help_text='In GB')
     add_price = models.PositiveSmallIntegerField(
-        blank=True, default=0, help_text="The price that will be added to the price of the product"
+        blank=True, default=0, help_text='The price that will be added to the price of the product'
     )
 
     @property
     def size_format(self):
-        return f"{self.storage} GB" if self.storage < 1024 else f"{self.storage // 1024} TB"
+        return f'{self.storage} GB' if self.storage < 1024 else f'{self.storage // 1024} TB'
 
     def __str__(self):
-        return f"{self.size_format}, +{self.add_price}$"
+        return f'{self.size_format}, +{self.add_price}$'
 
     class Meta:
         ordering = ['storage']
@@ -170,7 +175,7 @@ class Category(models.Model):
         return self.title
 
     class Meta:
-        verbose_name_plural = "Categories"
+        verbose_name_plural = 'Categories'
 
 class Comment(models.Model):
     RATING_CHOICES =(
@@ -184,8 +189,8 @@ class Comment(models.Model):
 
     text = models.TextField()
     rating_value = models.PositiveSmallIntegerField(default=0, choices=RATING_CHOICES)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comments')
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -199,7 +204,7 @@ class Comment(models.Model):
         ordering = ['-rating_value']
 
 class ProductVersion(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="versions")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='versions')
     quantity = models.PositiveSmallIntegerField(default=1)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE, null=True, blank=True)
@@ -231,7 +236,7 @@ class ProductVersion(models.Model):
     def __str__(self):
         result = str(self.product)
         if self.color:
-            result += f" {self.color.name}"
+            result += f' {self.color.name}'
         if self.storage:
-            result += f" {self.storage.size_format}"
-        return result + f" x{self.quantity}"
+            result += f' {self.storage.size_format}'
+        return result + f' x{self.quantity}'

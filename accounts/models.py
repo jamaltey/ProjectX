@@ -1,7 +1,9 @@
+from decimal import Decimal
+
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import AbstractUser
-from decimal import Decimal
+
 
 class User(AbstractUser):
     username = None

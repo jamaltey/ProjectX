@@ -1,5 +1,7 @@
 from django import forms
+
 from .models import ProductVersion
+
 
 class AddToCartForm(forms.Form):
     quantity = forms.IntegerField(min_value=1)

@@ -180,20 +180,16 @@ function renderComment({ id, rating_value: ratingValue = 0, author, created_at: 
 				<h2>${ratingValue || 'No rating'}</h2>
 				<div class="stars fs-5">${generateStars(ratingValue)}</div>
 			</div>
-
 			<div class="col-md-9">
 				<div class="comment-info d-flex justify-content-between">
 					<h5>${author}</h5>
 					<h6>${createdAt}</h6>
 				</div>
-
 				<p>${text}</p>
-
 				<button class="btn btn-dark" onclick="deleteComment(${id})">
 					Delete comment
 				</button>
 			</div>
-
 			<hr class="w-100 my-4" />
 		</div>
 	`);

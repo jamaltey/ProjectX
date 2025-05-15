@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from django.urls import reverse_lazy
+
 from django.core.management.commands.runserver import Command as runserver
+from django.urls import reverse_lazy
 
 runserver.default_addr = "0.0.0.0"
 
@@ -23,6 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 from os import getenv
+
 from dotenv import load_dotenv
 
 load_dotenv()

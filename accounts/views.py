@@ -1,12 +1,15 @@
-from django.shortcuts import redirect
+from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.contrib.auth import login
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DetailView, ListView
-from .forms import SignUpForm, LoginForm, EditProfileForm, AddressForm
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
+
+from accounts.models import Address, Cart, Order, User
 from core.models import Product, ProductVersion
-from accounts.models import User, Cart, Order, Address
+
+from .forms import AddressForm, EditProfileForm, LoginForm, SignUpForm
+
 
 class CustomLoginView(LoginView):
     form_class = LoginForm

@@ -1,9 +1,11 @@
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from core.models import Product
+
 
 class CartViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
@@ -14,10 +16,10 @@ class CartViewSet(viewsets.ViewSet):
         product_version = get_object_or_404(cart.products, id=pk)
         product_version.delete()
         data = {
-            "is_empty": not cart.products.exists(),
-            "items_count": cart.products.count(),
-            "discount": cart.discount,
-            "total_price": cart.total_price
+            'is_empty': not cart.products.exists(),
+            'items_count': cart.products.count(),
+            'discount': cart.discount,
+            'total_price': cart.total_price
         }
         return Response(data=data, status=status.HTTP_200_OK)
 
@@ -36,12 +38,12 @@ class CartViewSet(viewsets.ViewSet):
             product_version.quantity = quantity
             product_version.save()
             data = {
-                "price": product_version.final_price,
-                "discount": cart.discount,
-                "total_price": cart.total_price
+                'price': product_version.final_price,
+                'discount': cart.discount,
+                'total_price': cart.total_price
             }
             return Response(data=data, status=status.HTTP_200_OK)
-        return Response({"detail": "Quantity must be greater than zero."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'detail': 'Quantity must be greater than zero.'}, status=status.HTTP_400_BAD_REQUEST)
 
 class WishlistViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
