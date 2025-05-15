@@ -185,9 +185,9 @@
             </form>
         {% endif %}
 
-            <div class="{% if user.is_authenticated %}border-top{% endif %} border-bottom py-4" id="comments">
+            <div class="{% if user.is_authenticated %}border-top{% endif %} border-bottom" id="comments">
                 {% for i in comments %}
-                <div class="comment row gy-3" id="{{ i.id }}">
+                <div class="comment row gy-3" id="comment-{{ i.id }}">
                     <div class="col-md-3 text-center">
                         <h2>{{ i.rating }}</h2>
                         <div class="stars fs-5">
@@ -232,5 +232,5 @@
     const initialPrice = +'{{ product.price }}';
     const initialOldPrice = +'{{ product.old_price }}';
 </script>
-<script src="{% static 'js/detail.js' %}?v=123"></script>
+<script src="{% static 'js/detail.js' %}"></script>
 {% endblock %}

@@ -4,6 +4,6 @@ function updateFavorites(productId) {
 		return;
 	}
 	$.get(`/api/wishlist/toggle/${productId}/`, () => {
-		$(`.product#${productId} .fa-heart`).toggleClass('fa-regular fa-solid');
+		$(`#product-${productId} .fa-heart`).toggleClass('fa-regular fa-solid');
 	});
 }

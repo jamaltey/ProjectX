@@ -44,7 +44,7 @@
 {% if cart.products.exists %}
 	<div class="row gy-3">
 		{% for i in cart.products.all %}
-		<div id="{{ i.id }}" class="col-12 cart-item d-flex flex-column flex-md-row row-gap-2 pb-3 pb-md-0 px-0">
+		<div id="cart-item-{{ i.id }}" class="col-12 cart-item d-flex flex-column flex-md-row row-gap-2 pb-3 pb-md-0 px-0">
 			<a class="d-flex h-100" href="{% url 'accounts:cart-detail' i.id %}">
 				<img class="w-100 object-fit-cover" src="{{ i.image.url }}" alt="{{ i.title }}">
 			</a>

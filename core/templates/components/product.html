@@ -1,4 +1,4 @@
-<div id="{{ product.id }}" class="product col-6 col-md-4 col-xl-3">
+<div id="product-{{ product.id }}" class="product col-6 col-md-4 col-xl-3">
     <div class="card h-100">
         <a class="card-img-top d-flex justify-content-center bg-white" href="{{ product.get_absolute_url }}">
             <img class="card-img-top object-fit-cover w-auto" height="200" src="{{ product.image.url }}" alt="{{ product.title }} image">

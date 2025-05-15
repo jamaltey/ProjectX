@@ -13,7 +13,7 @@ const swiper = new Swiper('#swiper', {
         type: 'bullets',
         dynamicBullets: true,
         clickable: true,
-        renderBullet: function (index, className) {
+        renderBullet(index, className) {
             const src = $(`#swiper .swiper-slide img`).eq(index).attr('src');
             return `<button class="${className}" style="background-image: url('${src}')"></button>`;
         },
@@ -130,7 +130,7 @@ const $infoBtn = $('#info-button');
 const $commentPart = $('#comment-part');
 const $infoPart = $('#info-part');
 
-if (location.href.endsWith('#comment-part')) showCommentsPart();
+if (location.hash == '#comment-part') showCommentsPart();
 else showInfoPart();
 
 function showCommentsPart() {
@@ -175,7 +175,7 @@ function renderComment({ id, rating_value: ratingValue = 0, author, created_at: 
     createdAt = new Date(createdAt).toLocaleString('en-us', { month: 'short', day: 'numeric', year: 'numeric' });
 
     const $comment = $(`
-		<div class="comment row gy-3" id="${id}">
+		<div class="comment row gy-3" id="comment-${id}">
 			<div class="col-md-3 text-center">
 				<h2>${ratingValue || 'No rating'}</h2>
 				<div class="stars fs-5">${generateStars(ratingValue)}</div>
@@ -226,7 +226,7 @@ function deleteComment(id) {
         url: `/api/comment/${id}/`,
         type: 'DELETE',
         success() {
-            $(`.comment#${id}`).remove();
+            $(`#comment-${id}`).remove();
             const commentsLength = $('.comment').length;
             if (!commentsLength) {
                 $('#comments .no-items').show();
