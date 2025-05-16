@@ -15,5 +15,5 @@ class CommentViewSet(CreateModelMixin, DestroyModelMixin, GenericViewSet):
 
     def perform_destroy(self, instance):
         if instance.author != self.request.user:
-            raise PermissionDenied("You do not have permission to delete this comment.")
+            raise PermissionDenied('You do not have permission to delete this comment.')
         instance.delete()
