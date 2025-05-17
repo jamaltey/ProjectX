@@ -17,13 +17,13 @@ class Product(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/')
-    brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='products', null=True, blank=True)
+    brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='products')
     category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='products', null=True, blank=True)
     specifications = models.ForeignKey('Specifications', on_delete=models.CASCADE, related_name='products', null=True, blank=True)
     colors = models.ManyToManyField('Color', related_name='products', blank=True)
     storages = models.ManyToManyField('Storage', related_name='products', blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
-    old_price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)], blank=True, null=True)
+    old_price = models.DecimalField(max_digits=10, decimal_places=0, validators=[MinValueValidator(0)], null=True, blank=True)
     sold_units = models.PositiveIntegerField(default=0, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
@@ -113,9 +113,7 @@ class ProductImage(models.Model):
     color = models.ForeignKey('Color', on_delete=models.CASCADE, related_name='images', null=True, blank=True)
 
     def clean(self):
-        max_images_count = 5
-        if self.product.colors.exists():
-            max_images_count = self.product.colors.count() + 1
+        max_images_count = self.product.colors.count() + 1 if self.product.colors.exists() else 5
         if not self.pk and self.product.images.count() >= max_images_count:
             raise ValidationError(f"This product can't have more than {max_images_count} images")
 
@@ -198,7 +196,8 @@ class Comment(models.Model):
         return Rating(self.rating_value)
 
     def __str__(self):
-        return f'{self.author.full_name}: {self.text}'
+        truncated = self.text[:50] + ('...' if len(self.text) > 50 else '')
+        return f'{self.author.full_name}: {truncated}'
 
     class Meta:
         ordering = ['-rating_value']
@@ -212,11 +211,11 @@ class ProductVersion(models.Model):
 
     @property
     def image(self):
+        # Return image matching version color if available, else fallback to product image
         if self.color:
-            try:
-                return self.product.images.get(color__name=self.color.name).image
-            except ProductImage.DoesNotExist:
-                pass
+            image_obj = self.product.images.filter(color=self.color).first()
+            if image_obj:
+                return image_obj.image
         return self.product.image
 
     @property

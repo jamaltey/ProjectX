@@ -48,7 +48,7 @@ class CartViewSet(viewsets.ViewSet):
 class WishlistViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['post', 'get'], url_path='toggle/(?P<pk>\d+)', url_name='toggle')
+    @action(detail=False, methods=['post', 'get'], url_path=r'toggle/(?P<pk>\d+)', url_name='toggle')
     def toggle_wishlist(self, request, pk=None):
         user = request.user
         product = get_object_or_404(Product, id=pk)

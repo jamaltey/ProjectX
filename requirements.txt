@@ -2,6 +2,7 @@ asgiref
 daphne
 django
 django-colorfield
+django-debug-toolbar
 djangorestframework
 pillow
 python-dotenv
