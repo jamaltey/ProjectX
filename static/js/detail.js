@@ -185,16 +185,17 @@ function renderComment({ id, rating_value: ratingValue = 0, author, created_at: 
 					<h5>${author}</h5>
 					<h6>${createdAt}</h6>
 				</div>
-				<p>${text}</p>
-				<button class="btn btn-dark" onclick="deleteComment(${id})">
+				<p></p>
+				<button class="btn btn-dark">
 					Delete comment
 				</button>
 			</div>
 			<hr class="w-100 my-4" />
 		</div>
 	`);
-
-    $('#comments').prepend($comment);
+    $comment.find('p').text(text);
+    $comment.find('.btn').on('click', () => deleteComment(id));
+    $comment.prependTo('#comments');
 }
 
 function sendComment(rating = 0, text) {

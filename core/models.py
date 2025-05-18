@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.text import slugify
 
 from accounts.models import User
@@ -45,10 +46,10 @@ class Product(models.Model):
 
     @property
     def reviews(self):
-        reviews: models.QuerySet[Comment] = self.comments.filter(rating_value__gt=0)
-        return reviews
+        self.comments: models.QuerySet[Comment]
+        return self.comments.filter(rating_value__gt=0)
 
-    @property
+    @cached_property
     def rating(self):
         return Rating(self.calculate_rating())
 
@@ -57,8 +58,7 @@ class Product(models.Model):
         return math.ceil(avg_rating) if avg_rating else 0
 
     def __str__(self):
-        # Some product titles start with brand name, we don't want to duplicate this name in the title
-        return self.title if self.title.startswith(str(self.brand)) else f'{self.brand} {self.title}'
+        return self.title
 
     def get_absolute_url(self):
         return reverse('core:detail', kwargs={'slug': self.slug})

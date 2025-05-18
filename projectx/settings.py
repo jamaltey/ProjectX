@@ -138,7 +138,8 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 
+INTERNAL_IPS = ['127.0.0.1']
+
 if DEBUG:
     INSTALLED_APPS += ['debug_toolbar']
     MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
-    DEBUG_TOOLBAR_CONFIG = {'ROOT_TAG_EXTRA_ATTRS': 'data-turbo-permanent hx-preserve'}

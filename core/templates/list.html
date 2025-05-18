@@ -128,7 +128,7 @@
 
             <div class="row gy-5 py-5" id="products-list">
 			{% with favorites=user.favorites.all %}
-				{% for product in page_obj %}
+				{% for product in page %}
 					{% include 'components/product.html' %}
 				{% endfor %}
 			{% endwith %}

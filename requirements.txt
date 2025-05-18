@@ -1,9 +1,6 @@
-asgiref
-daphne
-django
-django-colorfield
-django-debug-toolbar
-djangorestframework
-pillow
-python-dotenv
-sqlparse
+Django==5.2.1
+django-colorfield==0.14.0
+django-debug-toolbar==5.2.0
+djangorestframework==3.16.0
+pillow==11.2.1
+python-dotenv==1.1.0

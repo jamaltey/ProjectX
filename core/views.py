@@ -27,19 +27,27 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'detail.html'
 
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .select_related('brand', 'specifications')
+            .prefetch_related('colors')
+        )
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         context.update({
-            'images': self.object.images.order_by('color__name'),
+            'images': self.object.images.select_related('color').order_by('color__name'),
             'colors': self.object.colors.all(),
             'storages': self.object.storages.all(),
-            'comments': self.object.comments.all(),
+            'comments': self.object.comments.select_related('author'),
         })
 
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         user = request.user
         if not user.is_authenticated:
             return redirect(f'/accounts/login/?next={request.path}')
