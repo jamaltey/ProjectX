@@ -10,11 +10,11 @@ class Rating:
         return (
             '<i class="fa-sharp fa-solid fa-star"></i>\n' * self.rating
             +
-            '<i class="fa-regular fa-star"></i>\n' * (5 - self.rating)
+            '<i class="fa-sharp fa-regular fa-star"></i>\n' * (5 - self.rating)
         )
 
     def __repr__(self):
-        return f'<Rating object "{str(self)}">'
+        return f'<Rating object "{self}">'
 
     def __str__(self):
         return str(self.rating) if self.rating else 'No rating'

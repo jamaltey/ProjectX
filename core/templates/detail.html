@@ -155,9 +155,9 @@
                 <h4 class="text-center mb-4">Write a review</h4>
 
                 <div class="d-flex align-items-center pb-4">
-                    <h6>Rating</h6>
+                    <h6 onclick="setRating(0)">Rating</h6>
 
-                    <select class="d-none" name="comment-rating" id="comment-rating">
+                    <select class="d-none" name="rating_value" id="comment-rating-select">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -168,7 +168,7 @@
 
                     <div class="stars fs-5 ps-3">
                         {% for i in '12345' %}
-                            <i class="fa-regular fa-star" onclick="setRating('{{ forloop.counter }}')"></i>
+                            <i class="fa-sharp fa-regular fa-star" onclick="setRating('{{ i }}')"></i>
                         {% endfor %}
                     </div>
                 </div>
@@ -232,5 +232,5 @@
     const initialPrice = +'{{ product.price }}';
     const initialOldPrice = +'{{ product.old_price }}';
 </script>
-<script src="{% static 'js/detail.js' %}?"></script>
+<script src="{% static 'js/detail.js' %}??"></script>
 {% endblock %}

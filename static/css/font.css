@@ -3,13 +3,27 @@
     src: url('../fonts/Euclid\ Circular/EuclidCircularA-Bold.ttf');
     font-weight: 700;
 }
+
 @font-face {
     font-family: 'Euclid Circular';
     src: url('../fonts/Euclid\ Circular/EuclidCircularA-SemiBold.ttf');
     font-weight: 600;
 }
+
 @font-face {
     font-family: 'Euclid Circular';
     src: url('../fonts/Euclid\ Circular/EuclidCircularA-Medium.ttf');
     font-weight: 500;
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Sharp";
+    src: url('https://site-assets.fontawesome.com/releases/v6.7.2/webfonts/fa-sharp-regular-400.woff2') format('woff2');
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Sharp";
+    src: url('https://site-assets.fontawesome.com/releases/v6.7.2/webfonts/fa-sharp-solid-900.woff2') format('woff2');
+    font-weight: 900;
 }

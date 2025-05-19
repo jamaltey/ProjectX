@@ -152,33 +152,46 @@ function showInfoPart() {
 $commentBtn.on('click', showCommentsPart);
 $infoBtn.on('click', showInfoPart);
 
-function setRating(rating) {
-    $('select#comment-rating').val(rating);
-    const stars = $('#comment-form .stars i.fa-star');
-    stars.each((i, star) => {
-        $(star).toggleClass('fa-sharp fa-solid', i < rating);
+const $commentRatingSelect = $('#comment-rating-select');
+const $commentText = $('#comment-text');
+const $commentRatingStars = $('#comment-form .fa-star');
+
+function setRating(ratingValue) {
+    ratingValue = parseInt(ratingValue);
+    const $star = $commentRatingStars.eq(ratingValue - 1);
+    const currentValue = $commentRatingSelect.val();
+    if (ratingValue == currentValue && $star.hasClass('fa-solid')) {
+        $commentRatingSelect.val(ratingValue - 1);
+        $star.removeClass('fa-solid');
+        return 0;
+    }
+    $commentRatingSelect.val(ratingValue);
+    $commentRatingStars.each((i, star) => {
+        $(star).toggleClass('fa-solid', i < ratingValue);
     });
+    return ratingValue;
 }
 
 $('#comment-form').on('submit', e => {
     e.preventDefault();
-    const text = $('#comment-text').val();
-    const rating = $('#comment-rating').val();
-    sendComment(rating, text);
+    const ratingValue = $commentRatingSelect.val();
+    const text = $commentText.val();
+    sendComment(ratingValue, text);
 });
 
-function generateStars(ratingValue) {
-    return '<i class="fa-sharp fa-solid fa-star"></i>\n'.repeat(ratingValue) + '<i class="fa-regular fa-star"></i>\n'.repeat(5 - ratingValue);
+function renderStars(ratingValue) {
+    return (
+        '<i class="fa-sharp fa-solid fa-star"></i>\n'.repeat(ratingValue) + '<i class="fa-sharp fa-regular fa-star"></i>\n'.repeat(5 - ratingValue)
+    );
 }
 
 function renderComment({ id, rating_value: ratingValue = 0, author, created_at: createdAt, text }) {
     createdAt = new Date(createdAt).toLocaleString('en-us', { month: 'short', day: 'numeric', year: 'numeric' });
-
     const $comment = $(`
 		<div class="comment row gy-3" id="comment-${id}">
 			<div class="col-md-3 text-center">
 				<h2>${ratingValue || 'No rating'}</h2>
-				<div class="stars fs-5">${generateStars(ratingValue)}</div>
+				<div class="stars fs-5">${renderStars(ratingValue)}</div>
 			</div>
 			<div class="col-md-9">
 				<div class="comment-info d-flex justify-content-between">
@@ -198,11 +211,11 @@ function renderComment({ id, rating_value: ratingValue = 0, author, created_at: 
     $comment.prependTo('#comments');
 }
 
-function sendComment(rating = 0, text) {
+function sendComment(ratingValue = 0, text) {
     $.post(
         '/api/comment/',
         {
-            rating_value: rating,
+            rating_value: ratingValue,
             text: text,
             product: productId,
         },
