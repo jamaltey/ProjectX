@@ -100,7 +100,7 @@ class ProductListView(ListView):
         if search and not search.isspace():
             search = search.strip()
             products = products.filter(
-                Q(title__icontains=search) | Q(brand__title__icontains=search)
+                Q(name__icontains=search) | Q(brand__name__icontains=search)
             )
 
         category = self.kwargs.get('category')
@@ -109,11 +109,11 @@ class ProductListView(ListView):
             if category == 'sales':
                 products = products.filter(old_price__isnull=False)
             else:
-                products = products.filter(category__title__iexact=category)
+                products = products.filter(category__name__iexact=category)
 
         for key, value in self.request.GET.lists():
             if key in self.filters and value:
-                products = products.filter(**{f'{key}__title__in': value})
+                products = products.filter(**{f'{key}__name__in': value})
 
         sort = self.request.GET.get('sort')
         if sort == 'price-asc':

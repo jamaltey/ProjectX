@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ product.title }} - {% endblock title %}
+{% block title %}{{ product.name }} - {% endblock title %}
 
 {% block css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" integrity="sha512-rd0qOHVMOcez6pLWPVFIv7EfSdGKLt+eafXh4RO/12Fgr41hDQxfGvoi1Vy55QIVcQEujUE1LQrATCLl2Fs+ag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -38,7 +38,7 @@
 
                 <input type="hidden" name="product_id" value="{{ product.id }}" />
 
-                <h2 class="product-title">{{ product.title }}</h2>
+                <h2>{{ product.name }}</h2>
 
                 <div class="product-rating">
                 {% if product.rating.rating %}

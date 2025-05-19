@@ -15,7 +15,7 @@ from .utils import Rating
 
 
 class Product(models.Model):
-    title = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='images/')
     brand = models.ForeignKey('Brand', on_delete=models.CASCADE, related_name='products')
@@ -58,7 +58,7 @@ class Product(models.Model):
         return math.ceil(avg_rating) if avg_rating else 0
 
     def __str__(self):
-        return self.title
+        return self.name
 
     def get_absolute_url(self):
         return reverse('core:detail', kwargs={'slug': self.slug})
@@ -161,16 +161,16 @@ class Storage(models.Model):
         ordering = ['storage']
 
 class Brand(models.Model):
-    title = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.title
+        return self.name
 
 class Category(models.Model):
-    title = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -202,8 +202,8 @@ class Comment(models.Model):
     class Meta:
         ordering = ['-rating_value']
 
-class ProductVersion(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='versions')
+class ProductVariant(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='variants')
     quantity = models.PositiveSmallIntegerField(default=1)
     color = models.ForeignKey(Color, on_delete=models.CASCADE, null=True, blank=True)
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE, null=True, blank=True)

@@ -5,10 +5,10 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
-from accounts.models import Address, Cart, Order, User
-from core.models import Product, ProductVersion
+from core.models import Product, ProductVariant
 
 from .forms import AddressForm, EditProfileForm, LoginForm, SignUpForm
+from .models import Address, Cart, Order, User
 
 
 class CustomLoginView(LoginView):
@@ -56,7 +56,7 @@ class CartView(LoginRequiredMixin, DetailView):
         return self.request.user.cart
 
 class CartDetailView(LoginRequiredMixin, DetailView):
-    model = ProductVersion
+    model = ProductVariant
     template_name = 'cart-detail.html'
     context_object_name = 'product'
 

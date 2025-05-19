@@ -73,8 +73,8 @@
 				{% for i in brands %}
 					<li>
 						<label>
-							<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.title }}" {% if i.title in brand_list %}checked{% endif %}>
-							{{ i.title }}
+							<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.name }}" {% if i.name in brand_list %}checked{% endif %}>
+							{{ i.name }}
 						</label>
 					</li>
 				{% endfor %}

@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# C Extensions
+*.so
+
+# Environment
+.env
+.env.*
+.venv/
+venv/
+ENV/
+env.bak/
+env/
+
+# Django specific
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+local_settings.py
+
+# Migrations
+**/migrations/__pycache__/
+**/migrations/*.pyc
+# **/migrations/*.py
+
+# VSCode
+.vscode/
+jsconfig.json
+
+# PyCharm
+.idea/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# MyPy & Pyright
+.mypy_cache/
+.pyright/
+dmypy.json
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Test output
+.tox/
+.nox/
+pytest_cache/
+.pytest_cache/
+
+# Build system
+build/
+dist/
+*.egg-info/
+.eggs/
+MANIFEST
+
+# Docker
+*.pid
+*.pid.lock
+docker-compose.override.yml
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

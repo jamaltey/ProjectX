@@ -20,7 +20,7 @@ class User(AbstractUser):
 
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart')
-    products = models.ManyToManyField('core.ProductVersion', related_name='carts', blank=True)
+    products = models.ManyToManyField('core.ProductVariant', related_name='carts', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -78,7 +78,7 @@ class Order(models.Model):
     SHIPPING_PRICE = Decimal('9.99')
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
-    products = models.ManyToManyField('core.ProductVersion', related_name='orders')
+    products = models.ManyToManyField('core.ProductVariant', related_name='orders')
     address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name='order')
     payment_method = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default='Cash')
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='Pending')

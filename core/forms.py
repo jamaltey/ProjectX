@@ -1,12 +1,12 @@
 from django import forms
 
-from .models import ProductVersion
+from .models import ProductVariant
 
 
 class AddToCartForm(forms.Form):
     quantity = forms.IntegerField(min_value=1)
-    color = forms.ModelChoiceField(queryset=ProductVersion.objects.none(), required=False)
-    storage = forms.ModelChoiceField(queryset=ProductVersion.objects.none(), required=False)
+    color = forms.ModelChoiceField(queryset=ProductVariant.objects.none(), required=False)
+    storage = forms.ModelChoiceField(queryset=ProductVariant.objects.none(), required=False)
 
     def __init__(self, *args, **kwargs):
         product = kwargs.pop('product')
