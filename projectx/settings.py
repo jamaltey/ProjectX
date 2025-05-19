@@ -1,43 +1,50 @@
+from os import getenv
 from pathlib import Path
 
 from django.core.management.commands.runserver import Command as runserver
 from django.urls import reverse_lazy
-
-runserver.default_addr = '0.0.0.0'
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-from os import getenv
-
 from dotenv import load_dotenv
+
+# Load environment variables
 
 load_dotenv()
 SECRET_KEY = getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# Runserver configuration
+runserver.default_addr = '0.0.0.0'
+
+# Base settings
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# Application definition
-
-INSTALLED_APPS = [
+# Installed applications
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'core',
-    'accounts',
-    'colorfield'
 ]
 
+THIRD_PARTY_APPS = [
+    'rest_framework',
+    'colorfield',
+]
+
+LOCAL_APPS = [
+    'core',
+    'accounts',
+]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+
+# Middleware
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -48,8 +55,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# URL configuration
 ROOT_URLCONF = 'projectx.urls'
 
+# Templates configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -66,11 +75,11 @@ TEMPLATES = [
     },
 ]
 
+# WSGI application
 WSGI_APPLICATION = 'projectx.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -81,7 +90,6 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -100,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -111,8 +118,7 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
+# Static files
 
 STATIC_URL = 'static/'
 
@@ -122,13 +128,17 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+# Media files
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL  = "/media/"
+
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Authentication settings
 LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = reverse_lazy('core:home')
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -138,6 +148,7 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 
+# Debug toolbar
 INTERNAL_IPS = ['127.0.0.1']
 
 if DEBUG:
