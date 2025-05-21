@@ -4,8 +4,9 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.db.models import Count, QuerySet, Prefetch
 
-from core.models import Product, ProductVariant
+from core.models import Product, ProductVariant, ProductImage
 
 from .forms import AddressForm, EditProfileForm, LoginForm, SignUpForm
 from .models import Address, Cart, Order, User
@@ -14,7 +15,7 @@ from .models import Address, Cart, Order, User
 class CustomLoginView(LoginView):
     form_class = LoginForm
     template_name = 'login.html'
-    success_url = reverse_lazy('core:home') 
+    success_url = reverse_lazy('core:home')
     redirect_authenticated_user = True
 
 class SignUpView(CreateView):
@@ -29,8 +30,8 @@ class SignUpView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        login(self.request, self.object) # Login the user
-        Cart.objects.get_or_create(user=self.object) # Create a cart for the user
+        login(self.request, self.object)  # Login the user
+        Cart.objects.get_or_create(user=self.object)  # Create a cart for the user
         return redirect(self.success_url)
 
 class OrdersView(LoginRequiredMixin, ListView):
@@ -39,14 +40,39 @@ class OrdersView(LoginRequiredMixin, ListView):
     context_object_name = 'orders'
 
     def get_queryset(self):
-        return self.request.user.orders.all()
+        queryset: QuerySet[Order] = self.request.user.orders.all()
+        queryset = queryset.select_related(
+            'user',
+            'address',
+        ).prefetch_related(
+            Prefetch(
+                'products',
+                queryset=ProductVariant.objects.select_related(
+                    'color',
+                    'storage',
+                    'product'
+                ).prefetch_related(
+                    Prefetch(
+                        'product__images',
+                        queryset=ProductImage.objects.select_related('color')
+                    )
+                )
+            )
+        ).annotate(products_count=Count('products'))
+        # print(queryset.first().products.first())
+        return queryset
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'order-detail.html'
 
     def get_queryset(self):
-        return self.request.user.orders.all()
+        return self.request.user.orders.select_related(
+            'user'
+            'address',
+        ).prefetch_related(
+            'products',
+        ).all()
 
 class CartView(LoginRequiredMixin, DetailView):
     model = Cart
@@ -58,10 +84,16 @@ class CartView(LoginRequiredMixin, DetailView):
 class CartDetailView(LoginRequiredMixin, DetailView):
     model = ProductVariant
     template_name = 'cart-detail.html'
-    context_object_name = 'product'
 
     def get_queryset(self):
-        return self.request.user.cart.products.all()
+        cart: Cart = self.request.user.cart
+        return cart.products.select_related(
+            'color',
+            'storage',
+            'product',
+            'product__brand',
+            'product__specifications',
+        ).all()
 
 class WishlistView(LoginRequiredMixin, ListView):
     model = Product
@@ -112,10 +144,12 @@ class CheckoutView(AddressView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         cart: Cart = self.request.user.cart
-        context.update({
-            'shipping_price': Order.SHIPPING_PRICE,
-            'total_price': cart.total_price + Order.SHIPPING_PRICE,
-        })
+        context.update(
+            {
+                'shipping_price': Order.SHIPPING_PRICE,
+                'total_price': cart.total_price + Order.SHIPPING_PRICE,
+            }
+        )
         return context
 
 class EditProfile(LoginRequiredMixin, UpdateView):

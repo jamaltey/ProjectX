@@ -209,23 +209,25 @@ class ProductVariant(models.Model):
     storage = models.ForeignKey(Storage, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    @property
+    @cached_property
     def image(self):
-        # Return image matching version color if available, else fallback to product image
         if self.color:
-            image_obj = self.product.images.filter(color=self.color).first()
-            if image_obj:
-                return image_obj.image
+            product_image = next(
+                (img for img in self.product.images.all() if img.color_id == self.color_id),
+                None
+            )
+            if product_image:
+                return product_image.image
         return self.product.image
 
-    @property
+    @cached_property
     def old_price(self):
         old_price = self.product.old_price or 0
         if self.storage:
             old_price += self.storage.add_price
         return old_price * self.quantity
 
-    @property
+    @cached_property
     def final_price(self):
         final_price = self.product.price
         if self.storage:

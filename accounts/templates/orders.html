@@ -17,7 +17,6 @@
         .img-wrap .g-0:not(:has(img:nth-of-type(3))) img { height: 50%; }
         .img-wrap .g-0:has(.col-sm-12:nth-of-type(3), .col-6:nth-of-type(5)) img { height: 33.33%; }
     }
-    /* #empty-orders { color: #BDBDBD; } */
 
     @media (min-width: 576px) {
         .order {
@@ -48,23 +47,11 @@
                 <div class="row g-0 h-100">
 
                     <div class="img-wrap col-sm-5 d-flex">
-                    {% if order.products.count == 1 %}
-                        <div class="d-flex w-100">
-                            <img class="object-fit-cover" src="{{ order.products.first.image.url }}" alt="{{ order }}">
-                        </div>
-                    {% elif order.products.count == 2 or order.products.count == 3 %}
-                        <div class="row g-0">
+                        <div class="{% if order.products_count == 1 %}d-flex w-100{% else %}row g-0{% endif %}">
                             {% for product in order.products.all %}
-                                <img class="col-sm-12 object-fit-cover" src="{{ product.image.url }}" alt="{{ order }}">
+                                <img class="object-fit-cover {% if order.products_count > 3 %}col-6{% elif order.products_count > 1 %}col-sm-12{% endif %}" src="{{ product.image.url }}" alt="{{ order }}">
                             {% endfor %}
                         </div>
-                    {% else %}
-                        <div class="row g-0">
-                        {% for product in order.products.all %}
-                            <img class="col-6 object-fit-cover" src="{{ product.image.url }}" alt="{{ order }}">
-                        {% endfor %}
-                        </div>
-                    {% endif %}
                     </div>
 
                     <div class="card-body info col-sm-7">
@@ -81,18 +68,17 @@
                             <span class="price">{{ order.total_price }}</span>
                         </div>
         
-                        <a href="{ order.get_absolute_url }" class="btn btn-dark border">
+                        <a href="{{ order.get_absolute_url }}" class="btn btn-dark border">
                             Order Details
                         </a>
                     </div>
 
                 </div>
-                <!-- <img src="{{order.products.first.image.url}}" alt="{{ order }}"> -->
             </div>
         </div>
         {% empty %}
         <div class="col-12 no-items bg-body-tertiary rounded" id="empty-orders">
-            <img src="{% static 'img/shopping-cart.svg' %}" alt="" />
+            <img src="{% static 'images/shopping-cart.svg' %}" alt="Shopping cart icon representing no orders available, set against a simple background, conveying a neutral and informative tone" />
             <h6 class="my-4">You have no orders</h6>
         </div>
         {% endfor %}

@@ -13,8 +13,8 @@ class CartViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['delete'], url_path='remove', url_name='remove')
     def remove_from_cart(self, request, pk=None):
         cart = request.user.cart
-        product_version = get_object_or_404(cart.products, id=pk)
-        product_version.delete()
+        product_variant = get_object_or_404(cart.products, id=pk)
+        product_variant.delete()
         data = {
             'is_empty': not cart.products.exists(),
             'items_count': cart.products.count(),
@@ -32,13 +32,13 @@ class CartViewSet(viewsets.ViewSet):
     @action(detail=True, methods=['post'], url_path='change-quantity', url_name='change-quantity')
     def change_quantity(self, request, pk=None):
         cart = request.user.cart
-        product_version = get_object_or_404(cart.products, id=pk)
+        product_variant = get_object_or_404(cart.products, id=pk)
         quantity = int(request.data.get('quantity'))
         if quantity > 0:
-            product_version.quantity = quantity
-            product_version.save()
+            product_variant.quantity = quantity
+            product_variant.save()
             data = {
-                'price': product_version.final_price,
+                'price': product_variant.final_price,
                 'discount': cart.discount,
                 'total_price': cart.total_price
             }

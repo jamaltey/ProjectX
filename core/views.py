@@ -74,14 +74,14 @@ class ProductDetailView(DetailView):
                 storage = product.storages.get(storage=storage_val)
 
         cart = Cart.objects.get_or_create(user=user)[0]
-        product_version, created = cart.products.get_or_create(product=product, color=color, storage=storage)
+        product_variant, created = cart.products.get_or_create(product=product, color=color, storage=storage)
 
         if not created:
-            product_version.quantity += quantity
+            product_variant.quantity += quantity
         else:
-            product_version.quantity = quantity
+            product_variant.quantity = quantity
 
-        product_version.save()
+        product_variant.save()
         cart.save()
 
         return redirect('accounts:cart')

@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.contrib.auth.models import AbstractUser
+from django.utils.functional import cached_property
 from django.db import models
 from django.urls import reverse
 
@@ -88,7 +89,7 @@ class Order(models.Model):
     def shipping_price(self):
         return self.SHIPPING_PRICE
 
-    @property
+    @cached_property
     def price(self):
         return sum(i.final_price for i in self.products.all())
 
@@ -97,7 +98,7 @@ class Order(models.Model):
         return self.price + self.shipping_price
 
     def get_absolute_url(self):
-        return reverse('order_detail', kwargs={'pk': self.pk})
+        return reverse('accounts:order-detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return f"{self.user.full_name}'s order {self.id} ({self.status}) ${self.total_price}"

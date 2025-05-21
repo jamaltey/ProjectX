@@ -84,7 +84,7 @@
 
 				<a class="d-none d-lg-block text-decoration-underline ps-2" href="{% url 'accounts:cart-detail' i.id %}">View details»</a>
 				<button class="btn" onclick="removeItem('{{ i.id }}')">
-					<img height="32" src="{% static 'img/remove.svg' %}?" alt="">
+					<img height="32" src="{% static 'images/remove.svg' %}?" alt="">
 					<!-- <i class="fa-solid fa-trash-can"></i> -->
 				</button>
 			</div>
@@ -109,13 +109,13 @@
 	</div>
 
 	<div style="display: none;" id="cart-empty" class="no-items">
-		<img src="{% static 'img/no-items.svg' %}" alt="">
+		<img src="{% static 'images/no-items.svg' %}" alt="">
 		<h5 class="mt-4">Your cart is empty</h5>
 	</div>
 
 {% else %}
 	<div id="cart-empty" class="no-items">
-		<img src="{% static 'img/no-items.svg' %}" alt="">
+		<img src="{% static 'images/no-items.svg' %}" alt="">
 		<h5 class="mt-4">Your cart is empty</h5>
 	</div>
 {% endif %}

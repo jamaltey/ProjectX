@@ -15,7 +15,7 @@
             {% include 'components/product.html' %}
         {% endfor %}
         <div id="empty-wishlist" class="col-12 no-items bg-body-tertiary" {% if favorites %}style="display: none;"{% endif %}>
-            <img src="{% static 'img/heart-empty.svg' %}" alt="">
+            <img src="{% static 'images/heart-empty.svg' %}" alt="">
             <h6 class="my-4">Your wishlist is empty</h6>
         </div>
     </div>
@@ -27,7 +27,6 @@
 <script>
     $('.product .heart').on('click', function(){
         const $product = $(this).closest('.product');
-        updateFavorites($product.prop('id'));
         $product.fadeOut(150, () => {
             $product.remove();
             if (!$('.product').length) {

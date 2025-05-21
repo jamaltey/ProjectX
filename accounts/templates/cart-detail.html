@@ -19,7 +19,7 @@
             <h2>{{ object.product.name }}</h2>
 
             <div class="d-flex align-items-baseline">
-                {% if product.old_price %}
+                {% if object.old_price %}
                     <span class="old-price text-decoration-line-through me-2" id="old-price" >{{ object.old_price }}</span>
                 {% endif %}
                 <span class="price" id="price">{{ object.final_price }}</span>
