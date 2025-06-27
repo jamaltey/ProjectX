@@ -1,110 +1,110 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg navbar-light">
-	<div class="container-fluid pt-3 py-lg-4 px-5">
-		<a class="navbar-brand fs-1" href="{% url 'core:home' %}">
-			Project <span class="text-primary">X</span>
-		</a>
+    <div class="container-fluid pt-3 py-lg-4 px-5">
+        <a class="navbar-brand fs-1" href="{% url 'core:home' %}">
+            Project <span class="text-primary">X</span>
+        </a>
 
-		<button class="navbar-toggler py-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarToggler" aria-expanded="true" aria-label="Toggle navigation">
-			<i class="fa-solid fa-bars fs-4"></i>
-		</button>
+        <button class="navbar-toggler py-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbarToggler" aria-expanded="true" aria-label="Toggle navigation">
+            <i class="fas fa-bars fs-4"></i>
+        </button>
 
-		<div class="navbar-collapse justify-content-between px-sm-5 px-lg-3 show" id="navbar">
+        <div class="navbar-collapse justify-content-between px-sm-5 px-lg-3 show" id="navbar">
 
-			<ul class="nav-icons d-flex justify-content-center gap-1">
-				{% if user.is_authenticated %}
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:profile-info' %}" id="profile-link">
-						<i class="fa-regular fa-user"></i>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:wishlist' %}">
-						<i class="fa-regular fa-heart"></i>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:cart' %}">
-						<i class="fa-regular fa-cart-shopping"></i>
-						{% if user.cart.products.exists %}
-						<span class="cart-items-count badge bg-primary rounded-circle p-1">{{ user.cart.count }}</span>
-						{% endif %}
-					</a>
-				</li>
-				{% else %}
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'accounts:login' %}">
-						<i class="fa-regular fa-user"></i>
-						Log in
-					</a>
-				</li>
-				{% endif %}
-				<li class="nav-item dropdown" id="theme-dropdown">
-					<button class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						<i class="fas fa-circle-half-stroke me-1"></i>
-						Auto
-					</button>
-					<ul class="dropdown-menu dropdown-menu-end p-0">
-						<li>
-							<button class="dropdown-item" data-theme-value="light">
-								<i class="fas fa-sun me-1"></i>
-								Light
-							</button>
-						</li>
-						<li>
-							<button class="dropdown-item" data-theme-value="dark">
-								<i class="fas fa-moon me-1"></i>
-								Dark
-							</button>
-						</li>
-						<li>
-							<button class="dropdown-item" data-theme-value="auto">
-								<i class="fas fa-circle-half-stroke me-1"></i>
-								Auto
-							</button>
-						</li>
-					</ul>
-				</li>
-			</ul>
+            <ul class="nav-icons d-flex justify-content-center gap-1">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:profile-info' %}" id="profile-link">
+                            <i class="far fa-user"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:wishlist' %}">
+                            <i class="far fa-heart"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:cart' %}">
+                            <i class="far fa-cart-shopping"></i>
+                            {% if user.cart.products.exists %}
+                                <span class="cart-items-count badge bg-primary rounded-circle p-1">{{ user.cart.count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">
+                            <i class="far fa-user"></i>
+                            Log in
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item dropdown" id="theme-dropdown">
+                    <button class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-circle-half-stroke me-1"></i>
+                        Auto
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end p-0">
+                        <li>
+                            <button class="dropdown-item" data-theme-value="light">
+                                <i class="fas fa-sun me-1"></i>
+                                Light
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" data-theme-value="dark">
+                                <i class="fas fa-moon me-1"></i>
+                                Dark
+                            </button>
+                        </li>
+                        <li>
+                            <button class="dropdown-item" data-theme-value="auto">
+                                <i class="fas fa-circle-half-stroke me-1"></i>
+                                Auto
+                            </button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
 
-			<form id="search-form" class="order-lg-first d-flex justify-content-center mt-3 mb-2 my-lg-0 mx-auto" method="get" action="{% url 'core:list' %}{{ category }}">
-				<div class="input-group">
-					<input class="form-control search rounded-start-4 border-end-0" id="search" value="{% if search %}{{ search }}{% endif %}" type="search" name="search" placeholder="Search..." aria-label="Search">
-					<button class="input-group-text bg-body-secondary rounded-end-4 border-start-0" type="submit">
-						<i class="fas fa-search"></i>
-					</button>
-				</div>
-			</form>
+            <form id="search-form" class="order-lg-first d-flex justify-content-center mt-3 mb-2 my-lg-0 mx-auto" method="get" action="{% url 'core:list' %}{{ category }}">
+                <div class="input-group">
+                    <input class="form-control search rounded-start-4 border-end-0" id="search" value="{% if search %}{{ search }}{% endif %}" type="search" name="search" placeholder="Search..." aria-label="Search">
+                    <button class="input-group-text bg-body-secondary rounded-end-4 border-start-0" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
 
-		</div>
-	</div>
+        </div>
+    </div>
 </nav>
 
 <div class="container-fluid p-0">
-	<ul class="nav nav-tabs flex-nowrap overflow-y-hidden px-sm-2 px-lg-5">
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:home' %}">New</a>
-		</li>
-		<li class="nav-item text-primary">
-			<a class="nav-link" href="{% url 'core:list' 'sales' %}">Sales</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' %}">All products</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' 'phones' %}">Phones</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' 'tablets' %}">Tablets</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' 'smartwatches' %}">Smartwatches</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' 'headphones' %}">Headphones</a>
-		</li>
-		<li class="nav-item">
-			<a class="nav-link" href="{% url 'core:list' 'accessories' %}">Accessories</a>
-		</li>
-	</ul>
+    <ul class="nav nav-tabs flex-nowrap overflow-y-hidden px-sm-2 px-lg-5">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:home' %}">New</a>
+        </li>
+        <li class="nav-item text-primary">
+            <a class="nav-link" href="{% url 'core:list' 'sales' %}">Sales</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:list' %}">All products</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:list' 'phones' %}">Phones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:list' 'tablets' %}">Tablets</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:list' 'smartwatches' %}">Smartwatches</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:list' 'headphones' %}">Headphones</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'core:list' 'accessories' %}">Accessories</a>
+        </li>
+    </ul>
 </div>

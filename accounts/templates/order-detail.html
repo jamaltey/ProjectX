@@ -4,127 +4,126 @@
 {% block title %}Order {{ order.id }} Details - {% endblock title %}
 
 {% block profile-css %}
-<style>
-    [data-bs-theme=light] main ul { color: #1D2123; }
-    .info { gap: 1rem 2rem; }
-    .order-item img { background: white; }
-</style>
+    <style>
+        [data-bs-theme=light] main ul { color: #1D2123; }
+        .info { gap: 1rem 2rem; }
+    </style>
 {% endblock profile-css %}
 
 {% block profile-content %}
 
-<div class="my-3">
-    <a href="{% url 'accounts:orders' %}">
-        <h5 class="pb-3 mt-2">
-            <i class="fa-solid fa-arrow-left"></i>
-            My Orders
-        </h5>
-    </a>
-</div>
-
-<div class="container-fluid bg-body-tertiary shadow px-3">
-
-    <div class="d-flex flex-column gap-3 py-3">
-        <h4 class="pe-2">Order details</h4>
-        <div class="info d-flex ps-2">
-            <div class="d-flex flex-column">
-                <span>Date: </span>
-                <span>{{ order.created_at | date:"d.m.Y" }}</span>
-            </div>
-            <div class="d-flex flex-column">
-                <span>Status: </span>
-                <span>{{ order.status }}</span>
-            </div>
-        </div>
-    </div>
-
-    <h4 class="pt-2">Products</h4>
-    <hr />
-
-    {% for product in order.products.all %}
-    <div class="order-item row pt-2">
-        <a class="col-sm-3 d-flex" href="{% url 'core:detail' product.product.id %}">
-            <img class="object-fit-cover" src="{{ product.image.url }}" alt="">
+    <div class="my-3">
+        <a href="{% url 'accounts:orders' %}">
+            <h5 class="pb-3 mt-2">
+                <i class="fas fa-arrow-left"></i>
+                My Orders
+            </h5>
         </a>
+    </div>
 
-        <div class="product-info d-flex flex-column py-2 col-sm-9">
-            <a href="{% url 'core:detail' product.product.id %}">
-                <h5>{{ product }}</h5>
-            </a>
-            <div class="info d-flex align-items-end flex-wrap mt-2">
-                {% if product.color %}
-                <div class="d-flex flex-column">
-                    <span>Color: </span>
-                    <span>{{ product.color.name }}</span>
-                </div>
-                {% endif %}
+    <div class="container-fluid bg-body-tertiary shadow px-3">
 
-                {% if product.storage %}
+        <div class="d-flex flex-column gap-3 py-3">
+            <h4 class="pe-2">Order details</h4>
+            <div class="info d-flex ps-2">
                 <div class="d-flex flex-column">
-                    <span>Storage: </span>
-                    <span>{{ product.storage.size_format }}</span>
+                    <span>Date: </span>
+                    <span>{{ order.created_at | date:"d.m.Y" }}</span>
                 </div>
-                {% endif %}
-                
-                <a href="{% url 'core:detail' product.product.id %}" class="btn btn-dark">
-                    View product
+                <div class="d-flex flex-column">
+                    <span>Status: </span>
+                    <span>{{ order.status }}</span>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="pt-2">Products</h4>
+        <hr />
+
+        {% for product in order.products.all %}
+            <div class="row pt-2">
+                <a class="col-sm-3 d-flex" href="{{ product.product.get_absolute_url }}">
+                    <img class="object-fit-cover bg-white" src="{{ product.image.url }}" alt="">
                 </a>
+
+                <div class="product-info d-flex flex-column py-2 col-sm-9">
+                    <a href="{{ product.product.get_absolute_url }}">
+                        <h5>{{ product }}</h5>
+                    </a>
+                    <div class="info d-flex align-items-end flex-wrap mt-2">
+                        {% if product.color %}
+                            <div class="d-flex flex-column">
+                                <span>Color: </span>
+                                <span>{{ product.color.name }}</span>
+                            </div>
+                        {% endif %}
+
+                        {% if product.storage %}
+                            <div class="d-flex flex-column">
+                                <span>Storage: </span>
+                                <span>{{ product.storage.size_format }}</span>
+                            </div>
+                        {% endif %}
+
+                        <a href="{{ product.product.get_absolute_url }}" class="btn btn-dark">
+                            View product
+                        </a>
+                    </div>
+                </div>
             </div>
+        {% endfor %}
+
+        <hr />
+
+        <div class="mt-3">
+
+            <div class="row row-gap-3">
+                <div class="col-sm-6">
+                    <h5 class="pb-4">Personal information</h5>
+                    <ul class="details ps-3">
+                        <li>{{ user.full_name }}</li>
+                        <li>{{ user.phone }}</li>
+                        <li>{{ user.email }}</li>
+                    </ul>
+                </div>
+                <div class="col-sm-6">
+                    <h5 class="pb-4">Shipping address</h5>
+                    <ul class="details ps-3">
+                        {% for i in order.address %}
+                            <li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
         </div>
-    </div>
-    {% endfor %}
 
-    <hr />
+        <hr />
 
-    <div class="mt-3">
+        <div class="mt-3">
 
-        <div class="row row-gap-3">
-            <div class="col-sm-6">
-                <h5 class="pb-4">Personal information</h5>
-                <ul class="details ps-3">
-                    <li>{{ user.full_name }}</li>
-                    <li>{{ user.phone }}</li>
-                    <li>{{ user.email }}</li>
+            <h5 class="pb-4">Payment details</h5>
+            <div class="d-flex justify-content-between">
+                <ul class="d-flex flex-column gap-2 ps-3">
+                    <li>Payment method</li>
+                    <li>Amount</li>
+                    <li>Shipping</li>
+                </ul>
+
+                <ul class="d-flex flex-column gap-2 ps-3">
+                    <li style="color: rgba(var(--bs-body-color-rgb), 0.71);">{{ order.payment_method }}</li>
+                    <li class="price fs-6">{{ order.price }}</li>
+                    <li class="price fs-6">{{ order.shipping_price }}</li>
                 </ul>
             </div>
-            <div class="col-sm-6">
-                <h5 class="pb-4">Shipping address</h5>
-                <ul class="details ps-3">
-					{% for i in user.address %}
-                    <li>{{ i }}</li>
-					{% endfor %}
-                </ul>
-            </div>
+
         </div>
 
-    </div>
-
-    <hr />
-
-    <div class="mt-3">
-
-        <h5 class="pb-4">Payment details</h5>
-        <div class="d-flex justify-content-between">
-            <ul class="d-flex flex-column gap-2 ps-3">
-                <li>Payment method</li>
-                <li>Amount</li>
-                <li>Shipping</li>
-            </ul>
-
-            <ul class="d-flex flex-column gap-2 ps-3">
-                <li style="color: rgba(var(--bs-body-color-rgb), 0.71);">{{ order.payment_method }}</li>
-                <li class="price fs-6">{{ order.price }}</li>
-                <li class="price fs-6">{{ order.shipping_price }}</li>
-            </ul>
+        <hr />
+        <div class="d-flex justify-content-between px-3 pt-3">
+            <h5 class="pb-4">Total</h5>
+            <span class="price">{{ order.total_price }}</span>
         </div>
-
     </div>
-
-    <hr />
-    <div class="d-flex justify-content-between px-3 pt-3">
-		<h5 class="pb-4">Total</h5>
-		<span class="price">{{ order.total_price }}</span>
-    </div>
-</div>
 
 {% endblock profile-content %}

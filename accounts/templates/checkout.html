@@ -2,100 +2,100 @@
 {% load static %}
 
 {% block css %}
-<style>
-	main .form-control {
-		min-height: 3rem;
-		max-height: 6rem;
-		resize: none;
-	}
-</style>
+    <style>
+        main .form-control {
+            min-height: 3rem;
+            max-height: 6rem;
+            resize: none;
+        }
+    </style>
 {% endblock css %}
 
 {% block content %}
 
-<main class="container-md pb-3">
-	<h4 class="mt-5 mb-4">Checkout</h4>
-	<div class="row gy-4">
-		<div class="col-lg-4 order-lg-last">
-			<div class="shadow p-4">
-				<h5>Summary</h5>
+    <main class="container-md pb-3">
+        <h4 class="mt-5 mb-4">Checkout</h4>
+        <div class="row gy-4">
+            <div class="col-lg-4 order-lg-last">
+                <div class="shadow p-4">
+                    <h5>Summary</h5>
 
-				<div class="d-flex justify-content-between py-3">
-					<span>Amount</span>
-					<span class="price fs-6">{{ user.cart.total_price }}</span>
-				</div>
+                    <div class="d-flex justify-content-between py-3">
+                        <span>Amount</span>
+                        <span class="price fs-6">{{ user.cart.total_price }}</span>
+                    </div>
 
-				<div class="d-flex justify-content-between">
-					<span>Shipping</span>
-					<span class="price fs-6">{{ shipping_price }}</span>
-				</div>
+                    <div class="d-flex justify-content-between">
+                        <span>Shipping</span>
+                        <span class="price fs-6">{{ shipping_price }}</span>
+                    </div>
 
-				<hr />
+                    <hr />
 
-				<div class="d-flex justify-content-between">
-					<span>Total price</span>
-					<span class="price">{{ total_price }}</span>
-				</div>
-			</div>
-		</div>
+                    <div class="d-flex justify-content-between">
+                        <span>Total price</span>
+                        <span class="price">{{ total_price }}</span>
+                    </div>
+                </div>
+            </div>
 
-		<div class="col-lg-8">
-			<form class="shadow p-4" method="post">
-				{% csrf_token %}
+            <div class="col-lg-8">
+                <form class="shadow p-4" method="post">
+                    {% csrf_token %}
 
-				<h5 class="border-bottom pb-2 mb-3">
-					Shipping address
-				</h5>
+                    <h5 class="border-bottom pb-2 mb-3">
+                        Shipping address
+                    </h5>
 
-				<div class="row gy-4 pb-4">
-					<div class="col-md-6">
-						<label for="address">Address<span class="text-danger">*</span></label>
-						{{ form.address }}
-						{{ form.errors.address }}
-					</div>
-					<div class="col-md-6">
-						<label for="house">Your house/apartment number<span class="text-danger">*</span></label>
-						{{ form.house }}
-						{{ form.errors.house }}
-					</div>
-					<div class="col-12">
-						<label for="instructions">Additional instructions for delivery</label>
-						{{ form.instructions }}
-						{{ form.errors.instructions }}
-					</div>
-				</div>
+                    <div class="row gy-4 pb-4">
+                        <div class="col-md-6">
+                            <label for="address">Address<span class="text-danger">*</span></label>
+                            {{ form.address }}
+                            {{ form.errors.address }}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="house">Your house/apartment number<span class="text-danger">*</span></label>
+                            {{ form.house }}
+                            {{ form.errors.house }}
+                        </div>
+                        <div class="col-12">
+                            <label for="instructions">Additional instructions for delivery</label>
+                            {{ form.instructions }}
+                            {{ form.errors.instructions }}
+                        </div>
+                    </div>
 
-				<h5 class="mb-3">Payment method</h5>
+                    <h5 class="mb-3">Payment method</h5>
 
-				<div class="d-flex flex-wrap flex-md-nowrap gap-3">
-					<select class="d-none" name="payment-method">
-						<option value="cash">Cash</option>
-						<option value="card">Card</option>
-					</select>
-					<button class="payment-method btn btn-outline-secondary w-100" id="card" type="button" disabled>
-						<i class="far fa-credit-card"></i>
-						Pay now with card 
-					</button>
-					<button class="payment-method btn btn-secondary w-100" id="cash" type="button">
-						<i class="far fa-money-bill-wave"></i>
-						Pay at door with cash
-					</button>
-				</div>
+                    <div class="d-flex flex-wrap flex-md-nowrap gap-3">
+                        <select class="d-none" name="payment-method">
+                            <option value="cash">Cash</option>
+                            <option value="card">Card</option>
+                        </select>
+                        <button class="payment-method btn btn-outline-secondary w-100" id="card" type="button" disabled>
+                            <i class="far fa-credit-card"></i>
+                            Pay now with card
+                        </button>
+                        <button class="payment-method btn btn-secondary w-100" id="cash" type="button">
+                            <i class="far fa-money-bill-wave"></i>
+                            Pay at door with cash
+                        </button>
+                    </div>
 
-				<input class="btn btn-primary fs-5 px-4 mt-4" type="submit" value="Order">
+                    <input class="btn btn-primary fs-5 px-4 mt-4" type="submit" value="Order">
 
-			</form>
-		</div>
-	</div>
-</main>
+                </form>
+            </div>
+        </div>
+    </main>
 
 {% endblock %}
 
 {% block js %}
-<script>
-	$('.payment-method:not(:disabled)').on('click', function(){
-		$(this).addClass('active');
-		$('select[name="payment-method"]').val(this.id);
-	})
-</script>
+    <script>
+        $('.payment-method:not(:disabled)').on('click', function(){
+            $(this).addClass('active');
+            $('select[name="payment-method"]').val(this.id);
+        })
+    </script>
 {% endblock js %}

@@ -23,16 +23,16 @@
 {% endblock profile-content %}
 
 {% block profile-js %}
-<script src="{% static 'js/update-favorites.js' %}"></script>
-<script>
-    $('.product .heart').on('click', function(){
-        const $product = $(this).closest('.product');
-        $product.fadeOut(150, () => {
-            $product.remove();
-            if (!$('.product').length) {
-                $('#empty-wishlist').show();
-            }
-        });
-    })
-</script>
+    <script src="{% static 'js/update-favorites.js' %}"></script>
+    <script>
+        $('.product .heart').on('click', function(){
+            const $product = $(this).closest('.product');
+            $product.fadeOut(150, () => {
+                $product.remove();
+                if (!$('.product').length) {
+                    $('#empty-wishlist').show();
+                }
+            });
+        })
+    </script>
 {% endblock profile-js %}

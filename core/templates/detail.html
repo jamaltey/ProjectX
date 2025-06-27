@@ -4,216 +4,216 @@
 {% block title %}{{ product.name }} - {% endblock title %}
 
 {% block css %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" integrity="sha512-rd0qOHVMOcez6pLWPVFIv7EfSdGKLt+eafXh4RO/12Fgr41hDQxfGvoi1Vy55QIVcQEujUE1LQrATCLl2Fs+ag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="{% static 'css/detail.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.css" integrity="sha512-rd0qOHVMOcez6pLWPVFIv7EfSdGKLt+eafXh4RO/12Fgr41hDQxfGvoi1Vy55QIVcQEujUE1LQrATCLl2Fs+ag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}" />
 {% endblock css %}
 
 {% block content %}
-<main class="container">
+    <main class="container">
 
-    <div class="row py-5">
-        <div class="col-lg-6">
-            <div id="swiper" class="swiper d-flex">
-                <div class="swiper-wrapper d-flex">
-                    <div class="swiper-slide">
-                        <img class="w-100 h-100 object-fit-contain rounded bg-white" src="{{ product.image.url }}" alt="{{ product }}">
-                    </div>
-                    {% for image in images %}
-                    <div class="swiper-slide">
-                        <img class="w-100 h-100 object-fit-cover rounded bg-white" {% if image.color %} data-color-name="{{ image.color.name }}" {% endif %} src="{{ image.url }}" alt="{{ product }}">
-                    </div>
-                    {% endfor %}
-                </div>
-                {% if images %}
-                    <button class="swiper-button-prev btn border-0 text-secondary" type="button"></button>
-                    <button class="swiper-button-next btn border-0 text-secondary" type="button"></button>
-                {% endif %}
-                <div class="swiper-pagination rounded"></div>
-            </div>
-        </div>
-
-        <div class="col-lg-6 pt-2">
-            <form method="post">
-                {% csrf_token %}
-
-                <input type="hidden" name="product_id" value="{{ product.id }}" />
-
-                <h2>{{ product.name }}</h2>
-
-                <div class="product-rating">
-                {% if product.rating.rating %}
-                    <div class="stars d-inline-block">
-                        {{ product.rating.render_stars_html | safe }}
-                    </div>
-                    <span class="ps-1 pe-2 border-end">{{ product.reviews.count }}</span>
-                    <a href="#comment-part" class="ps-1" style="color: #2D9CDB;">{{ comments.count }} comments</a>
-                {% else %}
-                    <p class="rating-text">No reviews</p>
-                {% endif %}
-                </div>
-
-                <div class="d-flex align-items-baseline">
-                    {% if product.old_price %}
-                        <span class="old-price text-decoration-line-through me-2" id="old-price" >{{ product.old_price }}</span>
-                    {% endif %}
-                    <span class="price" id="price">{{ product.price }}</span>
-                </div>
-
-                {% if colors %}
-                <div id="color-selector" class="d-flex align-items-center gap-2 py-4">
-                    <h6>Color:</h6>
-                    <div class="d-flex flex-wrap gap-3">
-                        {% for i in colors %}
-                            <div class="color rounded-circle border border-light" data-color-name="{{ i.name }}"
-                                style="background-color: {{ i.color }};">
+        <div class="row py-5">
+            <div class="col-lg-6">
+                <div id="swiper" class="swiper d-flex">
+                    <div class="swiper-wrapper d-flex">
+                        <div class="swiper-slide">
+                            <img class="w-100 h-100 object-fit-contain rounded bg-white" src="{{ product.image.url }}" alt="{{ product }}">
+                        </div>
+                        {% for image in images %}
+                            <div class="swiper-slide">
+                                <img class="w-100 h-100 object-fit-cover rounded bg-white" {% if image.color %} data-color-name="{{ image.color.name }}" {% endif %} src="{{ image.url }}" alt="{{ product }}">
                             </div>
                         {% endfor %}
                     </div>
-                    <h6 id="color-name"></h6>
-                    <input type="hidden" name="color" required />
+                    {% if images %}
+                        <button class="swiper-button-prev btn border-0 text-secondary" type="button"></button>
+                        <button class="swiper-button-next btn border-0 text-secondary" type="button"></button>
+                    {% endif %}
+                    <div class="swiper-pagination rounded"></div>
                 </div>
-                {% endif %}
+            </div>
 
-                {% if storages %}
-                <div id="storage-selector" class="d-flex align-items-center gap-4 pb-4">
-                    <h6>Storage: </h6>
-                    {% for i in storages %}
-                        <div class="storage border-0 rounded btn btn-light p-0" data-add-price="{{ i.add_price }}" data-storage="{{ i.storage }}">
-                            {{ i.size_format }}
+            <div class="col-lg-6 pt-2">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="product_id" value="{{ product.id }}" />
+
+                    <h2>{{ product.name }}</h2>
+
+                    <div class="product-rating">
+                        {% if product.rating.rating %}
+                            <div class="stars d-inline-block">
+                                {{ product.rating.render_stars_html | safe }}
+                            </div>
+                            <span class="ps-1 pe-2 border-end">{{ product.reviews.count }}</span>
+                            <a href="#comment-part" class="ps-1" style="color: #2D9CDB;">{{ comments.count }} comments</a>
+                        {% else %}
+                            <p class="rating-text">No reviews</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-flex align-items-baseline">
+                        {% if product.old_price %}
+                            <span class="old-price text-decoration-line-through me-2" id="old-price" >{{ product.old_price }}</span>
+                        {% endif %}
+                        <span class="price" id="price">{{ product.price }}</span>
+                    </div>
+
+                    {% if colors %}
+                        <div id="color-selector" class="d-flex align-items-center gap-2 py-4">
+                            <h6>Color:</h6>
+                            <div class="d-flex flex-wrap gap-3">
+                                {% for i in colors %}
+                                    <div class="color rounded-circle border border-light" data-color-name="{{ i.name }}"
+                                         style="background-color: {{ i.color }};">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <h6 id="color-name"></h6>
+                            <input type="hidden" name="color" required />
+                        </div>
+                    {% endif %}
+
+                    {% if storages %}
+                        <div id="storage-selector" class="d-flex align-items-center gap-4 pb-4">
+                            <h6>Storage: </h6>
+                            {% for i in storages %}
+                                <div class="storage border-0 rounded btn btn-light p-0" data-add-price="{{ i.add_price }}" data-storage="{{ i.storage }}">
+                                    {{ i.size_format }}
+                                </div>
+                            {% endfor %}
+                            <input type="hidden" name="storage" required />
+                        </div>
+                    {% endif %}
+
+                    <hr class="my-1" />
+
+                    <div id="quantity" class="d-flex gap-4 align-items-center justify-content-center justify-content-lg-start py-4">
+                        <input name="quantity" value="1" type="hidden" />
+                        <button class="btn btn-light rounded-circle" onclick="changeCount(-1)" type="button">
+                            <i class="fas fa-minus"></i>
+                        </button>
+
+                        <span>1</span>
+
+                        <button class="btn btn-light rounded-circle" onclick="changeCount(1)" type="button">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-4 pt-3">
+                        <button type="submit" id="cart-btn" class="btn btn-primary py-2 px-4">
+                            <i class="far fa-cart-shopping me-3"></i>
+                            <span>Add to cart</span>
+                        </button>
+
+                        <button type="button" id="wishlist-btn" class="btn btn-outline-primary py-2">
+                            <i class="far fa-heart me-2"></i>
+                            {% if not product in user.favorites.all %}
+                                <span>Add to wishlist</span>
+                            {% else %}
+                                <span>Remove from wishlist</span>
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="product-tabs" class="d-flex gap-5 border-bottom pt-5">
+            <button id="info-button" class="btn border-0 fs-5" type="button">Specifications</button>
+            <button id="comment-button" class="btn border-0 fs-5" type="button">Comments</button>
+        </div>
+
+        <section class="py-4" id="info-part">
+            <div class="row">
+                <div class="col-md specifications row px-3">
+                    <h5 class="mb-3">Specifications</h5>
+                    <div class="d-flex justify-content-between p-3 {% if not product.description %}col-lg-6{% endif %}">
+                        <span>Brand</span>
+                        <span>{{ product.brand }}</span>
+                    </div>
+                    {% for key, value in product.specifications %}
+                        <div class="d-flex justify-content-between p-3 {% if not product.description %}col-lg-6{% endif %}">
+                            <span>{{ key }}</span>
+                            <span>{{ value }}</span>
                         </div>
                     {% endfor %}
-                    <input type="hidden" name="storage" required />
                 </div>
+                {% if product.description %}
+                    <div class="col-md-6 specifications">
+                        <h5>About this product</h5>
+                        <p class="pt-4">{{ product.description }}</p>
+                    </div>
                 {% endif %}
+            </div>
+        </section>
 
-                <hr class="my-1" />
+        <section class="py-5" id="comment-part">
+            {% if user.is_authenticated %}
+                <form class="pb-3 mx-auto" id="comment-form">
+                    <h4 class="text-center mb-4">Write a review</h4>
 
-                <div id="quantity" class="d-flex gap-4 align-items-center justify-content-center justify-content-lg-start py-4">
-                    <input name="quantity" value="1" type="hidden" />
-                    <button class="btn btn-light rounded-circle" onclick="changeCount(-1)" type="button">
-                        <i class="fas fa-minus"></i>
-                    </button>
+                    <div class="d-flex align-items-center pb-4">
+                        <h6 onclick="setRating(0)">Rating</h6>
 
-                    <span>1</span>
+                        <select class="d-none" name="rating_value" id="comment-rating-select">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
 
-                    <button class="btn btn-light rounded-circle" onclick="changeCount(1)" type="button">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-
-                <div class="d-flex flex-column flex-sm-row gap-4 pt-3">
-                    <button type="submit" id="cart-btn" class="btn btn-primary py-2 px-4">
-                        <i class="far fa-cart-shopping me-3"></i>
-                        <span>Add to cart</span>
-                    </button>
-
-                    <button type="button" id="wishlist-btn" class="btn btn-outline-primary py-2">
-                        <i class="far fa-heart me-2"></i>
-                        {% if not product in user.favorites.all %}
-                            <span>Add to wishlist</span>
-                        {% else %}
-                            <span>Remove from wishlist</span>
-                        {% endif %}
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="product-tabs" class="d-flex gap-5 border-bottom pt-5">
-        <button id="info-button" class="btn border-0 fs-5" type="button">Specifications</button>
-        <button id="comment-button" class="btn border-0 fs-5" type="button">Comments</button>
-    </div>
-
-    <section class="py-4" id="info-part">
-        <div class="row">
-            <div class="col-md specifications row px-3">
-                <h5 class="mb-3">Specifications</h5>
-                <div class="d-flex justify-content-between p-3 {% if not product.description %}col-lg-6{% endif %}">
-                    <span>Brand</span>
-                    <span>{{ product.brand }}</span>
-                </div>
-                {% for key, value in product.specifications %}
-                    <div class="d-flex justify-content-between p-3 {% if not product.description %}col-lg-6{% endif %}">
-                        <span>{{ key }}</span>
-                        <span>{{ value }}</span>
+                        <div class="stars fs-5 ps-3">
+                            {% for i in '12345' %}
+                                <i class="fa-sharp fa-regular fa-star" onclick="setRating('{{ i }}')"></i>
+                            {% endfor %}
+                        </div>
                     </div>
-                {% endfor %}
-            </div>
-            {% if product.description %}
-            <div class="col-md-6 specifications">
-                <h5>About this product</h5>
-                <p class="pt-4">{{ product.description }}</p>
-            </div>
+
+                    <div class="text-start pb-4">
+                        <label for="comment-text">Text</label>
+                        <textarea class="form-control mt-1" id="comment-text" rows="4" name="text" placeholder="Your comment..." required></textarea>
+                    </div>
+
+                    <div class="text-end py-1">
+                        <input class="btn btn-primary col-5 col-sm-4 col-md-3" type="submit" value="Submit" />
+                    </div>
+
+                </form>
             {% endif %}
-        </div>
-    </section>
-
-    <section class="py-5" id="comment-part">
-        {% if user.is_authenticated %}
-            <form class="pb-3 mx-auto" id="comment-form">
-                <h4 class="text-center mb-4">Write a review</h4>
-
-                <div class="d-flex align-items-center pb-4">
-                    <h6 onclick="setRating(0)">Rating</h6>
-
-                    <select class="d-none" name="rating_value" id="comment-rating-select">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-
-                    <div class="stars fs-5 ps-3">
-                        {% for i in '12345' %}
-                            <i class="fa-sharp fa-regular fa-star" onclick="setRating('{{ i }}')"></i>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="text-start pb-4">
-                    <label for="comment-text">Text</label>
-                    <textarea class="form-control mt-1" id="comment-text" rows="4" name="text" placeholder="Your comment..." required></textarea>
-                </div>
-
-                <div class="text-end py-1">
-                    <input class="btn btn-primary col-5 col-sm-4 col-md-3" type="submit" value="Submit" />
-                </div>
-
-            </form>
-        {% endif %}
 
             <div class="{% if user.is_authenticated %}border-top{% endif %} border-bottom py-3" id="comments">
                 {% for i in comments %}
-                <div class="comment row gy-3" id="comment-{{ i.id }}">
-                    <div class="col-md-3 text-center">
-                        <h2>{{ i.rating }}</h2>
-                        <div class="stars fs-5">
-                            {{ i.rating.render_stars_html | safe }}
-                        </div>
-                    </div>
-
-                    <div class="col-md-9">
-                        <div class="comment-info d-flex justify-content-between">
-                            <h5>{{i.author.full_name}}</h5>
-                            <h6>{{i.created_at | date:"M d, Y"}}</h6>
+                    <div class="comment row gy-3" id="comment-{{ i.id }}">
+                        <div class="col-md-3 text-center">
+                            <h2>{{ i.rating }}</h2>
+                            <div class="stars fs-5">
+                                {{ i.rating.render_stars_html | safe }}
+                            </div>
                         </div>
 
-                        <p>{{i.text}}</p>
+                        <div class="col-md-9">
+                            <div class="comment-info d-flex justify-content-between">
+                                <h5>{{i.author.full_name}}</h5>
+                                <h6>{{i.created_at | date:"M d, Y"}}</h6>
+                            </div>
 
-                        {% if i.author == request.user %}
-                            <button class="btn btn-dark" type="button" onclick="deleteComment('{{i.id}}')">
-                                Delete comment
-                            </button>
+                            <p>{{i.text}}</p>
+
+                            {% if i.author == request.user %}
+                                <button class="btn btn-dark" type="button" onclick="deleteComment('{{i.id}}')">
+                                    Delete comment
+                                </button>
+                            {% endif %}
+                        </div>
+
+                        {% if not forloop.last %}
+                            <hr class="w-100 my-4" />
                         {% endif %}
                     </div>
-
-                    {% if not forloop.last %}
-                        <hr class="w-100 my-4" />
-                    {% endif %}
-                </div>
                 {% endfor %}
 
                 <div class="no-items my-5" {% if comments %}style="display: none;"{% endif %} >
@@ -221,16 +221,16 @@
                     <img src="{% static 'images/no-items.svg' %}" alt="">
                 </div>
             </div>
-    </section>
+        </section>
 
-</main>
+    </main>
 {% endblock content %}
 {% block js %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js" integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    const productId = +'{{ product.id }}';
-    const initialPrice = +'{{ product.price }}';
-    const initialOldPrice = +'{{ product.old_price }}';
-</script>
-<script src="{% static 'js/detail.js' %}??"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/11.0.5/swiper-bundle.min.js" integrity="sha512-Ysw1DcK1P+uYLqprEAzNQJP+J4hTx4t/3X2nbVwszao8wD+9afLjBQYjz7Uk4ADP+Er++mJoScI42ueGtQOzEA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        const productId = +'{{ product.id }}';
+        const initialPrice = +'{{ product.price }}';
+        const initialOldPrice = +'{{ product.old_price }}';
+    </script>
+    <script src="{% static 'js/detail.js' %}??"></script>
 {% endblock %}

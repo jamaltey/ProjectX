@@ -4,126 +4,125 @@
 {% block title %}Cart - {% endblock title %}
 
 {% block css %}
-<style>
-	h2 .cart-items-count {
-		&::before { content: '(' }
-		&::after { content: ')' }
-	}
+    <style>
+        h2 .cart-items-count {
+            &::before { content: '(' }
+            &::after { content: ')' }
+        }
 
-	.cart-item {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		box-shadow: #64646f33 0px 7px 30px 0px;
-		border-radius: .5rem;
-		/* margin-bottom: 30px; */
-		a:has(img) { flex: 0 1 150px; }
-	}
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: #64646f33 0px 7px 30px 0px;
+            border-radius: .5rem;
+            a:has(img) { flex: 0 1 150px; }
+        }
 
-	#cart-empty { color: #BDBDBD; }
-</style>
+        #cart-empty { color: #BDBDBD; }
+    </style>
 {% endblock css %}
 
 {% block content %}
 
-<main class="container p-5 px-md-0">
+    <main class="container p-5 px-md-0">
 
-	<div class="d-flex justify-content-center mb-5">
-		<h2> My cart
-			{% if cart.products.exists %}
-				<span class="cart-items-count">{{ cart.products.count }}</span>
-			{% endif %}
-		</h2>
-		{% if cart.products.exists %}
-		<button id="cart-clear-btn" class="btn btn-dark border ms-auto">
-			Clear cart
-		</button>
-		{% endif %}
-	</div>
+        <div class="d-flex justify-content-center mb-5">
+            <h2> My cart
+                {% if cart.products.exists %}
+                    <span class="cart-items-count">{{ cart.products.count }}</span>
+                {% endif %}
+            </h2>
+            {% if cart.products.exists %}
+                <button id="cart-clear-btn" class="btn btn-dark border ms-auto">
+                    Clear cart
+                </button>
+            {% endif %}
+        </div>
 
-{% if cart.products.exists %}
-	<div class="row gy-3">
-		{% for i in cart.products.all %}
-		<div id="cart-item-{{ i.id }}" class="col-12 cart-item d-flex flex-column flex-md-row row-gap-2 pb-3 pb-md-0 px-0">
-			<a class="d-flex h-100" href="{% url 'accounts:cart-detail' i.id %}">
-				<img class="w-100 object-fit-cover" src="{{ i.image.url }}" alt="{{ i.product.name }}">
-			</a>
+        {% if cart.products.exists %}
+            <div class="row gy-3">
+                {% for i in cart.products.all %}
+                    <div id="cart-item-{{ i.id }}" class="col-12 cart-item d-flex flex-column flex-md-row row-gap-2 pb-3 pb-md-0 px-0">
+                        <a class="d-flex h-100" href="{% url 'accounts:cart-detail' i.id %}">
+                            <img class="w-100 object-fit-cover" src="{{ i.image.url }}" alt="{{ i.product.name }}">
+                        </a>
 
-			<a class="p-2" href="{% url 'accounts:cart-detail' i.id %}">
-				<h2>{{ i.product }}</h2>
-				<div class="pb-1">
-					{% if i.color %}
-					<span>
-						Color: {{ i.color.name }},
-					</span>
-					{% endif %}
+                        <a class="p-2" href="{% url 'accounts:cart-detail' i.id %}">
+                            <h2>{{ i.product }}</h2>
+                            <div class="pb-1">
+                                {% if i.color %}
+                                    <span>
+                                        Color: {{ i.color.name }},
+                                    </span>
+                                {% endif %}
 
-					{% if i.storage %}
+                                {% if i.storage %}
 
-					<span>
-						Storage: {{ i.storage.size_format }}
-					</span>
-					{% endif %}
+                                    <span>
+                                        Storage: {{ i.storage.size_format }}
+                                    </span>
+                                {% endif %}
 
-					<h5 class="price">
-						{{ i.final_price }}
-					</h5>
-				</div>
-			</a>
+                                <h5 class="price">
+                                    {{ i.final_price }}
+                                </h5>
+                            </div>
+                        </a>
 
-			<div class="d-flex flex-lg-row justify-content-between align-items-center ms-md-auto">
-				<div class="d-flex align-items-center gap-2">
-					<button class="btn" onclick="changeQuantity('{{ i.id }}', -1)">
-						<i class="fas fa-minus"></i>
-					</button>
-					<span class="counter">{{ i.quantity }}</span>
-					<button class="btn" onclick="changeQuantity('{{ i.id }}', 1)">
-						<i class="fas fa-plus"></i>
-					</button>
-				</div>
+                        <div class="d-flex flex-lg-row justify-content-between align-items-center ms-md-auto">
+                            <div class="d-flex align-items-center gap-2">
+                                <button class="btn" onclick="changeQuantity('{{ i.id }}', -1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="counter">{{ i.quantity }}</span>
+                                <button class="btn" onclick="changeQuantity('{{ i.id }}', 1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
 
-				<a class="d-none d-lg-block text-decoration-underline ps-2" href="{% url 'accounts:cart-detail' i.id %}">View details»</a>
-				<button class="btn" onclick="removeItem('{{ i.id }}')">
-					<img height="32" src="{% static 'images/remove.svg' %}?" alt="">
-					<!-- <i class="fa-solid fa-trash-can"></i> -->
-				</button>
-			</div>
-		</div>
-		{% endfor %} 
-	</div>
+                            <a class="d-none d-lg-block text-decoration-underline ps-2" href="{% url 'accounts:cart-detail' i.id %}">View details»</a>
+                            <button class="btn" onclick="removeItem('{{ i.id }}')">
+                                <img height="32" src="{% static 'images/remove.svg' %}?" alt="">
+                                <!-- <i class="fas fa-trash-can"></i> -->
+                            </button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
 
-	<div class="card col-md-5 col-lg-4 col-xl-3 align-items-center justify-content-center mt-5 py-4">
+            <div class="card col-md-5 col-lg-4 col-xl-3 align-items-center justify-content-center mt-5 py-4">
 
-		<div id="total-price" class="pb-3">
-			{% if cart.discount %}
-			<h5>Discount: <span class="old-price fs-5">{{ cart.discount }}</span></h5>
-			<hr>
-			{% endif %}
-			<h5>Total price: <span class="price">{{ cart.total_price }}</span></h5>
-		</div>
+                <div id="total-price" class="pb-3">
+                    {% if cart.discount %}
+                        <h5>Discount: <span class="old-price fs-5">{{ cart.discount }}</span></h5>
+                        <hr />
+                    {% endif %}
+                    <h5>Total price: <span class="price">{{ cart.total_price }}</span></h5>
+                </div>
 
-		<a class="btn btn-primary" href="{% url 'accounts:checkout' %}">
-			Checkout
-		</a>
+                <a class="btn btn-primary" href="{% url 'accounts:checkout' %}">
+                    Checkout
+                </a>
 
-	</div>
+            </div>
 
-	<div style="display: none;" id="cart-empty" class="no-items">
-		<img src="{% static 'images/no-items.svg' %}" alt="">
-		<h5 class="mt-4">Your cart is empty</h5>
-	</div>
+            <div style="display: none;" id="cart-empty" class="no-items">
+                <img src="{% static 'images/no-items.svg' %}" alt="">
+                <h5 class="mt-4">Your cart is empty</h5>
+            </div>
 
-{% else %}
-	<div id="cart-empty" class="no-items">
-		<img src="{% static 'images/no-items.svg' %}" alt="">
-		<h5 class="mt-4">Your cart is empty</h5>
-	</div>
-{% endif %}
+        {% else %}
+            <div id="cart-empty" class="no-items">
+                <img src="{% static 'images/no-items.svg' %}" alt="">
+                <h5 class="mt-4">Your cart is empty</h5>
+            </div>
+        {% endif %}
 
-</main>
+    </main>
 
 {% endblock content %}
 
 {% block js %}
-<script src="{% static 'js/cart.js' %}?v=2"></script>
+    <script src="{% static 'js/cart.js' %}?v=2"></script>
 {% endblock js %}

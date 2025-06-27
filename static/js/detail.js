@@ -153,8 +153,8 @@ $commentBtn.on('click', showCommentsPart);
 $infoBtn.on('click', showInfoPart);
 
 const $commentRatingSelect = $('#comment-rating-select');
-const $commentText = $('#comment-text');
 const $commentRatingStars = $('#comment-form .fa-star');
+const $commentText = $('#comment-text');
 
 function setRating(ratingValue) {
     ratingValue = parseInt(ratingValue);

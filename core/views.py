@@ -47,7 +47,7 @@ class ProductDetailView(DetailView):
 
         return context
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         user = request.user
         if not user.is_authenticated:
             return redirect(f'/accounts/login/?next={request.path}')

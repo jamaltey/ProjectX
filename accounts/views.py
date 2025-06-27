@@ -41,10 +41,7 @@ class OrdersView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset: QuerySet[Order] = self.request.user.orders.all()
-        queryset = queryset.select_related(
-            'user',
-            'address',
-        ).prefetch_related(
+        queryset = queryset.prefetch_related(
             Prefetch(
                 'products',
                 queryset=ProductVariant.objects.select_related(
@@ -58,8 +55,7 @@ class OrdersView(LoginRequiredMixin, ListView):
                     )
                 )
             )
-        ).annotate(products_count=Count('products'))
-        # print(queryset.first().products.first())
+        )
         return queryset
 
 class OrderDetailView(LoginRequiredMixin, DetailView):
@@ -67,19 +63,21 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     template_name = 'order-detail.html'
 
     def get_queryset(self):
-        return self.request.user.orders.select_related(
-            'user'
-            'address',
-        ).prefetch_related(
-            'products',
-        ).all()
+        return OrdersView.get_queryset(self).select_related('address')
 
 class CartView(LoginRequiredMixin, DetailView):
     model = Cart
     template_name = 'cart.html'
 
     def get_object(self):
-        return self.request.user.cart
+        return Cart.objects.filter(user=self.request.user).prefetch_related(
+            Prefetch(
+                'products',
+                queryset=ProductVariant.objects.select_related('product', 'color', 'storage').prefetch_related(
+                    Prefetch('product__images', queryset=ProductImage.objects.select_related('color'))
+                )
+            )
+        ).get()
 
 class CartDetailView(LoginRequiredMixin, DetailView):
     model = ProductVariant

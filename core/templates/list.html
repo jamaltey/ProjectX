@@ -4,177 +4,177 @@
 {% block title %}Products - {% endblock title %}
 
 {% block css %}
-<style>
-	.filter label {
-		font-size: 1.15rem;
-		cursor: pointer;
-		.form-check-input {
-			cursor: pointer;
-			border-color: var(--bs-primary);
-			&:checked { background-color: var(--bs-primary); }
-		}
-		&:hover .form-check-input {
-			background-color: rgba(var(--bs-primary-rgb), .25);
-			&:checked { background-color: rgba(var(--bs-primary-rgb), .75); }
-		}
-	}
-</style>
+    <style>
+        .filter label {
+            font-size: 1.15rem;
+            cursor: pointer;
+            .form-check-input {
+                cursor: pointer;
+                border-color: var(--bs-primary);
+                &:checked { background-color: var(--bs-primary); }
+            }
+            &:hover .form-check-input {
+                background-color: rgba(var(--bs-primary-rgb), .25);
+                &:checked { background-color: rgba(var(--bs-primary-rgb), .75); }
+            }
+        }
+    </style>
 {% endblock css %}
 
 {% block content %}
-<main class="container-fluid px-3 py-5">
-	<div class="d-flex d-lg-none justify-content-center w-100 pb-3">
-		<div class="dropdown w-50">
-			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="far fa-arrow-up-arrow-down"></i>
-				{{ sort | default:'Newest' }}
-			</button>
-			<ul class="dropdown-menu p-0">
-				{% if request.GET.sort %}
-				<li>
-					<a class="dropdown-item py-2" href="?{{args}}">
-						Sort: Newest
-					</a>
-				</li>
-				{% endif %}
-				{% if not request.GET.sort == 'price-asc' %}
-				<li>
-					<a class="dropdown-item py-2" href="?sort=price-asc&{{args}}">
-						Sort: Cheapest
-					</a>
-				</li>
-				{% endif %}
-				{% if not request.GET.sort == 'price-desc' %}
-				<li>
-					<a class="dropdown-item py-2" href="?sort=price-desc&{{args}}">
-						Sort: Most Expensive
-					</a>
-				</li>
-				{% endif %}
-			</ul>
-		</div>
-		<div class="w-50">
-			<button class="btn btn-dark border rounded-0 w-100 h-100 p-3" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="true" type="button">
-				<i class="far fa-filter"></i>
-				Filters
-			</button>
-		</div>
-	</div>
+    <main class="container-fluid px-3 py-5">
+        <div class="d-flex d-lg-none justify-content-center w-100 pb-3">
+            <div class="dropdown w-50">
+                <button class="btn btn-dark border rounded-0 w-100 h-100 p-3" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-arrow-up-arrow-down"></i>
+                    {{ sort | default:'Newest' }}
+                </button>
+                <ul class="dropdown-menu p-0">
+                    {% if request.GET.sort %}
+                        <li>
+                            <a class="dropdown-item py-2" href="?{{args}}">
+                                Sort: Newest
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if not request.GET.sort == 'price-asc' %}
+                        <li>
+                            <a class="dropdown-item py-2" href="?sort=price-asc&{{args}}">
+                                Sort: Cheapest
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if not request.GET.sort == 'price-desc' %}
+                        <li>
+                            <a class="dropdown-item py-2" href="?sort=price-desc&{{args}}">
+                                Sort: Most Expensive
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="w-50">
+                <button class="btn btn-dark border rounded-0 w-100 h-100 p-3" data-bs-toggle="collapse" data-bs-target="#sidebar" aria-expanded="true" type="button">
+                    <i class="far fa-filter"></i>
+                    Filters
+                </button>
+            </div>
+        </div>
 
-	<div class="row justify-content-center">
-		<div id="sidebar" class="collapse show d-lg-flex col">
+        <div class="row justify-content-center">
+            <div id="sidebar" class="collapse show d-lg-flex col">
 			<!-- Filters -->
-			<div class="filter shadow p-3 pt-1 w-100">
-				<h5 class="border-bottom py-2 px-3">
-					Brands ({{ brands.count }})
-				</h5>
+                <div class="filter shadow p-3 pt-1 w-100">
+                    <h5 class="border-bottom py-2 px-3">
+                        Brands ({{ brands.count }})
+                    </h5>
 
-				<ul class="py-3 px-4">
-				{% for i in brands %}
-					<li>
-						<label>
-							<input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.name }}" {% if i.name in brand_list %}checked{% endif %}>
-							{{ i.name }}
-						</label>
-					</li>
-				{% endfor %}
-				</ul>
+                    <ul class="py-3 px-4">
+                        {% for i in brands %}
+                            <li>
+                                <label>
+                                    <input class="form-check-input me-1" type="checkbox" name="brand" value="{{ i.name }}" {% if i.name in brand_list %}checked{% endif %}>
+                                    {{ i.name }}
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
 
-				<div class="px-4">
-					<button class="btn btn-dark" id="reset-filter" type="button">
-						Reset
-					</button>
-				</div>
-			</div>
-		</div>
+                    <div class="px-4">
+                        <button class="btn btn-dark" id="reset-filter" type="button">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
 
 		<!-- Products -->
-		<div class="col-12 col-lg-9 col-xxl-10 pt-4 pt-lg-0" id="products">
-		{% if paginator.count %}
-			<div class="d-flex align-items-center px-3">
-				<div class="spinner-border text-primary me-3" id="loading" role="status" style="display: none;">
-					<span class="visually-hidden">Loading...</span>
-				</div>
-				{% if search %}<span>{{ paginator.count }} products found</span>{% endif %}
-				<div class="dropdown ms-auto">
-					<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-						Sort: {{ sort | default:'Newest' }}
-					</button>
-					<ul class="dropdown-menu p-0">
-						{% if request.GET.sort and request.GET.sort.lower != 'newest' %}
-						<li>
-							<button class="dropdown-item" onclick="updateParam('sort', 'newest')">
-								Sort: Newest
-							</button>
-						</li>
-						{% endif %}
-						{% if not request.GET.sort == 'price-asc' %}
-						<li>
-							<button class="dropdown-item" onclick="updateParam('sort', 'price-asc')">
-								Sort: Cheapest
-							</button>
-						</li>
-						{% endif %}
-						{% if not request.GET.sort == 'price-desc' %}
-						<li>
-							<button class="dropdown-item" onclick="updateParam('sort', 'price-desc')">
-								Sort: Most Expensive
-							</button>
-						</li>
-						{% endif %}
-					</ul>
-				</div>
-            </div>
+            <div class="col-12 col-lg-9 col-xxl-10 pt-4 pt-lg-0" id="products">
+                {% if paginator.count %}
+                    <div class="d-flex align-items-center px-3">
+                        <div class="spinner-border text-primary me-3" id="loading" role="status" style="display: none;">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        {% if search %}<span>{{ paginator.count }} products found</span>{% endif %}
+                        <div class="dropdown ms-auto">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Sort: {{ sort | default:'Newest' }}
+                            </button>
+                            <ul class="dropdown-menu p-0">
+                                {% if request.GET.sort and request.GET.sort.lower != 'newest' %}
+                                    <li>
+                                        <button class="dropdown-item" onclick="updateParam('sort', 'newest')">
+                                            Sort: Newest
+                                        </button>
+                                    </li>
+                                {% endif %}
+                                {% if not request.GET.sort == 'price-asc' %}
+                                    <li>
+                                        <button class="dropdown-item" onclick="updateParam('sort', 'price-asc')">
+                                            Sort: Cheapest
+                                        </button>
+                                    </li>
+                                {% endif %}
+                                {% if not request.GET.sort == 'price-desc' %}
+                                    <li>
+                                        <button class="dropdown-item" onclick="updateParam('sort', 'price-desc')">
+                                            Sort: Most Expensive
+                                        </button>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
 
-            <div class="row gy-5 py-5" id="products-list">
-			{% with favorites=user.favorites.all %}
-				{% for product in page %}
-					{% include 'components/product.html' %}
-				{% endfor %}
-			{% endwith %}
-            </div>
+                    <div class="row gy-5 py-5" id="products-list">
+                        {% with favorites=user.favorites.all %}
+                            {% for product in page %}
+                                {% include 'components/product.html' %}
+                            {% endfor %}
+                        {% endwith %}
+                    </div>
 
-			{% if is_paginated %}
-            <nav aria-label="Pagination">
-                <ul class="pagination justify-content-center">
-                {% if page.has_previous %}
-                    <li class="page-item d-flex">
-						<button class="page-link d-flex align-items-center" onclick="updateParam('page', '{{ page.previous_page_number }}')" aria-label="Previous">
-							<i class="fas fa-angle-left"></i>
-						</button>
-                    </li>
+                    {% if is_paginated %}
+                        <nav aria-label="Pagination">
+                            <ul class="pagination justify-content-center">
+                                {% if page.has_previous %}
+                                    <li class="page-item d-flex">
+                                        <button class="page-link d-flex align-items-center" onclick="updateParam('page', '{{ page.previous_page_number }}')" aria-label="Previous">
+                                            <i class="fas fa-angle-left"></i>
+                                        </button>
+                                    </li>
+                                {% endif %}
+
+                                {% for i in paginator.page_range %}
+                                    <li class="page-item d-flex">
+                                        <button class="page-link d-flex align-items-center {% if page.number == i %}active{% endif %}" onclick="updateParam('page', '{{ i }}')">
+                                            {{ i }}
+                                        </button>
+                                    </li>
+                                {% endfor %}
+
+                                {% if page.has_next %}
+                                    <li class="page-item d-flex">
+                                        <button class="page-link d-flex align-items-center" onclick="updateParam('page', '{{ page.next_page_number }}')" aria-label="Next">
+                                            <i class="fas fa-angle-right"></i>
+                                        </button>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                {% else %}
+                    <div class="no-items">
+                        <h2>No products found</h2>
+                        <img src="{% static 'images/no-items.svg' %}" alt="">
+                    </div>
                 {% endif %}
-
-                {% for i in paginator.page_range %}
-                    <li class="page-item d-flex">
-						<button class="page-link d-flex align-items-center {% if page.number == i %}active{% endif %}" onclick="updateParam('page', '{{ i }}')">
-							{{ i }}
-						</button>
-					</li>
-                {% endfor %}
-
-                {% if page.has_next %}
-                    <li class="page-item d-flex">
-						<button class="page-link d-flex align-items-center" onclick="updateParam('page', '{{ page.next_page_number }}')" aria-label="Next">
-							<i class="fas fa-angle-right"></i>
-						</button>
-                    </li>
-                {% endif %}
-                </ul>
-            </nav>
-			{% endif %}
-		{% else %}
-			<div class="no-items">
-				<h2>No products found</h2>
-				<img src="{% static 'images/no-items.svg' %}" alt="">
-			</div>
-		{% endif %}
-		</div>
-	</div>
-</main>
+            </div>
+        </div>
+    </main>
 {% endblock content %}
 
 {% block js %}
-<script src="{% static 'js/update-favorites.js' %}"></script>
-<script src="{% static 'js/list.js' %}"></script>
+    <script src="{% static 'js/update-favorites.js' %}"></script>
+    <script src="{% static 'js/list.js' %}"></script>
 {% endblock %}
