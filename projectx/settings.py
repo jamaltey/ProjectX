@@ -1,14 +1,7 @@
-from os import getenv
 from pathlib import Path
-
 from django.core.management.commands.runserver import Command as runserver
 from django.urls import reverse_lazy
-from dotenv import load_dotenv
-
-# Load environment variables
-
-load_dotenv()
-SECRET_KEY = getenv('SECRET_KEY')
+from decouple import config
 
 # Runserver configuration
 runserver.default_addr = '0.0.0.0'
@@ -16,6 +9,7 @@ runserver.default_addr = '0.0.0.0'
 # Base settings
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
