@@ -1,9 +1,9 @@
 from decimal import Decimal
 
 from django.contrib.auth.models import AbstractUser
-from django.utils.functional import cached_property
 from django.db import models
 from django.urls import reverse
+from django.utils.functional import cached_property
 
 
 class User(AbstractUser):

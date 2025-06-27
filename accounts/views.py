@@ -1,12 +1,12 @@
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.db.models import Count, Prefetch, QuerySet
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
-from django.db.models import Count, QuerySet, Prefetch
 
-from core.models import Product, ProductVariant, ProductImage
+from core.models import Product, ProductImage, ProductVariant
 
 from .forms import AddressForm, EditProfileForm, LoginForm, SignUpForm
 from .models import Address, Cart, Order, User

@@ -1,7 +1,8 @@
 from pathlib import Path
+
+from decouple import config
 from django.core.management.commands.runserver import Command as runserver
 from django.urls import reverse_lazy
-from decouple import config
 
 # Runserver configuration
 runserver.default_addr = '0.0.0.0'
