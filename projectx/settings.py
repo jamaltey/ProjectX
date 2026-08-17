@@ -31,6 +31,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'colorfield',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 LOCAL_APPS = [
@@ -127,14 +129,23 @@ STATICFILES_DIRS = [
 ]
 
 STORAGES = {
+    'default': {
+        'BACKEND': 'cloudinary_storage.storage.MediaCloudinaryStorage',
+    },
     'staticfiles': {
         'BACKEND': 'whitenoise.storage.CompressedStaticFilesStorage',
     },
 }
 
 # Media files
-MEDIA_ROOT = BASE_DIR / "media"
-MEDIA_URL  = "/media/"
+MEDIA_URL = '/media/'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME', default=''),
+    'API_KEY': config('CLOUDINARY_API_KEY', default=''),
+    'API_SECRET': config('CLOUDINARY_API_SECRET', default=''),
+    'SECURE': True,
+}
 
 # STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
