@@ -24,6 +24,6 @@ python -m pip install -r requirements.txt
 ./deploy.sh
 ```
 
-This runs database migrations and `collectstatic`, then starts Gunicorn. Gunicorn binds to `0.0.0.0:$PORT`; it uses port `8000` when `PORT` is unset. Set the platform's single deploy/start command to `./deploy.sh`.
+This runs database migrations and `collectstatic`, then starts Gunicorn. Gunicorn binds to `0.0.0.0:$PORT`; it uses port `8000` when `PORT` is unset. WhiteNoise serves the collected static assets through the application. Set the platform's single deploy/start command to `./deploy.sh`.
 
-For a traditional server, put Nginx or another reverse proxy in front of Gunicorn to terminate HTTPS and serve the collected static files from `staticfiles/` and user uploads from `media/`.
+For a traditional server, put Nginx or another reverse proxy in front of Gunicorn to terminate HTTPS. User uploads in `media/` still need persistent object storage or web-server configuration; WhiteNoise is for version-controlled static assets only.
