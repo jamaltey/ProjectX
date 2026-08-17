@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from decouple import config
+from decouple import Csv, config
 from django.core.management.commands.runserver import Command as runserver
 from django.urls import reverse_lazy
 
@@ -12,9 +12,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 
-DEBUG = True
+DEBUG = config('DJANGO_DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = config(
+    'DJANGO_ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv()
+)
 
 # Installed applications
 DJANGO_APPS = [
