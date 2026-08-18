@@ -26,6 +26,10 @@ python -m pip install -r requirements.txt
 
 This runs database migrations and `collectstatic`, then starts Gunicorn. Gunicorn binds to `0.0.0.0:$PORT`; it uses port `8000` when `PORT` is unset. WhiteNoise serves the collected static assets through the application. Set the platform's single deploy/start command to `./deploy.sh`.
 
+### Render Free memory limit
+
+Render's Free web service has 512 MB of memory. This project therefore starts one Gunicorn worker by default. Do not set `GUNICORN_WORKERS` above `1` on the Free plan. Workers recycle after 300 requests to release any memory retained by application libraries; override this only with `GUNICORN_MAX_REQUESTS` if required.
+
 For a traditional server, put Nginx or another reverse proxy in front of Gunicorn to terminate HTTPS. User uploads in `media/` still need persistent object storage or web-server configuration; WhiteNoise is for version-controlled static assets only.
 
 ## Free Render media uploads with Cloudinary
