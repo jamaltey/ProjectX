@@ -22,17 +22,17 @@
         </li>
         <li>
             <a
-                class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center"
+                class="d-flex flex-sm-wrap justify-content-center align-items-center column-gap-3 row-gap-1 text-center"
                 href="{% url 'accounts:orders' %}">
-                <i class="far fa-bag-shopping fs-5"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>
                 <span>My orders</span>
             </a>
         </li>
         <li>
             <a
-                class="d-flex flex-sm-wrap justify-content-center align-items-center align-items-md-baseline column-gap-3 row-gap-1 text-center"
+                class="d-flex flex-sm-wrap justify-content-center align-items-center column-gap-3 row-gap-1 text-center"
                 href="{% url 'accounts:address' %}">
-                <i class="far fa-location-dot fs-5"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
                 <span>Shipping Address</span>
             </a>
         </li>
@@ -42,7 +42,7 @@
 
     <form class="d-lg-flex align-items-center text-center" action="{% url 'accounts:logout' %}" method="post">
         {% csrf_token %}
-        <i class="far fa-arrow-right-from-bracket fs-5 me-1 me-lg-3"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-1 me-lg-3"><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/></svg>
         <button class="btn border-0 p-0" type="submit">Log out</button>
     </form>
 </nav>

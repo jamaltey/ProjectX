@@ -52,6 +52,13 @@ hr {
     }
 }
 
+#cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+}
+
 #product-tabs button:not(.active) { color: #BDBDBD; }
 
 .specifications {
